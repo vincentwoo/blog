@@ -7,12 +7,24 @@
     <title><%= title %></title>
   </head>
   <body>
-    <section>
-      <%= yield %> 
-    </section>
-    <footer>
-      powered by <a href="http://cloudhead.io/toto">toto</a>
-    </footer>
+    <div id="page-wrap">
+        <div id="inside">
+            <div id="header">
+                <h1><a href="/">vincentwoo.com</a>: close enough</h1>
+            </div>
+            <div id="content">
+                <%= yield %> 
+            </div>
+            <div id="sidebar">
+                <ul>
+                    <li><a href="/">home</a></li>
+                    <li><a href="/about">about</a></li>
+                    <li><a href="/archives">archives</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
   </body>
+  <script type="text/javascript" src="http://disqus.com/forums/<%= @config[:disqus] %>/embed.js"> </script>
 </html>
 
