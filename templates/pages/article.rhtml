@@ -1,7 +1,7 @@
 <article>
   <h2><a href="<%= article.path %>"><%= article.title %></a></h2>
   <%= body %>
-  <p class="info"> <%= article.date %> | <a href="<%= article.path %>">permalink</a></p>
+  <p class="articleInfo"> <%= article.date %> | <a href="<%= article.path %>">permalink</a></p>
 
   <section class="comments">
     <% if @config[:disqus] %>

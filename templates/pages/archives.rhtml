@@ -1,11 +1,14 @@
-<h1><%= @path %></h1>
-<ul>
-  <% if archives.length > 0 %>
-    <% for entry in archives %>
-      <li>
-        <a href="<%= entry.path %>"><%= entry.title %></a>
-      </li>
-    <% end %>
-  <% end %>
-</ul>
-
+<h2>archives</h2>
+<p>In reverse chronological order...
+    <ul>
+      <% if archives.length > 0 %>
+        <% for entry in archives %>
+          <li>
+            <a href="<%= entry.path %>"><%= entry.title %>
+                <span class="archiveInfo"><%= entry.date %></span>
+            </a>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+</p>
