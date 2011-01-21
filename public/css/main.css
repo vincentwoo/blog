@@ -99,6 +99,11 @@ body {
 #disqus_thread {
     clear: both;
 }
-code, pre {
+code, pre, blockquote {
     font-family: 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
+    font-size: .7em;
+    line-height: 1.4em;
+    border-left: 15px solid #777;
+    padding-left: 10px;
+    background: #eee;
 }
