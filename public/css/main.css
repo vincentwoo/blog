@@ -31,15 +31,15 @@ body {
 }
 #inside {
     margin: 0 auto;
-    width: 97%;
+    width: 98%;
 }
 #content {
     float: left;
-    width: 80%;
+    width: 83%;
 }
 #sidebar {
     float: right;
-    width: 17%;
+    width: 16%;
 }
 #content h2
 {
@@ -68,8 +68,12 @@ body {
 }
 .centered
 {
-    margin: 0 auto;
-    width: 600px;
+    margin: 10px auto 0 auto;
+    width: 640px;
+}
+.centered a
+{
+    border: 0;
 }
  ul {
     margin: 0;

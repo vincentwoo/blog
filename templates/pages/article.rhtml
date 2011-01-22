@@ -1,5 +1,12 @@
 <article>
   <h2><a href="<%= article.path %>"><%= article.title %></a></h2>
+  <% if article[:flickr] %>
+    <div class="centered">
+        <a href="<%= config[:flickr] % article[:flickr].split('/').last.split('_').first %>">
+            <img src="<%= article[:flickr] %>" />
+        </a>
+    </div>
+  <% end %>
   <%= body %>
   <p class="articleInfo"> <%= article.date %> | <a href="<%= article.path %>">permalink</a></p>
 
