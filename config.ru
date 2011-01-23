@@ -1,9 +1,11 @@
 
 require 'toto'
+require 'rack/no-www'
 
 # Rack config
 use Rack::Static, :urls => ['/css', '/js', '/images', '/favicon.ico', '/pdf'], :root => 'public'
 use Rack::CommonLogger
+use Rack::NoWWW
 
 if ENV['RACK_ENV'] == 'development'
   use Rack::ShowExceptions
