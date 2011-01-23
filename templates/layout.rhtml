@@ -26,7 +26,7 @@
                 <ul>
                     <% notable = @articles.select { |article| article[:tags] and article[:tags].split.include? 'notable' } %>
                     <% for article in notable %>
-                        <li><a href="<%= article.path %>"><%= article.title %></li>
+                        <li><a href="<%= article.path %>"><%= article.title %></a></li>
                     <% end %>
                 </ul>
             </div>
