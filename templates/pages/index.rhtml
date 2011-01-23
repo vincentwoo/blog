@@ -1,9 +1,6 @@
 <% for article in articles[0...6] %>
   <article>
     <h2><a href="<%= article.path %>"><%= article.title %></a></h2>
-    <% if article[:tags] %>
-    test
-    <% end %>
     <% if article[:flickr] %>
         <div class="centered">
             <a href="<%= @config[:flickr_link] % article[:flickr].split('/').last.split('_').first %>">
