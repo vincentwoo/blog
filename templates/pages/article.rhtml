@@ -2,7 +2,7 @@
   <h2><a href="<%= article.path %>"><%= article.title %></a></h2>
   <% if article[:flickr] %>
     <div class="centered">
-        <a href="<%= config[:flickr] % article[:flickr].split('/').last.split('_').first %>">
+        <a href="<%= @config[:flickr_link] % article[:flickr].split('/').last.split('_').first %>">
             <img src="<%= article[:flickr] %>" />
         </a>
     </div>

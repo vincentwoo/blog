@@ -40,6 +40,7 @@ body {
 #sidebar {
     float: right;
     width: 16%;
+    font-size: 80%;
 }
 #content h2
 {
@@ -63,8 +64,8 @@ body {
 .archiveInfo
 {
     float:right;
-    text-align:left;
-    width: 200px;
+    text-align:right;
+    width: 150px;
 }
 .centered
 {
@@ -87,18 +88,18 @@ body {
     padding: 0;
 }
  li a, li a:link {
-    line-height: 0.9em;
+    line-height: 1em;
     border: 0;
     margin: 0;
     padding: 0;
     display: block;
     padding-left: 5px;
-    border-left: 20px solid #333;
+    border-left: 1em solid #333;
 }
  li a:hover {
     margin: 0;
     border: 0;
-    border-left: 20px solid #29D9C2;
+    border-left: 1em solid #29D9C2;
 }
 #disqus_thread {
     clear: both;

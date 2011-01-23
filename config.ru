@@ -28,7 +28,7 @@ toto = Toto::Server.new do
   set :title, "close enough"
   set :disqus, "closeenough"
   set :summary, :max => 250, :delim => /~/
-  set :flickr, "http://www.flickr.com/photos/eruditorium/%s/lightbox/"
+  set :flickr_link, "http://www.flickr.com/photos/eruditorium/%s/lightbox/"
 end
 
 run toto

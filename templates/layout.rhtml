@@ -22,6 +22,13 @@
                     <li><a href="/archives">archives</a></li>
                     <li><a href="/index.xml">feed</a></li>
                 </ul>
+                <h3>notable:</h3>
+                <ul>
+                    <% notable = @articles.select { |article| article[:tags] and article[:tags].split.include? 'notable' } %>
+                    <% for article in notable %>
+                        <li><a href="<%= article.path %>"><%= article.title %></li>
+                    <% end %>
+                </ul>
             </div>
         </div>
     </div>

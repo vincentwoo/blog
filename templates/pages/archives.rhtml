@@ -5,7 +5,7 @@
         <% for entry in archives %>
           <li>
             <a href="<%= entry.path %>"><%= entry.title %>
-                <span class="archiveInfo"><%= entry.date %></span>
+                <span class="archiveInfo"><%= entry[:date].strftime '%e %b %Y' %></span>
             </a>
           </li>
         <% end %>
