@@ -7,7 +7,7 @@ a, a:link {
     text-decoration: none; 
     border-bottom: 2px solid #333;
 }
-h1 a, h1 a:link, h1 a:hover {
+h1 a, h1 a:link, h1 a:hover, iframe {
     border: 0;
 }
 a:hover { 
@@ -18,7 +18,7 @@ body {
     font-family: 'Baskerville', Georgia, Times, serif;
     font-size: 20px;
     line-height: 30px;
-    background: fff repeat-x top left; 
+    background: #fff; 
     color: #000;
 }
 #page-wrap {
