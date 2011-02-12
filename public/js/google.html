@@ -4,11 +4,11 @@
     <title>Google Logo Experiment</title>
     <script type="text/javascript" src="vector.js"></script>
     <script type="text/javascript">
-        var context, canvas;
+        var context, canvas, grid;
         var circles = [];
         var seconds = 0, fps = 0, frames = 0;
         var lastUpdate = 0;
-        var restitution = 0.7;
+        var restitution = 0.99; //1.0001;
         
         // helpers
         Array.prototype.each = function(fun) {
@@ -25,6 +25,25 @@
             context = canvas.getContext("2d");
             context.font = "bold 12px sans-serif";
             circles = [new Circle(202, 78, 9, "#ed9d33"), new Circle(348, 83, 9, "#d44d61"), new Circle(256, 69, 9, "#4f7af2"), new Circle(214, 59, 9, "#ef9a1e"), new Circle(265, 36, 9, "#4976f3"), new Circle(300, 78, 9, "#269230"), new Circle(294, 59, 9, "#1f9e2c"), new Circle(45, 88, 9, "#1c48dd"), new Circle(268, 52, 9, "#2a56ea"), new Circle(73, 83, 9, "#3355d8"), new Circle(294, 6, 9, "#36b641"), new Circle(235, 62, 9, "#2e5def"), new Circle(353, 42, 8, "#d53747"), new Circle(336, 52, 8, "#eb676f"), new Circle(208, 41, 8, "#f9b125"), new Circle(321, 70, 8, "#de3646"), new Circle(8, 60, 8, "#2a59f0"), new Circle(180, 81, 8, "#eb9c31"), new Circle(146, 65, 8, "#c41731"), new Circle(145, 49, 8, "#d82038"), new Circle(246, 34, 8, "#5f8af8"), new Circle(169, 69, 8, "#efa11e"), new Circle(273, 99, 8, "#2e55e2"), new Circle(248, 120, 8, "#4167e4"), new Circle(294, 41, 8, "#0b991a"), new Circle(267, 114, 8, "#4869e3"), new Circle(78, 67, 8, "#3059e3"), new Circle(294, 23, 8, "#10a11d"), new Circle(117, 83, 8, "#cf4055"), new Circle(137, 80, 8, "#cd4359"), new Circle(14, 71, 8, "#2855ea"), new Circle(331, 80, 8, "#ca273c"), new Circle(25, 82, 8, "#2650e1"), new Circle(233, 46, 8, "#4a7bf9"), new Circle(73, 13, 8, "#3d65e7"), new Circle(327, 35, 6, "#f47875"), new Circle(319, 46, 6, "#f36764"), new Circle(256, 81, 6, "#1d4eeb"), new Circle(244, 88, 6, "#698bf1"), new Circle(194, 32, 6, "#fac652"), new Circle(97, 56, 6, "#ee5257"), new Circle(105, 75, 6, "#cf2a3f"), new Circle(42, 4, 6, "#5681f5"), new Circle(10, 27, 6, "#4577f6"), new Circle(166, 55, 6, "#f7b326"), new Circle(266, 88, 6, "#2b58e8"), new Circle(178, 34, 6, "#facb5e"), new Circle(100, 65, 6, "#e02e3d"), new Circle(343, 32, 6, "#f16d6f"), new Circle(59, 5, 6, "#507bf2"), new Circle(27, 9, 6, "#5683f7"), new Circle(233, 116, 6, "#3158e2"), new Circle(123, 32, 6, "#f0696c"), new Circle(6, 38, 6, "#3769f6"), new Circle(63, 62, 6, "#6084ef"), new Circle(6, 49, 6, "#2a5cf4"), new Circle(108, 36, 6, "#f4716e"), new Circle(169, 43, 6, "#f8c247"), new Circle(137, 37, 6, "#e74653"), new Circle(318, 58, 6, "#ec4147"), new Circle(226, 100, 5, "#4876f1"), new Circle(101, 46, 5, "#ef5c5c"), new Circle(226, 108, 5, "#2552ea"), new Circle(17, 17, 5, "#4779f7"), new Circle(232, 93, 5, "#4b78f1")];
+            circles.each(function(circle) {
+                circle.r *= 2;
+                circle.pos.elements[0] *= 2;
+                circle.pos.elements[1] *= 2;
+                circle.pos.elements[0] += 15;
+            });
+            
+            /*circles2 = [];
+            circles.each(function(circle) { c = circle.clone(); c.pos.elements[1] += 200; circles2.push(c);});
+            circles = circles.concat(circles2);
+            
+            circles2 = [];
+            circles.each(function(circle) { c = circle.clone(); c.pos.elements[0] += 400; circles2.push(c); });
+            circles = circles.concat(circles2);*/
+            
+            var max_r = 0;
+           circles.each(function(circle) { if (max_r < circle.r) max_r = circle.r; });
+
+            grid = new Grid(canvas.width, canvas.height, max_r * 2 + 1);
             lastUpdate = Date.now();
             setInterval(update, 33); // 1000ms/30fps ~ 33, 1000ms/60fps ~ 16
         }
@@ -33,7 +52,7 @@
             context.clearRect(0, 0, canvas.width, canvas.height);
             fpsCounter();
             var now = Date.now();
-            doPhysics(Math.min((now - lastUpdate)/1000.0, 0.041));
+            doPhysics(Math.min((now - lastUpdate)/1000.0, 0.05));
             lastUpdate = now;
             drawCircles();
         }
@@ -43,14 +62,16 @@
                 circle.velocity = circle.velocity.add( circle.acceleration.x(delta) );
                 circle.pos = circle.pos.add( circle.velocity.x(delta) );
             });
+            grid.clearCells();
+            circles.each(function(circle) { grid.registerObject(circle, circle.pos); } );
             posteriCollisions(delta);
         }
         
         function posteriCollisions(delta) {
             for (var i = 0; i < circles.length - 1; i++) {
-                for (var j = i + 1; j < circles.length; j++) {
-                    circles[i].handlePostCollision(circles[j]);
-                }
+                grid.collidingCandidates(circles[i], circles[i].pos).each( function(circle) {
+                    circles[i].handlePostCollision(circle);
+                });
             }
             for (var i = 0; i < circles.length; i++) {
                 circles[i].handlePostWallCollision();
@@ -71,6 +92,7 @@
                 fps = frames;
                 frames = 0;
             }
+            context.fillStyle = "#444";
             context.fillText(fps + " fps", 10, 20);
         }
         
@@ -78,15 +100,16 @@
             this.pos = $V([x, y]);
             this.r = r;
             this.fill = fill;
-            this.acceleration = $V([0.0, 100.0]);
+            this.acceleration = $V([0.0, 30.0]);
             this.velocity = $V([0, 0]); //Vector.Random(2).x(300);
             
             this.handlePostCollision = function(circle) {
                 var delta = this.pos.subtract(circle.pos);
-                var d     = delta.modulus();
+                var d     = delta.dot(delta);
                 
-                if (d > this.r + circle.r) return;
+                if (d > (this.r + circle.r)*(this.r + circle.r)) return;
                 
+                d          = Math.sqrt(d);                
                 var mtd   = delta.x( ((this.r + circle.r) - d) / d );
                 var v     = this.velocity.subtract(circle.velocity);
                 var im1   = 1.0 / (this.r * this.r);
@@ -113,7 +136,7 @@
                     this.pos.elements[0] = this.r;
                     this.velocity.elements[0] *= -1;
                     collided = true;
-                } else if (this.pos.elements[0] > canvas.width - this.r) {
+                } else if (this.pos.elements[0] >= canvas.width - this.r) {
                     this.pos.elements[0] = canvas.width - this.r;
                     this.velocity.elements[0] *= -1;
                     collided = true;
@@ -122,12 +145,16 @@
                     this.pos.elements[1] = this.r;
                     this.velocity.elements[1] *= -1;
                     collided = true;
-                } else if (this.pos.elements[1] > canvas.height - this.r) {
+                } else if (this.pos.elements[1] >= canvas.height - this.r) {
                     this.pos.elements[1] = canvas.height - this.r; 
                     this.velocity.elements[1] *= -1;
                     collided = true;
                 }
                 if (collided) this.velocity = this.velocity.x(restitution);
+            }
+            
+            this.clone = function() {
+                return(new Circle(this.pos.elements[0], this.pos.elements[1], this.r, this.fill));
             }
             
             this.draw = function() {
@@ -139,11 +166,66 @@
                 context.fill();
             }
         }
+        
+        function Grid(width, height, gridSize) {
+            this.cells = [];
+            this.gridSize = gridSize;
+            for (var i = 0; i < Math.ceil(width/gridSize); i++) {
+                var col = [];
+                for (var j = 0; j < Math.ceil(height/gridSize); j++) {
+                    c = new Cell();
+                    c.neighbors.push(c);
+                    if (j != 0) c.neighbors.push(col[j-1]);
+                    if (i != 0) {
+                        c.neighbors.push(this.cells[i-1][j]);
+                        if (j != 0) c.neighbors.push(this.cells[i-1][j-1]);
+                        if (j != this.cells[i-1].length - 1) c.neighbors.push(this.cells[i-1][j+1]);
+                    }
+                    col.push(c);
+                }
+                this.cells.push(col);
+            }
+            
+            this.clearCells = function() {
+                for (var i = 0; i < this.cells.length; i++) {
+                    for (var j = 0; j < this.cells[i].length; j++) {
+                        this.cells[i][j].objects = [];
+                    }
+                }
+            }
+            
+            this.posToCell = function(pos) {
+                var x = Math.min(Math.max(Math.floor(pos.elements[0] / gridSize), 0), this.cells.length-1);
+                var y = Math.min(Math.max(Math.floor(pos.elements[1] / gridSize), 0), this.cells[x].length-1);
+                return(this.cells[x][y]);
+            }
+            
+            this.registerObject = function(obj, pos) {
+                this.posToCell(pos).objects.push(obj);
+            }
+            
+            this.collidingCandidates = function(obj, pos) {
+                cell = this.posToCell(pos);
+                ret = [];
+                cell.neighbors.each( function(cell) {
+                    cell.objects.each( function(o) {
+                        if (obj != o) ret.push(o);
+                    });
+                });
+                return(ret);
+            }
+        
+            function Cell() {
+                this.neighbors = [];
+                this.objects   = [];
+            }
+            
+            
+        }
     </script>
     <style type="text/css">
         canvas {
-            border: 1px #777 dotted;
-            background: #eee;
+            border: 1px #ccc dotted;
         }
         div {
             margin: 50px auto;
