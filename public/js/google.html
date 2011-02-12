@@ -8,7 +8,10 @@
         var circles = [];
         var seconds = 0, fps = 0, frames = 0;
         var lastUpdate = 0;
-        var restitution = 0.99; //1.0001;
+        var restitution = 0.75; //1.0001;
+        var stiffness = 5.0, friction = 0.70;
+        var density = 1.0;
+        var curMouse = $V([0.0, 0.0]);
         
         // helpers
         Array.prototype.each = function(fun) {
@@ -24,28 +27,44 @@
             canvas = document.getElementById("c");
             context = canvas.getContext("2d");
             context.font = "bold 12px sans-serif";
+            // initial circle setup stolen from https://github.com/robhawkes/google-bouncing-balls
             circles = [new Circle(202, 78, 9, "#ed9d33"), new Circle(348, 83, 9, "#d44d61"), new Circle(256, 69, 9, "#4f7af2"), new Circle(214, 59, 9, "#ef9a1e"), new Circle(265, 36, 9, "#4976f3"), new Circle(300, 78, 9, "#269230"), new Circle(294, 59, 9, "#1f9e2c"), new Circle(45, 88, 9, "#1c48dd"), new Circle(268, 52, 9, "#2a56ea"), new Circle(73, 83, 9, "#3355d8"), new Circle(294, 6, 9, "#36b641"), new Circle(235, 62, 9, "#2e5def"), new Circle(353, 42, 8, "#d53747"), new Circle(336, 52, 8, "#eb676f"), new Circle(208, 41, 8, "#f9b125"), new Circle(321, 70, 8, "#de3646"), new Circle(8, 60, 8, "#2a59f0"), new Circle(180, 81, 8, "#eb9c31"), new Circle(146, 65, 8, "#c41731"), new Circle(145, 49, 8, "#d82038"), new Circle(246, 34, 8, "#5f8af8"), new Circle(169, 69, 8, "#efa11e"), new Circle(273, 99, 8, "#2e55e2"), new Circle(248, 120, 8, "#4167e4"), new Circle(294, 41, 8, "#0b991a"), new Circle(267, 114, 8, "#4869e3"), new Circle(78, 67, 8, "#3059e3"), new Circle(294, 23, 8, "#10a11d"), new Circle(117, 83, 8, "#cf4055"), new Circle(137, 80, 8, "#cd4359"), new Circle(14, 71, 8, "#2855ea"), new Circle(331, 80, 8, "#ca273c"), new Circle(25, 82, 8, "#2650e1"), new Circle(233, 46, 8, "#4a7bf9"), new Circle(73, 13, 8, "#3d65e7"), new Circle(327, 35, 6, "#f47875"), new Circle(319, 46, 6, "#f36764"), new Circle(256, 81, 6, "#1d4eeb"), new Circle(244, 88, 6, "#698bf1"), new Circle(194, 32, 6, "#fac652"), new Circle(97, 56, 6, "#ee5257"), new Circle(105, 75, 6, "#cf2a3f"), new Circle(42, 4, 6, "#5681f5"), new Circle(10, 27, 6, "#4577f6"), new Circle(166, 55, 6, "#f7b326"), new Circle(266, 88, 6, "#2b58e8"), new Circle(178, 34, 6, "#facb5e"), new Circle(100, 65, 6, "#e02e3d"), new Circle(343, 32, 6, "#f16d6f"), new Circle(59, 5, 6, "#507bf2"), new Circle(27, 9, 6, "#5683f7"), new Circle(233, 116, 6, "#3158e2"), new Circle(123, 32, 6, "#f0696c"), new Circle(6, 38, 6, "#3769f6"), new Circle(63, 62, 6, "#6084ef"), new Circle(6, 49, 6, "#2a5cf4"), new Circle(108, 36, 6, "#f4716e"), new Circle(169, 43, 6, "#f8c247"), new Circle(137, 37, 6, "#e74653"), new Circle(318, 58, 6, "#ec4147"), new Circle(226, 100, 5, "#4876f1"), new Circle(101, 46, 5, "#ef5c5c"), new Circle(226, 108, 5, "#2552ea"), new Circle(17, 17, 5, "#4779f7"), new Circle(232, 93, 5, "#4b78f1")];
             circles.each(function(circle) {
                 circle.r *= 2;
                 circle.pos.elements[0] *= 2;
                 circle.pos.elements[1] *= 2;
-                circle.pos.elements[0] += 15;
+                circle.pos.elements[0] += 130;
+                circle.pos.elements[1] += 160;
+                circle.accelerator = new Spring(circle.pos);
             });
             
-            /*circles2 = [];
-            circles.each(function(circle) { c = circle.clone(); c.pos.elements[1] += 200; circles2.push(c);});
-            circles = circles.concat(circles2);
-            
-            circles2 = [];
-            circles.each(function(circle) { c = circle.clone(); c.pos.elements[0] += 400; circles2.push(c); });
-            circles = circles.concat(circles2);*/
-            
             var max_r = 0;
-           circles.each(function(circle) { if (max_r < circle.r) max_r = circle.r; });
+            circles.each(function(circle) { if (max_r < circle.r) max_r = circle.r; });
 
-            grid = new Grid(canvas.width, canvas.height, max_r * 2 + 1);
+            grid = new Grid(canvas.width, canvas.height, max_r * 2);
             lastUpdate = Date.now();
-            setInterval(update, 33); // 1000ms/30fps ~ 33, 1000ms/60fps ~ 16
+            
+            canvas.addEventListener('mousemove', mouseInput, false);
+            
+            setInterval(update, 16); // 1000ms/30fps ~ 33, 1000ms/60fps ~ 16
+        }
+        
+        function mouseInput(e) {
+            var x,y
+            if (e.pageX != undefined && e.pageY != undefined) {
+                x = e.pageX;
+                y = e.pageY;
+            } else {
+                x = e.clientX + document.body.scrollLeft +
+                        document.documentElement.scrollLeft;
+                y = e.clientY + document.body.scrollTop +
+                        document.documentElement.scrollTop;
+            }
+            x -= canvas.offsetLeft;
+            y -= canvas.offsetTop;
+            
+            curMouse.elements[0] = x;
+            curMouse.elements[1] = y;
         }
         
         function update() {
@@ -59,11 +78,25 @@
         
         function doPhysics(delta) {
             circles.each(function(circle) {
-                circle.velocity = circle.velocity.add( circle.acceleration.x(delta) );
-                circle.pos = circle.pos.add( circle.velocity.x(delta) );
+                if (circle.accelerator == null)
+                    circle.velocity = circle.velocity.add(circle.acceleration.x(delta));
+                else {
+                    var accel = circle.accelerator.acceleration(circle.pos, circle.velocity).x(delta);
+                    
+                    var diff = circle.pos.subtract(curMouse);
+                    var d = diff.dot(diff);
+                    if (d < 10000) {
+                        d = Math.sqrt(d);
+                        diff = diff.x(1000/d - 1);
+                        accel = accel.add(diff);
+                    }
+                    
+                    circle.velocity = circle.velocity.add(accel);
+                }
+                circle.pos = circle.pos.add( circle.velocity.x(delta));
             });
             grid.clearCells();
-            circles.each(function(circle) { grid.registerObject(circle, circle.pos); } );
+            circles.each(function(circle) {grid.registerObject(circle, circle.pos);});
             posteriCollisions(delta);
         }
         
@@ -99,9 +132,13 @@
         function Circle(x, y, r, fill) {
             this.pos = $V([x, y]);
             this.r = r;
+            this.r2 = r * r;
+            this.mass = Math.PI * r * r * density;
             this.fill = fill;
-            this.acceleration = $V([0.0, 30.0]);
-            this.velocity = $V([0, 0]); //Vector.Random(2).x(300);
+            this.acceleration = $V([0.0, 0.0]);
+            this.accelerator = null;
+            this.velocity = $V([0, 0]);
+            //this.velocity = Vector.Random(2).subtract($V([0.5, 0.5])).x(10000);
             
             this.handlePostCollision = function(circle) {
                 var delta = this.pos.subtract(circle.pos);
@@ -112,8 +149,8 @@
                 d          = Math.sqrt(d);                
                 var mtd   = delta.x( ((this.r + circle.r) - d) / d );
                 var v     = this.velocity.subtract(circle.velocity);
-                var im1   = 1.0 / (this.r * this.r);
-                var im2   = 1.0 / (circle.r * circle.r);
+                var im1   = 1.0 / this.mass;
+                var im2   = 1.0 / this.mass;
                 var imsum = im1 + im2;
                 
                 this.pos   = this.pos.add  ( mtd.x( im1 / imsum ) );
@@ -154,7 +191,7 @@
             }
             
             this.clone = function() {
-                return(new Circle(this.pos.elements[0], this.pos.elements[1], this.r, this.fill));
+                return new Circle(this.pos.elements[0], this.pos.elements[1], this.r, this.fill);
             }
             
             this.draw = function() {
@@ -162,8 +199,16 @@
                 context.beginPath();
                 context.arc(this.pos.elements[0],this.pos.elements[1],this.r,0,Math.PI*2,true);
                 context.closePath();
-                context.stroke();
                 context.fill();
+            }
+        }
+        
+        function Spring(anchorPos) {
+            this.anchorPos = anchorPos.dup();
+            
+            this.acceleration = function(pos, vel) {
+                var d = anchorPos.subtract(pos);
+                return d.x(stiffness).add(vel.x(-restitution));
             }
         }
         
@@ -173,17 +218,31 @@
             for (var i = 0; i < Math.ceil(width/gridSize); i++) {
                 var col = [];
                 for (var j = 0; j < Math.ceil(height/gridSize); j++) {
-                    c = new Cell();
-                    c.neighbors.push(c);
-                    if (j != 0) c.neighbors.push(col[j-1]);
-                    if (i != 0) {
-                        c.neighbors.push(this.cells[i-1][j]);
-                        if (j != 0) c.neighbors.push(this.cells[i-1][j-1]);
-                        if (j != this.cells[i-1].length - 1) c.neighbors.push(this.cells[i-1][j+1]);
-                    }
-                    col.push(c);
+                    col.push(new Cell());
                 }
                 this.cells.push(col);
+            }
+            for (var i = 0; i < this.cells.length; i++) {
+                for (var j = 0; j < this.cells[i].length; j++) {
+                    c = this.cells[i][j];
+                    c.neighbors.push(c);
+                    var notLeft = i != 0;
+                    var notRight = i != this.cells.length - 1;
+                    var notTop = j != 0;
+                    var notBottom = j != this.cells[i].length - 1;
+                    if (notLeft) {
+                        c.neighbors.push(this.cells[i-1][j]);
+                        if (notTop) c.neighbors.push(this.cells[i-1][j-1]);
+                        if (notBottom) c.neighbors.push(this.cells[i-1][j+1]);
+                    }
+                    if (notRight) {
+                        c.neighbors.push(this.cells[i+1][j]);
+                        if (notTop) c.neighbors.push(this.cells[i+1][j-1]);
+                        if (notBottom) c.neighbors.push(this.cells[i+1][j+1]);
+                    }
+                    if (notTop) c.neighbors.push(this.cells[i][j-1]);
+                    if (notBottom) c.neighbors.push(this.cells[i][j+1]);
+                }
             }
             
             this.clearCells = function() {
@@ -197,7 +256,7 @@
             this.posToCell = function(pos) {
                 var x = Math.min(Math.max(Math.floor(pos.elements[0] / gridSize), 0), this.cells.length-1);
                 var y = Math.min(Math.max(Math.floor(pos.elements[1] / gridSize), 0), this.cells[x].length-1);
-                return(this.cells[x][y]);
+                return this.cells[x][y];
             }
             
             this.registerObject = function(obj, pos) {
@@ -212,7 +271,7 @@
                         if (obj != o) ret.push(o);
                     });
                 });
-                return(ret);
+                return ret;
             }
         
             function Cell() {
@@ -228,15 +287,15 @@
             border: 1px #ccc dotted;
         }
         div {
-            margin: 50px auto;
-            width: 800px;
+            margin: 40px auto;
+            width: 1000px;
         }
     </style>
 </head>
 
 <body onload="init()">
     <div>
-        <canvas id="c" width="800" height="500"></canvas>
+        <canvas id="c" width="1000" height="600"></canvas>
     </div>
 </body>
 
