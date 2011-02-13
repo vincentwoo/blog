@@ -36,7 +36,7 @@ function init() {
 	context.font = "bold 12px sans-serif";
 	
 	canvas.addEventListener('mousemove', mouseInput, false);
-	canvas.addEventListener('click', dump, false);
+	//canvas.addEventListener('click', dump, false);
 	window.addEventListener('resize', resize, false);
 	
 	// initial circle setup stolen from https://github.com/robhawkes/google-bouncing-balls
@@ -50,7 +50,7 @@ function init() {
 function resize() {
 	canvas.setAttribute("width", window.innerWidth);
 	canvas.setAttribute("height", window.innerHeight);
-	grid = new Grid(canvas.width, Math.ceil(canvas.height, max_r * 2));
+	grid = new Grid(canvas.width, canvas.height, Math.ceil(max_r * 2));
 	newCenter = $V([window.innerWidth / 2, 150]);
 	
 	circles.each(function(circle) {
@@ -60,7 +60,7 @@ function resize() {
 	});
 	
 	center = newCenter;
-	console.log("resized to " + window.innerWidth + ", " + window.innerHeight);
+	//console.log("resized to " + window.innerWidth + ", " + window.innerHeight);
 }
 
 function mouseInput(e) {
