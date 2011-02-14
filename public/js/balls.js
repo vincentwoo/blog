@@ -36,7 +36,7 @@ function init() {
 	search = document.getElementById("q");
 	form = document.getElementById("query");
 	
-	//window.addEventListener('mousemove', mouseInput, false);
+	window.addEventListener('mousemove', mouseInput, false);
 	//canvas.addEventListener('click', dump, false);
 	window.addEventListener('resize', resize, false);
 	search.addEventListener('keydown', searchChange, false);
