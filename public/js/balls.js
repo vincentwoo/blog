@@ -1,4 +1,4 @@
-var context, canvas, search, grid;
+var context, canvas, search, form, grid;
 var circles = [], staticCircles = [], queryCircles = [];
 var max_r = 24;
 var seconds = 0, fps = 0, frames = 0;
@@ -9,6 +9,7 @@ var density = 1.0;
 var curMouse = Vector.Zero(2), center = Vector.Zero(2);
 var lastSeenMouse = 0;
 var mouseTimeout = 1500, mouseRadius = 90;
+var ending = false;
 
 // helpers
 Array.prototype.each = function(fun) {
@@ -26,7 +27,6 @@ function dump(e) {
 				', "' + circle.fill + '"), ';
 	});
 	console.log(ret);
-	//console.log("x " + curMouse.elements[0] + " y " + curMouse.elements[1]);
 }
 // end helpers
 
@@ -34,12 +34,14 @@ function init() {
 	canvas = document.getElementById("c");
 	context = canvas.getContext("2d");
 	search = document.getElementById("q");
+	form = document.getElementById("query");
 	
 	window.addEventListener('mousemove', mouseInput, false);
 	//canvas.addEventListener('click', dump, false);
 	window.addEventListener('resize', resize, false);
 	search.addEventListener('keydown', searchChange, false);
 	search.focus();
+	form.addEventListener('submit', formSubmit, false);
 	
 	// initial circle setup stolen from https://github.com/robhawkes/google-bouncing-balls
 	staticCircles = [new Circle(47, 34, 18, "#ed9d33"), new Circle(340, 44, 18, "#d44d61"), new Circle(155, 12, 18, "#4f7af2"), new Circle(71, -4, 18, "#ef9a1e"), new Circle(172, -52, 18, "#4976f3"), new Circle(243, 34, 18, "#269230"), new Circle(231, -4, 18, "#1f9e2c"), new Circle(-267, 54, 18, "#1c48dd"), new Circle(179, -17, 18, "#2a56ea"), new Circle(-239, 53, 10, "3355d8"), new Circle(-212, 44, 18, "#3355d8"), new Circle(231, -110, 18, "#36b641"), new Circle(113, 2, 18, "#2e5def"), new Circle(349, -38, 16, "#d53747"), new Circle(307, -10, 12, "#ba3039"), new Circle(333, -12, 12, "#eb676f"), new Circle(59, -40, 16, "#f9b125"), new Circle(282, 19, 16, "#de3646"), new Circle(-350, -1, 16, "#2a59f0"), new Circle(3, 40, 16, "#eb9c31"), new Circle(-65, 8, 16, "#c41731"), new Circle(-67, -24, 16, "#d82038"), new Circle(135, -54, 16, "#5f8af8"), new Circle(-19, 16, 16, "#efa11e"), new Circle(189, 77, 16, "#2e55e2"), new Circle(139, 118, 16, "#4167e4"), new Circle(231, -40, 16, "#0b991a"), new Circle(176, 106, 16, "#4869e3"), new Circle(-201, 11, 16, "#3059e3"), new Circle(231, -76, 16, "#10a11d"), new Circle(-123, 44, 16, "#cf4055"), new Circle(-83, 38, 16, "#cd4359"), new Circle(-327, 20, 16, "#2855ea"), new Circle(306, 40, 16, "#ca273c"), new Circle(-305, 44, 16, "#2650e1"), new Circle(108, -31, 16, "#4a7bf9"), new Circle(-211, -96, 16, "#3d65e7"), new Circle(297, -52, 12, "#f47875"), new Circle(281, -32, 12, "#f36764"), new Circle(153, 42, 12, "#1d4eeb"), new Circle(131, 54, 12, "#698bf1"), new Circle(31, -58, 12, "#fac652"), new Circle(-166, -14, 12, "#ee5257"), new Circle(-147, 30, 12, "#cf2a3f"), new Circle(-273, -114, 12, "#5681f5"), new Circle(-337, -70, 12, "#4577f6"), new Circle(-25, -12, 12, "#f7b326"), new Circle(175, 53, 12, "#2b58e8"), new Circle(-1, -54, 12, "#facb5e"), new Circle(-157, 9, 12, "#e02e3d"), new Circle(329, -58, 12, "#f16d6f"), new Circle(-239, -112, 12, "#507bf2"), new Circle(-303, -104, 12, "#5683f7"), new Circle(110, 111, 12, "#3158e2"), new Circle(-111, -58, 12, "#f0696c"), new Circle(-348, -49, 12, "#3769f6"), new Circle(-231, 2, 12, "#6084ef"), new Circle(-349, -27, 10, "#2a5cf4"), new Circle(-141, -50, 12, "#f4716e"), new Circle(-19, -36, 12, "#f8c247"), new Circle(-83, -48, 12, "#e74653"), new Circle(278, -9, 12, "#ec4147"), new Circle(93, 76, 10, "#4876f1"), new Circle(-155, -32, 10, "#ef5c5c"), new Circle(93, 96, 10, "#2552ea"), new Circle(-324, -88, 10, "#4779f7"), new Circle(108, 62, 10, "#4b78f1")];
@@ -108,6 +110,9 @@ function mouseInput(e) {
 function searchChange(e) {
 	var curValue = search.value;
 	var caret = search.selectionStart;
+	if (ending) {
+		ending = false;
+	}
 	//console.log("caret: " + search.selectionStart + " keycode: " + e.keyCode + " charcode: " + e.charCode);
 	window.setTimeout( function() { postSearchChange(e, caret, curValue); }, 5 );
 }
@@ -154,6 +159,12 @@ function postSearchChange(e, caret, lastValue) {
 	}
 }
 
+function formSubmit(e) {
+	e.preventDefault();
+	ending = true;
+	window.setTimeout( function() { form.submit(); }, 1500);
+}
+
 function update() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	fpsCounter();
@@ -168,13 +179,12 @@ function update() {
 function doPhysics(delta) {
 	var timeSinceMouseMove = Math.max(lastUpdate - lastSeenMouse, 0);
 	if (timeSinceMouseMove < mouseTimeout) {
-		// disable mouse after 5s of no movement
 		var r = (mouseTimeout - timeSinceMouseMove) / mouseTimeout * mouseRadius;
 		var r2 = r * r;
 		grid.candidatesInRadius(curMouse, r).each(function(circle) {
 			var diff = circle.pos.subtract(curMouse);
 			var d = diff.dot(diff);
-			if (d < r2) {
+			if (d != 0 && d < r2) {
 				d = Math.sqrt(d);
 				diff = diff.x(10*mouseRadius/d - 1);
 			}
@@ -191,6 +201,7 @@ function doPhysics(delta) {
 	grid.clearCells();
 	circles.each(function(circle) {grid.registerObject(circle, circle.pos);});
 	posteriCollisions(delta);
+	posteriWallCollisions();
 }
 
 function posteriCollisions(delta) {
@@ -199,6 +210,10 @@ function posteriCollisions(delta) {
 			circles[i].handlePostCollision(circle);
 		});
 	}
+}
+
+function posteriWallCollisions() {
+	if (ending) return;
 	for (var i = 0; i < circles.length; i++) {
 		circles[i].handlePostWallCollision();
 	}
@@ -241,9 +256,9 @@ function Circle(x, y, r, fill, text, textFill) {
 		var delta = this.pos.subtract(circle.pos);
 		var d     = delta.dot(delta);
 		
-		if (d > (this.r + circle.r)*(this.r + circle.r)) return;
+		if (d > (this.r + circle.r)*(this.r + circle.r) || d == 0) return;
 		
-		d          = Math.sqrt(d);                
+		d         = Math.sqrt(d);                
 		var mtd   = delta.x( ((this.r + circle.r) - d) / d );
 		var v     = this.velocity.subtract(circle.velocity);
 		var im1   = 1.0 / this.mass;
@@ -308,7 +323,13 @@ function Spring(anchorPos) {
 	this.anchorPos = anchorPos.dup();
 	
 	this.acceleration = function(pos, vel) {
-		var d = this.anchorPos.subtract(pos);
+		var anchor;
+		if (ending)
+			anchor = this.anchorPos.add(this.anchorPos.subtract(center).x(5));
+		else
+			anchor = this.anchorPos;
+	
+		var d = anchor.subtract(pos);
 		return d.x(stiffness).add(vel.x(-friction));
 	}
 }

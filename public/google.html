@@ -2,6 +2,11 @@
 <html>
 <head>
     <title>Google Logo Experiment</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+	<!-- vector.js is just a cut version of sylvester's js
+		 vector API, with only the Vector class. See 
+		 http://sylvester.jcoglan.com/ for more info
+	-->
     <script type="text/javascript" src="/js/vector.js"></script>
     <script type="text/javascript" src="/js/balls.js"></script>
 	<script type="text/javacript">
@@ -17,8 +22,6 @@
       })();
     </script>
 	<meta name="description" content="A fun, interactive verison of the google search page with ball collision physics." />
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-  </head>
     <style type="text/css">
 		html, body {
 			margin: 0;
@@ -31,7 +34,7 @@
 			height: 100%;
 			position: fixed;
 			top: 0;
-			left0: 0;
+			left: 0;
 			z-index: -1;
         }
 		#wrap {
@@ -55,7 +58,9 @@
 <body>
 	<canvas id="c"></canvas>
 	<div id="wrap" >
-		<input id="q" type="text" title="Search" maxlength="2048" autocomplete="off" value="use your mouse!">
+		<form action="http://google.com/search" method="get" name="query" id="query">
+		<input id="q" name="q" type="text" title="Search" maxlength="2048" autocomplete="off" value="use your mouse!" />
+		</form>
 	</div>
 </body>
 </html>
