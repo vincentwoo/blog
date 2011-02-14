@@ -1,7 +1,6 @@
 --- 
 title: BC2 Hacking 1
 date: 21/01/2011
-tags: notable
 
 Here's a quick youtube of some of the ballistic aimbot capabilities of a
 hack that I am developing for [Bad Company 2](http://www.battlefieldbadcompany2.com).

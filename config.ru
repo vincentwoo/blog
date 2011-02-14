@@ -3,7 +3,9 @@ require 'toto'
 require 'rack/no-www'
 
 # Rack config
-use Rack::Static, :urls => ['/css', '/js', '/images', '/favicon.ico', '/pdf'], :root => 'public'
+use Rack::Static, :urls => ['/css', '/js', '/images', '/favicon.ico',
+							'/google.html', '/resume.pdf'],
+				  :root => 'public'
 use Rack::CommonLogger
 use Rack::NoWWW
 
