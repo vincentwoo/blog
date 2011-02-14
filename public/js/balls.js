@@ -143,11 +143,12 @@ function postSearchChange(e, caret, lastValue) {
 		if (d > 1) {
 			queryCircles.splice(caret, d);
 		} else {
-			if (e.keyCode == 46) {
-				queryCircles.splice(caret, d);
-			} else {
-				queryCircles.splice(caret-1, d);
-			}
+			if (e.keyCode == 8) caret -= 1;
+			queryCircles.splice(caret, d);
+		}
+		for (var i = caret; i < curValue.length; i++) {
+			if (queryCircles[i] == null) continue;
+			queryCircles[i].accelerator.anchorPos.elements[0] -= 22*d;
 		}
 		buildCirclesList();
 	}
