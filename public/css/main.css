@@ -1,6 +1,7 @@
 * { margin: 0; padding: 0; }
 html, body      { width: 100%; }
-p, li           {  text-indent: 25px; padding: 3px 10px }
+p, li           { text-indent: 25px; padding: 3px 10px }
+p		    { margin-bottom: 10px; }
 a, a:link {
     font-weight: bold;
     color: #000; 
@@ -49,6 +50,7 @@ body {
     border-left: 15px solid #29D9C2;
     color: #fff;
     text-align: right;
+	margin-bottom: 10px;
     clear: both;
 }
 #content h2 a
