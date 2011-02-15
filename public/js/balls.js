@@ -48,13 +48,7 @@ function init() {
 	fpsCounter();
 	
 	if (search.value == "") search.value = "use your mouse!";
-	for (var i = 0; i < search.value.length; i++) {
-		if (search.value.charAt(i) != " ")
-			queryCircles.push(new Circle(i*22-340, 200, 10, "#444", search.value.charAt(i), "#fff"));
-		else
-			queryCircles.push(null);
-	}
-	buildCirclesList();
+	rebuildQueryCircles();
 	
 	resize();	
 	lastUpdate = Date.now();
@@ -114,12 +108,13 @@ function searchChange(e) {
 	if (ending) {
 		ending = false;
 		if (queryCircles.length > 0 && search.value.length == 0) //recovered from a back button
-			queryCircles = [];
+			searchValidator();
 	}
 	//console.log("caret: " + search.selectionStart + " keycode: " + e.keyCode + " charcode: " + e.charCode);
 	window.setTimeout( function() { postSearchChange(e, caret, curValue); }, 5 );
 }
 
+var validateTimeout = null;
 function postSearchChange(e, caret, lastValue) {
 	var curValue = search.value;
 	if (curValue == lastValue) return;
@@ -172,6 +167,34 @@ function postSearchChange(e, caret, lastValue) {
 		}
 		buildCirclesList();
 	}
+	if (validateTimeout) window.clearTimeout(validateTimeout);
+	validateTimeout = window.setTimeout(searchValidator, 500);
+}
+
+function searchValidator() {
+	if (search.value.length != queryCircles.length) {
+		rebuildQueryCircles();
+	} else {
+		for (var i = 0; i < queryCircles.length; i++) {
+			if ((queryCircles[i] == null && search.value.charAt(i)) != " " ||
+				(queryCircles[i].text != search.value.charAt(i))) {
+				rebuildQueryCircles();
+				return;
+			}
+		}
+	}
+}
+
+function rebuildQueryCircles() {
+	queryCircles = [];
+	for (var i = 0; i < search.value.length; i++) {
+		if (search.value.charAt(i) != " ")
+			queryCircles.push(new Circle(i*22-340+center.elements[0], 200+center.elements[1],
+											10, "#444", search.value.charAt(i), "#fff"));
+		else
+			queryCircles.push(null);
+	}
+	buildCirclesList();
 }
 
 function formSubmit(e) {
