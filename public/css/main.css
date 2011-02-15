@@ -88,19 +88,22 @@ body {
     margin: 0;
     margin-bottom: 10px;
     padding: 0;
+	padding-left: 20px;
+	background: url('/images/list-style.gif') no-repeat;
+	line-height: 1em;
 }
  li a, li a:link {
-    line-height: 1em;
     border: 0;
     margin: 0;
     padding: 0;
     display: block;
-    padding-left: 20px;
-    background: url('/images/list-style.gif') no-repeat;
+	margin-left:-20px;
+    padding-left:20px;
 }
  li a:hover {
     margin: 0;
     border: 0;
+	margin-left:-20px;
     background: url('/images/list-style.gif') no-repeat 0px -48px;
 }
 #disqus_thread {
