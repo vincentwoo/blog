@@ -18,6 +18,13 @@ it.
 
 ~
 
+Some features: 
+*  Mass based ball collisions
+*  Mouse input to scatter balls
+*  Balls "anchored" to positions with dampened springs
+*  Typing creates additional iteractable balls
+*  Searching cues exit animation
+
 Technical information
 --------------------- 
 
