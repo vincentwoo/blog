@@ -1,4 +1,3 @@
-
 require 'toto'
 require 'rack/no-www'
 
@@ -27,7 +26,7 @@ toto = Toto::Server.new do
   # set :markdown,  :smart                                    # use markdown + smart-mode
   # set :ext,       'txt'                                     # file extension for articles
   # set :cache,      28800                                    # cache duration, in seconds
-
+  set :url, "http://vincentwoo.com"
   set :date, lambda {|now| now.strftime("%B #{now.day.ordinal} %Y") }
   set :title, "close enough"
   set :disqus, "closeenough"
