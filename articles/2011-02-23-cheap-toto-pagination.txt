@@ -18,7 +18,6 @@ so:
         alias_method :old_go, :go
         
         def go route, env = {}, type = :html
-            route = ['page'] if route.empty? # You can probably do this with a Rack route, too
             if not route.first =~ /\d{4}/ and route.size == 2 and route.last =~ /(\d+)/
                 @config[:id] = route.last.to_i
                 route.pop
@@ -28,6 +27,9 @@ so:
             ret
         end
     end
+    ...
+    # and in the config initializer block:
+    set :root, "page"                                           # page to load on /
 
 You can see that we intercept routes that look like name/1234 and pass the numeric portion of
 the route in @config[:id], and then clear @config[:id] (because @config is persistent). This is

@@ -16,7 +16,6 @@ class Toto::Site
     alias_method :old_go, :go
     
     def go route, env = {}, type = :html
-        route = ['page'] if route.empty?
         if not route.first =~ /\d{4}/ and route.size == 2 and route.last =~ /(\d+)/
             @config[:id] = route.last.to_i
             route.pop
@@ -37,11 +36,11 @@ toto = Toto::Server.new do
   # set [:setting], [value]
   # 
   # set :author,    ENV['USER']                               # blog author
-  # set :root,      "index"                                   # page to load on /
   # set :date,      lambda {|now| now.strftime("%d/%m/%Y") }  # date format for articles
   # set :markdown,  :smart                                    # use markdown + smart-mode
   # set :ext,       'txt'                                     # file extension for articles
   # set :cache,      28800                                    # cache duration, in seconds
+  set :root, "page"                                           # page to load on /
   set :url, "http://vincentwoo.com"
   set :date, lambda {|now| now.strftime("%B #{now.day.ordinal} %Y") }
   set :title, "close enough"
