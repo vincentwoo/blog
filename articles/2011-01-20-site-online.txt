@@ -4,7 +4,7 @@ date: 20/01/2011
 tags: notable
 
 So I guess I'm finished with this mostly minimal layout paired with an 
-incredibly minimal [rails stack](http://cloudhead.io/toto) running for 
+incredibly minimal [rack stack](http://cloudhead.io/toto) running for 
 dirt, dirt free on [Heroku](http://heroku.com/). I've also put 
 together a [resume](/pdf/resume.pdf) that's current as of the writing of 
 this post. It's lovingly hand crafted in inDesign and the typeface is 

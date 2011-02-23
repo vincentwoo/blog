@@ -1,0 +1,42 @@
+<%
+    page = @config[:id]
+    per_page = @config[:articles_per_page]
+    page = 1 if (page.nil? or (page-1) * per_page > @articles.length) or page < 1
+    page_results = @articles[(page-1) * per_page .. page * per_page - 1]
+    prev_page = page > 1 ? page - 1 : nil
+    next_page = @articles.length > page * per_page ? page + 1 : nil
+%>
+
+<% for article in page_results %>
+  <article>
+    <h2><a href="<%= article.path %>"><%= article.title %></a></h2>
+    <% if article[:flickr] %>
+        <div class="centered">
+            <a href="<%= article.path %>">
+                <img src="<%= article[:flickr] %>" />
+            </a>
+        </div>
+    <% else %>
+        <%=
+            config = @config[:summary]
+            sum = if article[:body] =~ config[:delim]
+                article[:body].split(config[:delim]).first
+            else
+                article[:body].match(/(.{1,#{config[:max]}}.*?)(\n|\Z)/m).to_s
+            end
+            markdown(sum.length == article[:body].length ? sum : sum.strip + '&hellip;' )
+        %>
+    <% end %>
+    <p class="articleInfo"> <%= article.date %> | <a href="<%= article.path %>">more &raquo;</a></p>
+  </article>
+<% end %>
+
+<p id="footer">
+    <% if prev_page %>
+        <a href="/page/<%=prev_page%>">&laquo; newer</a>
+        <% if next_page  %>|<% end %>
+    <% end %>
+    <% if next_page %>
+        <a href="/page/<%=next_page%>">older &raquo;</a>
+    <% end %>
+</p>

@@ -62,6 +62,13 @@ body {
 {
     float: right;
     margin-bottom: 20px;
+    clear:both;
+}
+#footer
+{
+    float: left;
+    margin-bottom: 20px;
+    clear:both;
 }
 .archiveInfo
 {
@@ -109,7 +116,7 @@ body {
 #disqus_thread {
     clear: both;
 }
-code, pre, blockquote {
+pre, blockquote {
     font-family: 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
     font-size: .7em;
     line-height: 1.4em;

@@ -3,8 +3,8 @@ require 'rack/no-www'
 
 # Rack config
 use Rack::Static, :urls => ['/css', '/js', '/images', '/favicon.ico',
-							'/google.html', '/resume.pdf'],
-				  :root => 'public'
+                            '/google.html', '/resume.pdf'],
+                  :root => 'public'
 use Rack::CommonLogger
 use Rack::NoWWW
 
@@ -12,9 +12,25 @@ if ENV['RACK_ENV'] == 'development'
   use Rack::ShowExceptions
 end
 
+class Toto::Site
+    alias_method :old_go, :go
+    
+    def go route, env = {}, type = :html
+        route = ['page'] if route.empty?
+        if not route.first =~ /\d{4}/ and route.size == 2 and route.last =~ /(\d+)/
+            @config[:id] = route.last.to_i
+            route.pop
+        end
+        ret = old_go route, env, type
+        @config.delete :id
+        ret
+    end
+end
+
 #
 # Create and configure a toto instance
 #
+
 toto = Toto::Server.new do
   #
   # Add your settings here
@@ -32,6 +48,7 @@ toto = Toto::Server.new do
   set :disqus, "closeenough"
   set :summary, :max => 250, :delim => /~/
   set :flickr_link, "http://www.flickr.com/photos/eruditorium/%s/lightbox/"
+  set :articles_per_page, 5
 end
 
 run toto
