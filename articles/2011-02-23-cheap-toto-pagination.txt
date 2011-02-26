@@ -31,9 +31,10 @@ so:
     # and in the config initializer block:
     set :root, "page"                                           # page to load on /
 
-You can see that we intercept routes that look like name/1234 and pass the numeric portion of
-the route in @config[:id], and then clear @config[:id] (because @config is persistent). This is
-pretty hacky and only really acceptable in the context of Heroku caching everything.
+You can see that we intercept routes that look like name/1234 and pass 
+the numeric portion of the route in @config[:id], and then clear 
+@config[:id] (because @config is persistent). This is pretty hacky and 
+only really acceptable in the context of Heroku caching everything. 
 
 and in templates/pages/page.rhtml...
 

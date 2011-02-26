@@ -23,6 +23,11 @@
     </script>
 	<meta name="description" content="A fun, interactive verison of the google search page with ball collision physics." />
     <style type="text/css">
+        * { 
+			font: 17px arial,sans-serif;
+            color: black;
+        }
+        
 		html, body {
 			margin: 0;
 			padding: 0;
@@ -47,12 +52,27 @@
 		#q {
 			border-color: #C9D7F1 #3366CC #3366CC #A2BAE7;
 			border-width: 1px;
-			font: 17px arial,sans-serif;
 			padding-left: 6px;
 			padding-right: 10px;
 			vertical-align: top;
 			width: 100%;
 		}
+        
+        #info {
+            position:fixed;
+            bottom: 15px;
+            left: 15px;
+        }
+        
+        a {
+            text-decoration: none;
+            border: 0;
+        }
+        a:hover {
+            cursor: pointer;
+            border-bottom: 2px solid #29D9C2;
+            margin-bottom: -2px;
+        }
     </style>
 </head>
 <body>
@@ -62,5 +82,6 @@
 		<input id="q" name="q" type="text" title="Search" maxlength="2048" autocomplete="off" />
 		</form>
 	</div>
+    <a id="info" href="/2011/02/14/interactive-google-doodle/">about this page</a>
 </body>
 </html>
