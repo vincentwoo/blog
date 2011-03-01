@@ -7,11 +7,11 @@ which was a pretty entertaining and informative exercise. The idea is
 basically to parse a log file and generate an undirected graph that 
 represents mutual friendships between Facebook users. Then you are to 
 find every group of friends where each friend in the group is friends 
-with every other friend in the group. 
+with every other person in the group. 
 
 ~
 
-I wrote a naive implementation at first that looked something like.
+I wrote a naive implementation at first that looked something like
 
     # $seen is a hash to menoize previously seen sets
     # $sparse is a hash of usernames to a list of neighboring usernames
