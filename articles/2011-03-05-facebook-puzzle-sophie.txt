@@ -327,5 +327,9 @@ it's actually possible to be sure to find sophie. In particular, if
 there are nodes that aren't reachable from the first node that sophie 
 has a chance of being in then you need to fail. 
 
+    Dear submitter,
+
+    Thank you for your submission of a puzzle solution to Facebook! After running your solution to sophie (received on March 5, 2011, 8:14 pm), I have determined it to be correct. Your solution ran for 25.118 ms on its longest test case.
+
 Also, full source and some plagiarized test cases are all on 
 [github](https://github.com/vincentwoo/rubycode/tree/master/sophie).
