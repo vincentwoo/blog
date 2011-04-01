@@ -267,7 +267,6 @@ It's much faster to just do:
     for (set<int>::iterator n = remain.begin(); n != remain.end(); n++) {
         int next = *n;
         double next_time = time + weights[node][next];
-        set<int> next_remain = remain;
         next_remain.erase(next);
         solve(next, next_remain, unseen - probs[next],
             expect + next_time * probs[next], next_time);
