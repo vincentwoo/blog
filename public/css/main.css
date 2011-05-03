@@ -1,7 +1,6 @@
 * { margin: 0; padding: 0; }
 html, body      { width: 100%; }
-p, li           { text-indent: 25px; padding: 3px 10px }
-p		    { margin-bottom: 10px; }
+p		    {text-indent: 25px; margin-bottom: 10px; }
 a, a:link {
     font-weight: bold;
     color: #000; 
@@ -19,6 +18,7 @@ body {
     font-family: 'Baskerville', Georgia, Times, serif;
     font-size: 20px;
     line-height: 30px;
+    text-shadow: 0px -1px 1px #ccc;
     background: #fff; 
     color: #000;
 }
@@ -37,6 +37,11 @@ body {
 #content {
     float: left;
     width: 83%;
+}
+#content article {
+	min-width: 640px;
+	width: 90%;
+	margin: 0 auto;
 }
 #sidebar {
     float: right;
@@ -96,8 +101,9 @@ body {
     margin-bottom: 10px;
     padding: 0;
 	padding-left: 20px;
-	background: url('/images/list-style.gif') no-repeat;
+	background: url('/images/list-style.gif') no-repeat 0px -48px;
 	line-height: 1em;
+	position: relative;
 }
  li a, li a:link {
     border: 0;
@@ -111,15 +117,28 @@ body {
     margin: 0;
     border: 0;
 	margin-left:-20px;
-    background: url('/images/list-style.gif') no-repeat 0px -48px;
+    background: url('/images/list-style.gif') no-repeat;
+}
+li p {
+	line-height: 30px;
+	top: -6px;
+	position: relative;
 }
 #disqus_thread {
     clear: both;
 }
-pre, blockquote {
+pre {
     font-family: 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
     font-size: .7em;
     line-height: 1.4em;
     border-left: 15px solid #777;
     margin-top: 10px;
+}
+blockquote {
+    margin: 0 50px;
+	padding: 0 10px;
+    background: #eee;
+}
+blockquote p {
+    text-indent: 0;
 }
