@@ -15,7 +15,7 @@ body {
   color: #000;
 }
 #page-wrap {
-  min-width: 810px;
+  min-width: 640px;
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -151,4 +151,26 @@ blockquote {
 }
 blockquote p {
   text-indent: 0;
+}
+@media all and (max-width: 800px) {
+ #sidebar {
+   float: none;
+   clear: both;
+   width: 70%;
+   margin: 10px auto;
+ }
+ #nav {
+   float: left;
+   width: 48%;
+ }
+ #notable {
+   float: right;
+   width: 48%%;
+ }
+ #content, #header {
+   float: none;
+   margin-left: 1%;
+   margin-right: 1%;
+   width: 98%;
+ }
 }
