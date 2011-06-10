@@ -26,9 +26,6 @@
       <div id="header">
         <h1><a href="/">vincentwoo.com</a>: close enough</h1>
       </div>
-      <div id="content">
-        <%= yield %> 
-      </div>
       <div id="sidebar">
         <div id="nav">
           <h3>nav</h3>
@@ -49,6 +46,10 @@
             <% end %>
           </ul>
         </div>
+        <div class="clear"></div>
+      </div>
+      <div id="content">
+        <%= yield %> 
       </div>
     </div>
   </body>

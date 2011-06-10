@@ -135,7 +135,7 @@ li p {
   top: -6px;
   position: relative;
 }
-#disqus_thread {
+#disqus_thread, .clear{
   clear: both;
 }
 pre {
@@ -156,8 +156,8 @@ blockquote p {
  #sidebar {
    float: none;
    clear: both;
-   width: 70%;
-   margin: 10px auto;
+   width: 480px;
+   margin: 0px auto 20px auto;
  }
  #nav {
    float: left;
