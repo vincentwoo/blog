@@ -15,7 +15,7 @@ body {
   color: #000;
 }
 #page-wrap {
-  min-width: 640px;
+  min-width: 480px;
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -126,6 +126,7 @@ li a, li a:link {
   display: block;
   margin-left: -20px;
   padding-left: 20px;
+  min-height: 16px;
 }
 li a:hover {
   background: url('/images/list-style.gif') no-repeat;
@@ -153,6 +154,7 @@ blockquote p {
   text-indent: 0;
 }
 @media all and (max-width: 800px) {
+
  #sidebar {
    float: none;
    clear: both;
@@ -173,4 +175,21 @@ blockquote p {
    margin-right: 1%;
    width: 98%;
  }
+}
+
+@media all and (max-width: 640px) {
+  body {
+   font-size: 18px;
+   line-height: 1.3em; 
+  }
+  #header {
+    font-size: 80%;
+  }
+  .centered {
+    width: 100%;
+    overflow:hidden;
+  }
+  .centered img {
+    width: 100%;
+  }
 }
