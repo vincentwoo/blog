@@ -38,12 +38,12 @@ h2, h3 {
   clear: both;
   border-bottom: 5px solid #333;
   height: 30px;
-  font-size: 1.17em;
+  font-size: 1.5em;
 }
 h3 {
   padding-right: 10px;
   border-width: 3px;
-  font-size: 1.5em;
+  font-size: 1.17em;
 }
 h3:before {
   content: '»';
@@ -119,7 +119,6 @@ li {
   padding: 0;
   padding-left: 20px;
   background: url('/images/list-style.gif') no-repeat 0px -48px;
-  line-height: 1em;
   position: relative;
 }
 li a, li a:link {
@@ -134,10 +133,8 @@ li a, li a:link {
 li a:hover {
   background: url('/images/list-style.gif') no-repeat;
 }
-li p {
-  line-height: 30px;
-  top: -6px;
-  position: relative;
+li *:first-line {
+  line-height: 16px;
 }
 #disqus_thread, .clear {
   clear: both;
@@ -208,6 +205,9 @@ blockquote p {
   }
   .centered img {
     width: 100%;
+  }
+  #sidebar {
+    font-size: 1em;
   }
   #content, #header {
     margin-left: 0;
