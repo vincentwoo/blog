@@ -114,8 +114,7 @@ solution appears to outperform bron_kerbosch I would greatly appreciate
 it, as it does not seem correct. My guess is slow implementations in 
 Ruby of Array "set-like" operators (&, +).
 
-final thoughts
---------------
+### final thoughts
 
 I spent 2-3 days stuck on bugs that amounted to 
 

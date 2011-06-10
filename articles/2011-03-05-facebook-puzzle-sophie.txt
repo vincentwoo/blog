@@ -14,8 +14,7 @@ well as the transit times between the various locations in your home.
 I'll document here the various bad solutions I came up with on my way to
 a decent one, and as a bonus: an optimized-ish version in C++! ~
 
-About the math
---------------
+### About the math
 The problem asks you to minimize the expected time to find sophie. What
 does this mean? Take a look at the example input (comments mine).
 
@@ -55,8 +54,7 @@ Eisenstat's site](http://www.davideisenstat.com/fbpfaq/#sophie):
                            + Distance(under_bed, behind_blinds))
         = .2 * 0 + .3 * 2 + .4 * (2 + 7) + .1 * (2 + 7 + 9) = 6.00
     
-Building the graph
-------------------
+### Building the graph
 
 The input only includes edges between particular nodes. In order to know 
 that, say, the distance between the cabinet and the bed is 7 (through 
@@ -98,8 +96,7 @@ algorithm](http://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
 This gives a good starting point for actually trying to start solving 
 the problem. 
 
-BFS solution
-------------
+### BFS solution
 In my hubris, I figured a breadth first search where you expand on the 
 path with the lowest current expected time would work. Here's what it 
 looks like: 
@@ -131,8 +128,7 @@ forever on large graphs. This doesn't work because you incrementally
 build all the bad paths on your way to finding the first path to 
 complete. Complexity: proportional to the number of paths, or O(n!).
 
-DP Solution
------------
+### DP Solution
 
 Hitting upon the realization that the problem is a variant of the 
 [traveling salesman 
@@ -183,8 +179,7 @@ requires examining all other previous paths of the subset minus one of
 its elements (breathe), the complexity here is 
 O(2<sup>n</sup>n<sup>2</sup>).
 
-Recursive Backtracking (Pruning) Solution
------------------------------------------
+### Recursive Backtracking (Pruning) Solution
 
 [Backtracking](http://en.wikipedia.org/wiki/Backtracking) can be thought 
 of, essentially, as a DFS search with fast failure. For example, say you 
@@ -228,8 +223,7 @@ I don't have a good estimate of the complexity improvement here, since
 you can generate corner cases that can prevent any pruning from 
 happening. 
 
-Optimizations!
--------------- 
+### Optimizations! 
 
 Ruby is slow. At least, Cygwin's default Ruby 1.8.7 interpreter is slow. 
 I decided to reimplement the whole deal in C++ and see what kind of 
@@ -318,8 +312,7 @@ fast, ain't no O(1). This gets us (for our 17 node graph):
     
 Hooray!
 
-Final Thoughts
---------------
+### Final Thoughts
 
 I didn't talk about any of the edge cases, but you need to check for if 
 it's actually possible to be sure to find sophie. In particular, if 

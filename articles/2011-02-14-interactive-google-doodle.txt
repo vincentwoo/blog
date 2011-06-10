@@ -18,17 +18,15 @@ it.
 
 ~
 
-Features
---------
+### Features
 
 *  Mass based ball collisions
 *  Mouse input to scatter balls
 *  Balls "anchored" to positions with dampened springs
-*  Typing creates additional iteractable balls
+*  Typing creates additional interactable balls
 *  Searching cues exit animation
 
-Technical information
---------------------- 
+### Technical information 
 
 The code for this demo (as well this entire blog) is on github. Here is
 [the primary javascript engine][3].
