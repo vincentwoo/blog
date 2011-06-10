@@ -24,7 +24,10 @@
             else
                 article[:body].match(/(.{1,#{config[:max]}}.*?)(\n|\Z)/m).to_s
             end
-            markdown(sum.length == article[:body].length ? sum : sum.strip + '&hellip;' )
+            last = sum.split('').reverse.find { |c| not c =~ /\s/ }
+            terminate = sum.length == article[:body].length ||
+                        last == '.' || last == '?' || last == '!'
+            markdown(terminate ? sum : sum.strip + '&hellip;')
         %>
     <% end %>
     <p class="articleInfo"> <%= article.date %> | <a href="<%= article.path %>">more &raquo;</a></p>
