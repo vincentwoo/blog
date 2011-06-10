@@ -139,9 +139,7 @@ li p {
   clear: both;
 }
 pre {
-  font-family: 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
-  font-size: .7em;
-  line-height: 1.4em;
+  font: 0.7em/1.4em 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
   border-left: 15px solid #777;
   margin: 10px 0;
 }
