@@ -182,7 +182,7 @@ O(2<sup>n</sup>n<sup>2</sup>).
 ### Recursive Backtracking (Pruning) Solution
 
 [Backtracking](http://en.wikipedia.org/wiki/Backtracking) can be thought 
-of, essentially, as a DFS search with fast failure. For example, say you 
+of as essentially a DFS search with fast failure. For example, say you 
 have found a complete path that you know will give you an expected time 
 of 30 seconds. Now you are attempting to build another path, and halfway 
 through you know your partial expected time is already 31 seconds. You 

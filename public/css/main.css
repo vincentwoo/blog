@@ -16,7 +16,7 @@ body {
 }
 #page-wrap {
   min-width: 320px;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 #header {
@@ -76,12 +76,12 @@ a:hover, h2 a:hover {
 }
 #content {
   float: left;
-  width: 79%;
+  width: 74%;
   margin-left: 2%;
 }
 #sidebar {
   float: right;
-  width: 15%;
+  width: 20%;
   margin-right: 2%;
   font-size: 80%;
 }
@@ -133,7 +133,7 @@ li a, li a:link {
 li a:hover {
   background: url('/images/list-style.gif') no-repeat;
 }
-li *:first-line {
+li > *:first-child:first-line {
   line-height: 16px;
 }
 #disqus_thread, .clear {
@@ -166,6 +166,7 @@ blockquote p {
     width: 70%;
     min-width: 320px;
     margin: 0px auto 20px auto;
+    font-size: 1em;
   }
   #nav {
     float: left;
@@ -205,9 +206,6 @@ blockquote p {
   }
   .centered img {
     width: 100%;
-  }
-  #sidebar {
-    font-size: 1em;
   }
   #content, #header {
     margin-left: 0;
