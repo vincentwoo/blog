@@ -23,7 +23,9 @@
   </head>
   <body>
     <div id="page-wrap">
-      <h1><a href="/">vincentwoo.com</a>: close enough</h1>
+      <div id="header">
+        <h1><a href="/">vincentwoo.com</a>: close enough</h1>
+      </div>
       <div id="content">
         <%= yield %> 
       </div>
@@ -35,7 +37,7 @@
           <li><a href="/index.xml">feed</a></li>
           <li><a href="https://github.com/vincentwoo/">github</a></li>
         </ul>
-        <h3>notable:</h3>
+        <h3>notable</h3>
         <ul>
           <% notable = @articles.select { |article| article[:tags] and article[:tags].split.include? 'notable' } %>
           <% for article in notable %>

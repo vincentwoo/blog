@@ -9,25 +9,8 @@ p {
   text-indent: 25px;
   margin-bottom: 10px;
 }
-a, a:link {
-  font-weight: bold;
-  color: #000;
-  text-decoration: none;
-  border-bottom: 3px solid #333;
-  cursor: pointer;
-}
-h1 a, h1 a:link, h1 a:hover, iframe {
-  border: 0;
-}
-h2 a, h2 a:link {
-  color: #fff;
-  border-bottom: 3px solid #666;
-}
-a:hover, h2 a:hover {
-  border-bottom: 3px solid #29D9C2;
-}
 body {
-  font: 300 20px/1.7em 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font: 300 20px/1.5em 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #fff;
   color: #000;
 }
@@ -36,8 +19,57 @@ body {
   max-width: 1100px;
   margin: 0 auto;
 }
+#header {
+  width: 79%;
+  margin: 20px 0 20px 2%;
+}
 h1 {
-  margin: 20px 2%;
+  text-align: right;
+  background: #333;
+  border-left: 15px solid #29D9C2;
+  color: #fff;
+  text-shadow: -1px -1px 1px #666;
+  padding: 9px 10px 13px 0;
+}
+h2, h3 {
+  text-align: right;
+  margin-bottom: 10px;
+  clear: both;
+  border-bottom: 5px solid #333;
+  height: 30px;
+}
+h3 {
+  padding-right: 10px;
+  border-width: 3px;
+}
+h3:before {
+  content: '»';
+  margin-right: 10px;
+  color: #29D9C2;
+}
+a, a:link {
+  font-weight: bold;
+  color: #000;
+  text-decoration: none;
+  border-bottom: 3px solid #333;
+  cursor: pointer;
+}
+h1 a, h1 a:link, h1 a:hover {
+  border: 0;
+  color: #fff;
+}
+h1 a:hover {
+  color: #ccc;
+}
+h2 a, h2 a:link {
+  height: 30px;
+  float: right;
+  color: #000;
+  border-bottom: 5px solid #666;
+  padding: 0 10px;
+}
+a:hover, h2 a:hover {
+  border-color: #29D9C2;
 }
 #content {
   float: left;
@@ -49,25 +81,6 @@ h1 {
   width: 15%;
   margin-right: 2%;
   font-size: 80%;
-}
-h2, h3 {
-  text-align: right;
-  margin-bottom: 10px;
-  clear: both;
-}
-h2 {
-  padding: 5px 10px;
-  background: #333;
-  border-left: 15px solid #29D9C2;
-  color: #fff;
-}
-h3 {
-  border-bottom: 5px solid #333;
-}
-h3:before {
-  content: '»';
-  margin-right: 10px;
-  color: #29D9C2;
 }
 .articleInfo {
   float: right;
