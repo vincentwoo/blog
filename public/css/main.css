@@ -139,7 +139,7 @@ li p {
   top: -6px;
   position: relative;
 }
-#disqus_thread, .clear{
+#disqus_thread, .clear {
   clear: both;
 }
 pre {
@@ -159,36 +159,42 @@ blockquote p {
   text-indent: 0;
 }
 @media all and (max-width: 800px) {
- #sidebar {
-   float: none;
-   clear: both;
-   width: 70%;
-   min-width: 320px;
-   margin: 0px auto 20px auto;
- }
- #nav {
-   float: left;
-   width: 48%;
- }
- #notable {
-   float: right;
-   width: 48%%;
- }
- #content, #header {
-   float: none;
-   margin-left: 1%;
-   margin-right: 1%;
-   width: 98%;
- }
+  body {
+    font-size: 18px;
+    line-height: 1.4em;
+  }
+  #sidebar {
+    float: none;
+    clear: both;
+    width: 70%;
+    min-width: 320px;
+    margin: 0px auto 20px auto;
+  }
+  #nav {
+    float: left;
+    width: 48%;
+  }
+  #notable {
+    float: right;
+    width: 48%%;
+  }
+  #content, #header {
+    float: none;
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 98%;
+    overflow: hidden;
+  }
+
 }
 
 @media all and (max-width: 650px) {
   body {
-   font-size: 18px;
-   line-height: 1.3em;
+    font-size: 16px;
+    line-height: 1.3em;
   }
   h1 {
-    font-size: 1.6em;
+    font-size: 1.4em;
   }
   h2 {
     font-size: 1.2em;
@@ -198,7 +204,7 @@ blockquote p {
   }
   .centered {
     width: 100%;
-    overflow:hidden;
+    overflow: hidden;
   }
   .centered img {
     width: 100%;
@@ -207,15 +213,5 @@ blockquote p {
     margin-left: 0;
     margin-right: 0;
     width: 100%;
-    overflow: hidden;
-  }
-}
-
-@media all and (max-width: 500px) {
-  body {
-    font-size: 16px;
-  }
-  h1 {
-    font-size: 1.4em;
   }
 }
