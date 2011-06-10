@@ -13,14 +13,18 @@ a, a:link {
   font-weight: bold;
   color: #000;
   text-decoration: none;
-  border-bottom: 2px solid #333;
+  border-bottom: 3px solid #333;
+  cursor: pointer;
 }
 h1 a, h1 a:link, h1 a:hover, iframe {
   border: 0;
 }
-a:hover {
-  cursor: pointer;
-  border-bottom: 2px solid #29D9C2;
+h2 a, h2 a:link {
+  color: #fff;
+  border-bottom: 3px solid #666;
+}
+a:hover, h2 a:hover {
+  border-bottom: 3px solid #29D9C2;
 }
 body {
   font: 300 20px/1.7em 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -46,28 +50,24 @@ h1 {
   margin-right: 2%;
   font-size: 80%;
 }
-#content h2, #content h3 {
+h2, h3 {
   text-align: right;
   margin-bottom: 10px;
   clear: both;
 }
-#content h2 {
+h2 {
   padding: 5px 10px;
   background: #333;
   border-left: 15px solid #29D9C2;
   color: #fff;
 }
-#content h3 {
+h3 {
   border-bottom: 5px solid #333;
 }
-#content h3:before {
+h3:before {
   content: '»';
   margin-right: 10px;
   color: #29D9C2;
-}
-#content h2 a {
-  color: #fff;
-  text-decoration: none;
 }
 .articleInfo {
   float: right;
