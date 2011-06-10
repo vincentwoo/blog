@@ -28,7 +28,7 @@ body {
   color: #000;
 }
 #page-wrap {
-  min-width: 640px;
+  min-width: 810px;
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -37,7 +37,7 @@ h1 {
 }
 #content {
   float: left;
-  width: 79%%;
+  width: 79%;
   margin-left: 2%;
 }
 #sidebar {
@@ -133,12 +133,13 @@ pre {
   font-size: .7em;
   line-height: 1.4em;
   border-left: 15px solid #777;
-  margin-top: 10px;
+  margin: 10px 0;
 }
 blockquote {
-  margin: 0 50px;
-  padding: 0 10px;
-  background: #eee;
+  padding: 10px 10% 5px 10%;
+  margin-bottom: 10px;
+  font-style: italic;
+  background: #f5f5f5;
 }
 blockquote p {
   text-indent: 0;
