@@ -159,7 +159,6 @@ blockquote p {
   text-indent: 0;
 }
 @media all and (max-width: 800px) {
-
  #sidebar {
    float: none;
    clear: both;
@@ -203,6 +202,12 @@ blockquote p {
   }
   .centered img {
     width: 100%;
+  }
+  #content, #header {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    overflow: hidden;
   }
 }
 
