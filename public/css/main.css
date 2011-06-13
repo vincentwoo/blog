@@ -20,8 +20,8 @@ body {
   margin: 0 auto;
 }
 #header {
-  width: 79%;
-  margin: 20px 0 20px 2%;
+  width: 96%;
+  margin: 20px 2%;
 }
 h1 {
   text-align: right;
@@ -65,7 +65,7 @@ h1 a:hover {
   color: #ccc;
 }
 h2 a, h2 a:link {
-  height: 30px;
+  height: 100%;
   float: right;
   color: #000;
   border-bottom: 5px solid #666;
@@ -84,6 +84,9 @@ a:hover, h2 a:hover {
   width: 20%;
   margin-right: 2%;
   font-size: 80%;
+}
+#sidebar li * {
+  line-height: 1.2em;
 }
 .articleInfo {
   float: right;
@@ -117,9 +120,20 @@ li {
   margin: 0;
   margin-bottom: 10px;
   padding: 0;
-  padding-left: 20px;
-  background: url('/images/list-style.gif') no-repeat 0px -48px;
+  padding-left: 25px;
   position: relative;
+}
+li > *:first-child:before {
+  content: '';
+  background: url('/images/list-style.gif') no-repeat 0px -48px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-left: -25px;
+  margin-right: 5px;
+}
+li > a:first-child:hover:before {
+  background: url('/images/list-style.gif') no-repeat;
 }
 li a, li a:link {
   border: 0;
@@ -129,12 +143,6 @@ li a, li a:link {
   margin-left: -20px;
   padding-left: 20px;
   min-height: 16px;
-}
-li a:hover {
-  background: url('/images/list-style.gif') no-repeat;
-}
-li > *:first-child:first-line {
-  line-height: 16px;
 }
 #disqus_thread, .clear {
   clear: both;
@@ -163,18 +171,20 @@ blockquote p {
   #sidebar {
     float: none;
     clear: both;
-    width: 70%;
+    width: 98%;
     min-width: 320px;
-    margin: 0px auto 20px auto;
-    font-size: 1em;
+    margin: 0px 1% 20px 1%;
+    font-size: 1.2em;
+    line-height: 16px;
   }
-  #nav {
-    float: left;
-    width: 48%;
+  #sidebar li {
+    margin-right: 10px;
   }
   #notable {
-    float: right;
-    width: 48%%;
+    display: none;
+  }
+  #sidebar li, #sidebar li a {
+    display: inline-block;
   }
   #content, #header {
     float: none;
@@ -183,7 +193,14 @@ blockquote p {
     width: 98%;
     overflow: hidden;
   }
-
+  .centered {
+    width: 100%;
+    max-width: 640px;
+    overflow: hidden;
+  }
+  .centered img {
+    width: 100%;
+  }
 }
 
 @media all and (max-width: 650px) {
@@ -191,25 +208,50 @@ blockquote p {
     font-size: 16px;
     line-height: 1.3em;
   }
+  #sidebar li {
+    font-size: 0.7em;
+    margin-right: 5px;
+  }
   h1 {
-    font-size: 1.4em;
+    font-size: 1.2em;
+    border-left: 10px solid #29D9C2;
+    color: #fff;
+    text-shadow: -1px -1px 1px #666;
+    padding: 7px 8px 11px 0;
+  }
+  h2, h3 {
+    height: 20px;
+    border-width: 3px;
+  }
+  h2 a, h2 a:link {
+    border-width: 3px;
   }
   h2 {
-    font-size: 1.2em;
+    font-size: 1.1em;
   }
   h3 {
     font-size: 1em;
   }
-  .centered {
-    width: 100%;
-    overflow: hidden;
+  
+  li {
+    padding-left: 0px;
   }
-  .centered img {
-    width: 100%;
+  li > *:first-child:before {
+    content: '»';
+    background: none;
+    width: auto;
+    height: auto;
+    display: inline;
+    margin: 0;
   }
-  #content, #header {
-    margin-left: 0;
-    margin-right: 0;
-    width: 100%;
+  li > a:first-child:hover:before {
+    content: '»';
+    background: none;
+    color: #29D9C2;
+  }
+  li a, li a:link {
+    border: 0;
+    margin: 0;
+    padding: 0;
   }
 }
