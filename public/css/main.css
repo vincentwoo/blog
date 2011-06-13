@@ -144,8 +144,11 @@ li a, li a:link {
   padding-left: 20px;
   min-height: 16px;
 }
-#disqus_thread, .clear {
+.clear, #disqus_thread  {
   clear: both;
+}
+#disqus_thread li > *:first-child:before {
+  display: none;
 }
 pre {
   font: 0.7em/1.4em 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
