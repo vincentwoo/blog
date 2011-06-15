@@ -1,3 +1,25 @@
+@font-face {
+    font-family: 'ITCAvantGardeGothicProBook';
+    src: url('/fonts/IAG/itcavantgardepro-bk-webfont.eot');
+    src: url('/fonts/IAG/itcavantgardepro-bk-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/IAG/itcavantgardepro-bk-webfont.woff') format('woff'),
+         url('/fonts/IAG/itcavantgardepro-bk-webfont.ttf') format('truetype'),
+         url('/fonts/IAG/itcavantgardepro-bk-webfont.svg#ITCAvantGardeGothicProBook') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ITCAvantGardeGothicProDemi';
+    src: url('/fonts/IAG/itcavantgardepro-demi-webfont.eot');
+    src: url('/fonts/IAG/itcavantgardepro-demi-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/IAG/itcavantgardepro-demi-webfont.woff') format('woff'),
+         url('/fonts/IAG/itcavantgardepro-demi-webfont.ttf') format('truetype'),
+         url('/fonts/IAG/itcavantgardepro-demi-webfont.svg#ITCAvantGardeGothicProDemi') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,9 +32,9 @@ p {
   margin-bottom: 10px;
 }
 body {
-  font: 300 20px/1.5em 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font: 300 20px/1.5em 'ITCAvantGardeGothicProBook',  'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #fff;
-  color: #000;
+  color: #222;
 }
 #page-wrap {
   min-width: 320px;
@@ -22,6 +44,10 @@ body {
 #header {
   width: 96%;
   margin: 20px 2%;
+}
+h1, h2, h3 {
+  font-family: 'ITCAvantGardeGothicProDemi';
+  font-weight: bold;
 }
 h1 {
   text-align: right;
@@ -37,7 +63,7 @@ h2, h3 {
   margin-bottom: 10px;
   clear: both;
   border-bottom: 5px solid #333;
-  height: 30px;
+  height: 35px;
   font-size: 1.5em;
 }
 h3 {
@@ -51,10 +77,11 @@ h3:before {
   color: #29D9C2;
 }
 a, a:link {
+  color: #222;
+  font-family: 'ITCAvantGardeGothicProDemi';
   font-weight: bold;
-  color: #000;
   text-decoration: none;
-  border-bottom: 3px solid transparent;
+  border-bottom: 2px dotted #666;
   cursor: pointer;
 }
 h1 a, h1 a:link, h1 a:hover {
@@ -67,7 +94,6 @@ h1 a:hover {
 h2 a, h2 a:link {
   height: 100%;
   float: right;
-  color: #000;
   border-bottom: 5px solid #666;
   padding: 0 10px;
 }
@@ -168,7 +194,7 @@ blockquote p {
 }
 @media all and (max-width: 800px) {
   body {
-    font-size: 18px;
+    font-size: 17px;
     line-height: 1.4em;
   }
   #sidebar {
@@ -223,7 +249,7 @@ blockquote p {
     padding: 7px 8px 11px 0;
   }
   h2, h3 {
-    height: 20px;
+    height: 25px;
     border-width: 3px;
   }
   h2 a, h2 a:link {
