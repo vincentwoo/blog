@@ -45,7 +45,7 @@ p {
 body {
   font: 18px/1.5em 'DejaVuSansCondensed',  'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #fff;
-  color: #222;
+  color: #333;
 }
 #page-wrap {
   min-width: 320px;
@@ -88,9 +88,7 @@ h3:before {
   color: #29D9C2;
 }
 a, a:link {
-  color: #222;
-  font-family: 'DejaVuSansCondensedBold';
-  font-weight: bold;
+  color: #333;
   text-decoration: none;
   border-bottom: 2px dotted #666;
   cursor: pointer;
@@ -199,6 +197,10 @@ blockquote {
   font-style: italic;
   background: #f5f5f5;
   overflow: hidden;
+}
+em {
+  font-style:italic;
+  font-family: 'DejaVuSansOblique';
 }
 blockquote p {
   text-indent: 0;
