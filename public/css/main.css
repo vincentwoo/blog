@@ -124,7 +124,7 @@ a:hover, h2 a:hover {
 }
 .articleInfo {
   float: right;
-  margin-bottom: 20px;
+  margin: -5px 0 25px 0;
   clear: both;
 }
 #footer {
