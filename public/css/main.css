@@ -1,21 +1,32 @@
 @font-face {
-    font-family: 'ITCAvantGardeGothicProBook';
-    src: url('/fonts/IAG/itcavantgardepro-bk-webfont.eot');
-    src: url('/fonts/IAG/itcavantgardepro-bk-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/IAG/itcavantgardepro-bk-webfont.woff') format('woff'),
-         url('/fonts/IAG/itcavantgardepro-bk-webfont.ttf') format('truetype'),
-         url('/fonts/IAG/itcavantgardepro-bk-webfont.svg#ITCAvantGardeGothicProBook') format('svg');
+    font-family: 'DejaVuSansOblique';
+    src: url('/fonts/DejaVuSans-Oblique-webfont.eot');
+    src: url('/fonts/DejaVuSans-Oblique-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/DejaVuSans-Oblique-webfont.woff') format('woff'),
+         url('/fonts/DejaVuSans-Oblique-webfont.ttf') format('truetype'),
+         url('/fonts/DejaVuSans-Oblique-webfont.svg#DejaVuSansOblique') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'ITCAvantGardeGothicProDemi';
-    src: url('/fonts/IAG/itcavantgardepro-demi-webfont.eot');
-    src: url('/fonts/IAG/itcavantgardepro-demi-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/IAG/itcavantgardepro-demi-webfont.woff') format('woff'),
-         url('/fonts/IAG/itcavantgardepro-demi-webfont.ttf') format('truetype'),
-         url('/fonts/IAG/itcavantgardepro-demi-webfont.svg#ITCAvantGardeGothicProDemi') format('svg');
+    font-family: 'DejaVuSansCondensed';
+    src: url('/fonts/DejaVuSansCondensed-webfont.eot');
+    src: url('/fonts/DejaVuSansCondensed-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/DejaVuSansCondensed-webfont.woff') format('woff'),
+         url('/fonts/DejaVuSansCondensed-webfont.ttf') format('truetype'),
+         url('/fonts/DejaVuSansCondensed-webfont.svg#DejaVuSansCondensed') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'DejaVuSansCondensedBold';
+    src: url('/fonts/DejaVuSansCondensed-Bold-webfont.eot');
+    src: url('/fonts/DejaVuSansCondensed-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/DejaVuSansCondensed-Bold-webfont.woff') format('woff'),
+         url('/fonts/DejaVuSansCondensed-Bold-webfont.ttf') format('truetype'),
+         url('/fonts/DejaVuSansCondensed-Bold-webfont.svg#DejaVuSansCondensedBold') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -32,7 +43,7 @@ p {
   margin-bottom: 10px;
 }
 body {
-  font: 300 20px/1.5em 'ITCAvantGardeGothicProBook',  'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font: 18px/1.5em 'DejaVuSansCondensed',  'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #fff;
   color: #222;
 }
@@ -46,7 +57,7 @@ body {
   margin: 20px 2%;
 }
 h1, h2, h3 {
-  font-family: 'ITCAvantGardeGothicProDemi';
+  font-family: 'DejaVuSansCondensedBold';
   font-weight: bold;
 }
 h1 {
@@ -63,7 +74,7 @@ h2, h3 {
   margin-bottom: 10px;
   clear: both;
   border-bottom: 5px solid #333;
-  height: 35px;
+  height: 30px;
   font-size: 1.5em;
 }
 h3 {
@@ -78,7 +89,7 @@ h3:before {
 }
 a, a:link {
   color: #222;
-  font-family: 'ITCAvantGardeGothicProDemi';
+  font-family: 'DejaVuSansCondensedBold';
   font-weight: bold;
   text-decoration: none;
   border-bottom: 2px dotted #666;
@@ -109,7 +120,6 @@ a:hover, h2 a:hover {
   float: right;
   width: 20%;
   margin-right: 2%;
-  font-size: 80%;
 }
 #sidebar li * {
   line-height: 1.2em;
@@ -185,6 +195,7 @@ pre {
 blockquote {
   padding: 10px 10% 5px 10%;
   margin-bottom: 10px;
+  font-family: 'DejaVuSansOblique';
   font-style: italic;
   background: #f5f5f5;
   overflow: hidden;
@@ -249,7 +260,7 @@ blockquote p {
     padding: 7px 8px 11px 0;
   }
   h2, h3 {
-    height: 25px;
+    height: 20px;
     border-width: 3px;
   }
   h2 a, h2 a:link {
