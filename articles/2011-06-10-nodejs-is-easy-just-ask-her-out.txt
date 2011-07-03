@@ -1,0 +1,101 @@
+--- 
+title: NodeJS is easy, just ask her out
+date: 10/06/2011
+
+NodeJS is the hot new girl on the block. You've flirted a few times at
+meetups, and you think you could probably get a date with her if you asked.
+However, you still have doubts. She's smart, but sometimes it feels like her
+Inception-esque nested callback conversation is out of your league. Maybe
+you'd be better off getting back together with Ruby. You find yourself missing
+her concise, imperative style during tedious stretches of smalltalk on dates
+with other programming languages. She was nice, and she loved you. ~
+
+You tell yourself, "No, she was nice, but limited." On rails, even. You remind
+yourself that you put yourself back in the web development market for a
+reason. But you worry that your years of blissful content with Ruby have
+dulled your ability to satisfy new languages.
+
+Well, fear not. She's easy. I don't even mean that in a pejorative sense,
+she's easy in a way that will make you feel good about yourself. What's that?
+Too much information, but you want to hear how we got together anyway? Well,
+alright.
+
+### Hooking Up
+
+I started [MultiplayerSet][1] with the intention of making a realtime game
+that my non-savvy friends could play with nothing more than a browser. I
+thought about how I might do this. Canonical options for realtime behavior in
+a browser were limited. You could do something with [Juggernaut][3] and Rails,
+but, ugh. Flash on every page? But what about the server side? How do you
+architect that? A controller action for every game action? But actions have
+context, game state, oh no am I going to have to make a model just to
+represent the state of every game oh god session management I already have a
+day job.
+
+Then, the [perfect storm][2] walked into the room. Javascript on the server,
+javascript on the client. Just build the server game states in memory, just
+hack together jQuery on the client side for interaction. Let Socket.IO take
+care of the heavy lifting. All these things are great, but the reason they are
+all great gravitate around one reason: *NodeJS is fundamentally unstructured*.
+Everything you might ever want to do in the context of a web service is
+present at every layer of abstraction in NodeJS *because there is basically no
+abstraction*. Rails is nice because she is fundamentally structured by
+convention. Doing anything that Rails isn't already comfortable with doing is
+hard.
+
+### Doing it Right (the Wrong Way)
+
+[Some people][4] are just [not going to get it][5]. They'll point at how
+disorganized Node is, and ask why you didn't go for the more classy Erlang or
+at least stay with the more successful Ruby. What they're missing is that Node
+doesn't care that you don't know what you doing. Put another way, *Node is
+always ready to party*.
+
+There's no configuration, no convention. Sure, you can have those things if
+you want them, but Node doesn't care. She'll let you go from zero to highly
+performant (if somewhat kludgy) web service in a tiny amount of code. Writing
+a game? Sure, you could set up a structured [RPC framework][7], or you could
+just say *fuck it*, drop in some [websocket support][8] and hit the ground
+running. Giant switch statement in a master method that runs on your server?
+Rubyists cringe, but if you're smart you understand that all that fancy
+routing is just so you can pretend you won't have to do some regexes later.
+*Just do it*. Node loves it when you put on your Ray-Bans and go full
+[programming motherfucker][9] on her.
+
+### Common Misgivings
+
+"Blah blah webscale, blah blah unmaintainable code," you say. Listen to me:
+*no one gives a shit*. Nothing's stopping you from writing Node the "right"
+way. Yes, callback nesting is a pain. Yes, commonJS modules are a real piece
+of work. But compare that to the pain of using Ruby on Rails in her ever
+mutable glory. Sure, she has url helpers and views. Sure, she has controllers
+and ActiveRecord tomfoolery. All that stuff is great, and if that's all you
+need, then by all means continue writing skinned CRUD apps and live happily
+ever after.
+
+But you know the truth, right? You can see the writing on the wall. The web is
+getting more complicated. The hard things that need doing at scale aren't just
+serving web pages and responding to REST requests anymore. The hard problems
+are now dealing with a huge amount of varied data, different levels of cache
+liveness, and varied third party endpoints. If you subscribe to convention over
+configuration, that means having a canonical answer to everything. That means
+the default system needs to be able to do anything. That means that the people
+who make Rails are going to have to work pretty hard.
+
+There's another way, though. *Fuck* the framework, go for the [lingua
+franca][10] and ensure that it works, fast. Ensure that if you need a specific
+tool you can [get it][6] in a hurry. Develop on a platform you know can
+comfortably handle everything. Sure, you won't have fancy syntactic sugar.
+Sure, Node's callbacks are a pale approximation of Erlang's true concurrent glory.
+But she works everywhere, and she doesn't care. Just ask her out.
+
+[1]: http://multiplayerset.com
+[2]: http://www.travisglines.com/web-coding/webgl-node-js-websockets-a-web-technology-perfect-storm
+[3]: http://juggernaut.rubyforge.org/
+[4]: http://blog.ankurgoyal.com/post/6433642218/node-js-is-backwards
+[5]: http://yehudakatz.com/2011/06/14/what-the-hell-is-happening-to-rails/
+[6]: http://npmjs.org/
+[7]: http://nowjs.com/
+[8]: http://socket.io/
+[9]: http://programming-motherfucker.com/
+[10]: http://en.wikipedia.org/wiki/JavaScript
