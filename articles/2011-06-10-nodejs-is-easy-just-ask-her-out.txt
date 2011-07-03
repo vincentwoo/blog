@@ -100,7 +100,7 @@ she works everywhere, and she doesn't care. Just ask her out.
 [2]: http://www.travisglines.com/web-coding/webgl-node-js-websockets-a-web-technology-perfect-storm
 [3]: http://juggernaut.rubyforge.org/
 [4]: http://blog.ankurgoyal.com/post/6433642218/node-js-is-backwards
-[5]: http://yehudakatz.com/2011/06/14/what-the-hell-is-happening-to-Rails/
+[5]: http://yehudakatz.com/2011/06/14/what-the-hell-is-happening-to-rails/
 [6]: http://npmjs.org/
 [7]: http://nowjs.com/
 [8]: http://socket.io/
