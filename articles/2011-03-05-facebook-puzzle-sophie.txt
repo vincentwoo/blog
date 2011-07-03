@@ -1,7 +1,6 @@
 --- 
 title: "Facebook Puzzle: sophie"
 date: 05/03/2011
-tags: notable
 
 This week: Facebook's [sophie 
 puzzle](http://www.facebook.com/careers/puzzles.php?puzzle_id=11). This 

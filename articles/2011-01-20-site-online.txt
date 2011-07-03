@@ -1,7 +1,6 @@
 --- 
 title: site online
 date: 20/01/2011
-tags: notable
 
 So I guess I'm finished with this mostly minimal layout paired with an 
 incredibly minimal [rack stack](http://cloudhead.io/toto) running for 
