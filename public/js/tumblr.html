@@ -4,90 +4,97 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script>
 function go() {
-	// setup our namespace
-	$.tumblr = {};
-	// modify these
-	$.tumblr.batch = 50;
-	$.tumblr.threads = 3;
-	$.tumblr.complete = 0;
-	$.tumblr.url = 'http://' + $('#user').val() + '.tumblr.com/api/read/json?num=' + $.tumblr.batch + '&type=text&';
-	$.tumblr.posts = [];
-	$.tumblr.progress = $('#progress');
-	
-	$.tumblr.progress.show();
-	$('input').hide();
-	
-	for (var i = 0; i < $.tumblr.threads; i++) {
-		tumble(i * $.tumblr.batch, ($.tumblr.threads * $.tumblr.batch));
-	}
-	return false;
+  // setup our namespace
+  $.tumblr = {};
+  // modify these
+  $.tumblr.batch = 50;
+  $.tumblr.threads = 3;
+  $.tumblr.offs = 0;
+  $.tumblr.url = 'http://' + $('#user').val() + '.tumblr.com/api/read/json?num=' + $.tumblr.batch + '&type=text&';
+  $.tumblr.posts = [];
+  
+  $('#progress').show();
+  $('input').hide();
+  
+  for (var i = 0; i < $.tumblr.threads; i++) tumble(i * $.tumblr.batch);
 };
 
-function tumble(offs, step) {
-	console.log(offs);
-	$.ajax({
-		url: $.tumblr.url + 'start=' + offs,
-		dataType: 'script',
-		timeout: 10000,
-		success: function() {
-			if (!tumblr_api_read || !tumblr_api_read.posts || tumblr_api_read.posts.length == 0) {
-				if (++$.tumblr.complete == $.tumblr.threads) render();
-				return;
-			}
-			$.each(tumblr_api_read.posts, process_post);
-			$.tumblr.progress.text($.tumblr.posts.length + ' posts loaded');
-			tumble(offs + step, step);
-		}
-	});
+function tumble(offs, attempt) {
+  attempt = attempt || 1;
+  $.ajax({
+    url: $.tumblr.url + 'start=' + offs,
+    dataType: 'script',
+    timeout: 10000,
+    success: function() {
+      if (!tumblr_api_read || !tumblr_api_read.posts || tumblr_api_read.posts.length == 0) {
+        if (--$.tumblr.threads == 0) render();
+        return;
+      }
+      $.each(tumblr_api_read.posts, process_post);
+      $('#progress span').text($.tumblr.posts.length);
+      tumble($.tumblr.offs += $.tumblr.batch);
+    },
+    error: function(xhr, ajaxOptions, thrownError) {
+      if (attempt == 3) {
+        $.tumblr.progress.text("Error loading posts");
+        return;
+      }
+      tumble(offs, attempt + 1);
+    }
+  });
 }
 
 function process_post(i, post) {
-	$.tumblr.posts.push({
-		title: (post['regular-title'] || 'Untitled'),
-		text: post['regular-body'],
-		url: post['url']
-	});
+  $.tumblr.posts.push({
+    title: (post['regular-title'] || 'Untitled'),
+    text: post['regular-body'],
+    url: post['url']
+  });
 }
 
 function render() {
-	$('body').html('');
-	$.tumblr.posts.sort(function cmp(a, b) {return b.text.length - a.text.length;});
-	$.each($.tumblr.posts.slice(0, 100), display_post);
+  $('#load').fadeOut('slow', function() {
+    $.tumblr.posts.sort(function cmp(a, b) {return b.text.length - a.text.length;});
+    $.each($.tumblr.posts.slice(0, 100), display_post);
+  });
 }
 
 function display_post(i, post) {
-	var elem = $(
-		'<div class="post">' +
-			'<h3><a href="' + post.url + '">' + post.title + '</a></h3>' +
-		'</div>'
-	);
-	elem.append($(post.text));
-	$('body').append(elem);
+  var elem = $(
+    '<div class="post">' +
+      '<h3><a href="' + post.url + '">' + post.title + '</a></h3>' +
+    '</div>'
+  );
+  elem.append($(post.text));
+  $('body').append(elem);
 }
 
 </script>
 
 <style>
-*			{ margin: 0; padding: 0 }
-html, body	{ width: 100%; height: 100%; }
-.post		{ width: 300px; float: left; margin: 30px 0 0 30px; }
-img			{ width: 100%; }
-p, img		{ margin: 15px 0 }
-#progress	{ display: none; }
-#load		{ width: 450px; height: 200px; position: fixed; top: 50%; left: 50%;
-				margin-left: -200px; margin-top: -100px; text-align: center }
-body		{ font-family: Helvetica, Tahoma, sans-serif; color: #333; background: #eee; }
-input		{ margin: 15px 0; width: 100%; height: 25px; font-size: 18px; color: #666; text-align: center}
+*          { margin: 0; padding: 0 }
+html, body { width: 100%; height: 100%; }
+.post      { width: 300px; float: left; margin: 30px 0 0 30px; }
+img        { width: 100%; }
+p, img, h1, h2, h3
+           { margin: 15px 0 }
+#progress  { display: none; }
+#load      { width: 450px; height: 200px; position: fixed; top: 50%; left: 50%;
+             margin-left: -200px; margin-top: -100px; text-align: center }
+body       { font-family: Helvetica, Tahoma, sans-serif; color: #333; background: #fff; }
+input      { margin: 15px 0; width: 100%; height: 25px; font-size: 18px; color: #666; text-align: center; font-weight: bold; }
+a, span    { color: #600; text-decoration: none; }
+a:hover    { text-decoration: underline; }
 </style>
 </head>
 
 <body>
-	<form onsubmit="go(); return false;">
-		<div id="load">
-			<h1>GIMME THE 100 LONGEST TUMBLR POSTS FROM:</h1>
-			<input id="user" type="text" />
-			<h2 id="progress">0 posts loaded</h2>
-		</div>
-	</form>
+  <form onsubmit="go(); return false;">
+    <div id="load">
+      <h1>GIMME THE <span>100 LONGEST</span> TUMBLR POSTS FROM:</h1>
+      <input id="user" type="text" />
+      <h2 id="progress"><span>0</span> posts loaded</h2>
+    </div>
+  </form>
 </body>
 </html>
