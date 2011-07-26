@@ -13,7 +13,7 @@ function go() {
   $.tumblr = {};
   // modify these
   $.tumblr.batch = 50;
-  $.tumblr.threads = 3;
+  $.tumblr.threads = 2;
   $.tumblr.offs = 0;
   $.tumblr.url = 'http://' + $('#user').val() + '.tumblr.com/api/read/json?num=' + $.tumblr.batch + '&type=text&';
   $.tumblr.posts = [];
@@ -41,7 +41,7 @@ function tumble(offs, attempt) {
     },
     error: function(xhr, ajaxOptions, thrownError) {
       if (attempt == 3) {
-        $.tumblr.progress.text("Error loading posts");
+        $('#progress').text("Error loading posts");
         return;
       }
       tumble(offs, attempt + 1);
