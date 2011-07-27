@@ -8,19 +8,29 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script>
-function go() {
+$(function() {
   // setup our namespace
   $.tumblr = {};
   // modify these
   $.tumblr.batch = 50;
   $.tumblr.threads = 2;
   $.tumblr.offs = 0;
-  $.tumblr.url = 'http://' + $('#user').val() + '.tumblr.com/api/read/json?num=' + $.tumblr.batch + '&type=text&';
   $.tumblr.posts = [];
   
+  if (window.location.hash != '') {
+    $('#user').val(window.location.hash.substring(1));
+  }
+  $('#user').focus();
+});
+
+function go() {
   $('#progress').show();
   $('input').hide();
-  
+  $.tumblr.user = $('#user').val();
+  $.tumblr.url = 'http://' + $.tumblr.user + '.tumblr.com/api/read/json?num=' + $.tumblr.batch + '&type=text&';
+  $('#load h1').html('GETTING THE <span>100 LONGEST</span> POSTS FROM <span>' + $.tumblr.user + '</span>');
+
+  window.location.hash = $.tumblr.user;
   for (var i = 0; i < $.tumblr.threads; i++) tumble(i * $.tumblr.batch);
 };
 
@@ -81,6 +91,8 @@ function display_post(i, post) {
 html, body { width: 100%; height: 100%; }
 .post      { width: 300px; float: left; margin: 30px 0 0 30px; overflow: hidden; }
 img        { width: 100%; }
+h1, h2, h3, input
+           { text-shadow: 2px 2px 2px #ccc; }
 p, img, h1, h2, h3
            { margin: 15px 0 }
 #progress  { display: none; }
@@ -90,14 +102,16 @@ body       { font-family: Helvetica, Tahoma, sans-serif; color: #333; background
 input      { margin: 15px 0; width: 100%; height: 25px; font-size: 18px; color: #666; text-align: center; font-weight: bold; }
 a, span    { color: #600; text-decoration: none; }
 a:hover    { text-decoration: underline; }
+#refresh   { position: absolute; top: 15px; left: 15px; }
 </style>
 </head>
 
 <body>
   <form onsubmit="go(); return false;">
+    <a id="refresh" href="#" onclick="window.location.reload(true); return false;">Again?</a>
     <div id="load">
       <h1>GIMME THE <span>100 LONGEST</span> TUMBLR POSTS FROM:</h1>
-      <input id="user" type="text" />
+      <input id="user" type="text"/>
       <h2 id="progress"><span>0</span> posts loaded</h2>
     </div>
   </form>
