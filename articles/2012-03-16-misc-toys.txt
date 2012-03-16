@@ -1,0 +1,11 @@
+---
+title: misc toys
+date: 03/16/2012
+
+I've put a couple toys on my site that I haven't bothered documenting.
+
+One is a toy canvas simulating a [bunch of colored balls in bouncing around](/google.html)
+in the shape of the Google logo (I made it before joining Google).
+
+The other is a nifty page that will load a [tumblr user's 100 longest posts](/js/tumblr.html).
+It's all done client side, querying the old tumblr v1 API.
