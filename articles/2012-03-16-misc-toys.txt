@@ -1,6 +1,6 @@
 ---
 title: misc toys
-date: 15/3/2012
+date: 16/3/2012
 
 I've put a couple toys on my site that I haven't bothered documenting.
 

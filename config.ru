@@ -40,6 +40,7 @@ toto = Toto::Server.new do
   # set :markdown,  :smart                                    # use markdown + smart-mode
   # set :ext,       'txt'                                     # file extension for articles
   # set :cache,      28800                                    # cache duration, in seconds
+  set :author, "Vincent Woo"
   set :root, "page"                                           # page to load on /
   set :url, "http://vincentwoo.com"
   set :date, lambda {|now| now.strftime("%B #{now.day.ordinal} %Y") }
