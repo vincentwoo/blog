@@ -1,21 +1,22 @@
 @font-face {
+    font-family: 'DejaVuSansBook';
+    src: url('DejaVuSans-webfont.eot');
+    src: url('DejaVuSans-webfont.eot?#iefix') format('embedded-opentype'),
+         url('DejaVuSans-webfont.woff') format('woff'),
+         url('DejaVuSans-webfont.ttf') format('truetype'),
+         url('DejaVuSans-webfont.svg#DejaVuSansBook') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
     font-family: 'DejaVuSansOblique';
     src: url('/fonts/DejaVuSans-Oblique-webfont.eot');
     src: url('/fonts/DejaVuSans-Oblique-webfont.eot?#iefix') format('embedded-opentype'),
          url('/fonts/DejaVuSans-Oblique-webfont.woff') format('woff'),
          url('/fonts/DejaVuSans-Oblique-webfont.ttf') format('truetype'),
          url('/fonts/DejaVuSans-Oblique-webfont.svg#DejaVuSansOblique') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'DejaVuSansCondensed';
-    src: url('/fonts/DejaVuSansCondensed-webfont.eot');
-    src: url('/fonts/DejaVuSansCondensed-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/DejaVuSansCondensed-webfont.woff') format('woff'),
-         url('/fonts/DejaVuSansCondensed-webfont.ttf') format('truetype'),
-         url('/fonts/DejaVuSansCondensed-webfont.svg#DejaVuSansCondensed') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -42,8 +43,11 @@ p {
   text-indent: 25px;
   margin-bottom: 10px;
 }
+article p {
+  margin: 0 3% 10px 3%;
+}
 body {
-  font: 18px/1.5em 'DejaVuSansCondensed',  'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font: 20px/1.4em 'DejaVuSansBook',  'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #fff;
   color: #333;
 }
