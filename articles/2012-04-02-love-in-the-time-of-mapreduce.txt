@@ -18,8 +18,6 @@ concerning company hierarchy. All the opinions expressed are my own and
 obviously do not constitute the workings of an actual Google plan, etc. Jeff Dean
 is a very nice man. This is a piece of fiction in almost every sense.
 
--------------------------------------------------------------------------------
-
 The MapReduce was a piece of technology whose existence its steward, Jeff Dean,
 sometimes begrudged. It was glamorous, in a way, to be the public face of the
 algorithm that had essentially rewritten interpersonal contact, but it was also
