@@ -123,7 +123,7 @@ a:hover, h2 a:hover,  #sidebar li a:hover {
   width: 150px;
 }
 .centered {
-  margin: 10px auto 0 auto;
+  margin: 10px auto 25px auto;
   width: 640px;
 }
 .centered a {
