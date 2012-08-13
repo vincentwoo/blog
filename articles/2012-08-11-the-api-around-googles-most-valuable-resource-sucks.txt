@@ -1,0 +1,72 @@
+---
+title: The API around Google's most valuable resource sucks
+date: 11/08/2012
+
+> Disclosure: I recently worked for Google for about a year. It was alright.
+
+Recently, Vic Gundotra of Google+ fame made a bold statement. He
+[proclaimed](https://plus.google.com/107117483540235115863/posts/EstNjiL2uon)
+that the lack of write API access to Google+ is born not out of lack of
+foresight, planning, or even bandwidth, but out of trepidation, caution, and the
+desire to do right by developers.
+
+This is raw, barely refined bullshit ~(and I regret not being able to respond to
+the thread with a pithier snarky comment). The truth is simpler: Google is
+full-stop terrible at APIs.
+
+As a case study, let's examine what I had to do in order to use the most
+powerful collection of user-generated data that Google makes available to
+developers: a user's [contact list][1]. People who work for consumer-facing web
+companies probably know how deeply important having a user's email address is
+for marketing. Despite being invented before I was born, email has yet to be
+outmoded as the most effective way to push content to users on demand.
+
+Email is huge, and each GMail user's contact list is a treasure trove of
+potential customers. Recently here at [Everlane][2], we thought it might be a
+good idea to have a button a user could hit to view a list of their GMail
+contacts with portraits, select some of them, and then have us send those users
+an invitation email. Simple, obvious stuff to want to do, right?
+
+Well, let's hit the [getting started page][3] of the contacts API documentation.
+Reading closely seems to reveal that there might already be a library for doing
+what we want, which is really nothing more than getting a bunch of names, faces,
+and emails. Those geniuses at Google *have* to have something already made for
+this, right? We head over to the [libraries and samples page][4]. Cool, a
+[javascript library][5]! This could be easy! *Nope*, they seem to support
+everything but what we need. The Google+ read API doesn't seem to have a good
+way to grab emails, either.
+
+That's fine, we're pretty decent engineers and we can call the Contacts API on
+our own. We register our application with the [API Console][6] and start reading
+about OAuth. Google provides for a [few authorization schemes][7]. We probably
+want the one titled ["Client-side Applications"][8], which saves us the trouble
+of having our application server be aware of any auth tokens.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> Lastly, we're always on the lookout for talented developers who are interested
+in the fashion space here at [Everlane][2]. If that sounds like you and you want
+to talk, send me an email at [me@vincentwoo.com](mailto:me@vincentwoo.com).
+
+
+
+[1]: https://developers.google.com/google-apps/contacts/v3/
+[2]: https://www.everlane.com/about
+[3]: https://developers.google.com/google-apps/contacts/v3/index#getting_started
+[4]: https://developers.google.com/google-apps/tasks/downloads
+[5]: http://code.google.com/p/google-api-javascript-client/
+[6]: https://code.google.com/apis/console#access
+[7]: https://developers.google.com/accounts/docs/OAuth2#scenarios
+[8]: https://developers.google.com/accounts/docs/OAuth2UserAgent
