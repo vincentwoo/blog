@@ -31,28 +31,6 @@ body .typekit-badge {
   width: 960px;
   margin: 50px auto 0 auto;
 }
-h1 div {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border-radius: 100px;
-  border: 2px solid #29D9C2;
-  opacity: 0;
-  z-index: -1;
-  -webkit-animation: grow;
-  -webkit-animation-timing-function: ease;
-  -webkit-animation-delay: 0s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-duration: 5s;
-  -moz-animation: grow;
-  -moz-animation-timing-function: ease;
-  -moz-animation-delay: 0s;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-duration: 5s;
-}
-h1:hover div {
-  border-color: black;
-}
 h2, h3 {
   text-align: right;
   margin-bottom: 10px;
