@@ -135,7 +135,7 @@ This seems to produce a real photo in your browser. Success! Let's extrapolate:
       $('body').append('<img src="' + imageUrl + '" />');
     });
 
-Unfortuneately, only a few images load, what's going on? You squint at the docs
+Unfortunately, only a few images load. What's going on? You squint at the docs
 more closely.
 
 > Note: If a contact does not have a photo, then the photo link element has no
@@ -155,7 +155,7 @@ This time, a few more photos than before load, then they stop. The console shows
 a few successful image loads, but most of them returned with  **503 (Service
 Unavailable)**. You realize, after an hour or so, that each image load is being
 counted as an API call against you, and that there must be some rate limiting in
-place, despite this fact going completely undocumented. After some amount of
+place. Unluckily, this fact is completely undocumented. After some amount of
 both loving and hating the irony of having to write what is essentially the
 opposite of an image preloader, you arrive at the following code:
 
@@ -170,7 +170,7 @@ opposite of an image preloader, you arrive at the following code:
         }, 100);
       };
       img.src = contact.imageUrl;
-      contact.imgContainer.append(img);
+      $('body').append(img);
     }
     populateImages(0);
 
