@@ -143,13 +143,22 @@ more closely.
 
 Great, so some image links have a magic attribute on them that says they're real
 images. You wonder why Google even bothered returning image links for photos
-that don't exist.
+that don't exist. You try something like the following
 
-      var link = entry.find('link[type="image/*"]');
-      if (entry.attr('gd:etag')) {
-        var imageUrl = link.attr('href') + '&' + $.param(authParams);
-        $('body').append('<img src="' + imageUrl + '" />');
-      }
+<pre><code class="javascript">.find('link[type="image/*"][gd\\:etag]') // or even
+.find('link[type="image/*"][gd:etag]') // nope? how about
+.find('link[type="image/*"][etag]')
+</code></pre>
+
+But nope, jQuery can't deal with namespaced attribute selection, at all, so you
+arrive at:
+    
+<pre><code class="javascript">var link = entry.find('link[type="image/*"]');
+if (entry.attr('gd:etag')) {
+  var imageUrl = link.attr('href') + '&' + $.param(authParams);
+  $('body').append('&lt;img src="' + imageUrl + '" /&gt;');
+}
+</code></pre>
 
 This time, a few more photos than before load, then they stop. The console shows
 a few successful image loads, but most of them returned with  **503 (Service
