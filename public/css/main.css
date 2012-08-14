@@ -135,14 +135,14 @@ pre {
   font: 0.7em/1.4em 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
   border-left: 15px solid #777;
   margin: 10px 0 25px 0;
-  overflow: hidden;
+  background: #000;
+  overflow: auto;
 }
 blockquote {
   padding: 10px 5% 5px 5%;
   margin-bottom: 25px;
   font-style: italic;
   background: #f5f5f5;
-  overflow: hidden;
 }
 em {
   font-style: italic;

@@ -11,8 +11,8 @@ foresight, planning, or even bandwidth, but out of trepidation, caution, and the
 desire to do right by developers.
 
 This is raw, barely refined bullshit ~(and I regret not being able to respond to
-the thread with a pithier snarky comment). The truth is simpler: Google is
-full-stop terrible at APIs.
+the thread with a pithier snarky comment). The truth is simpler: Google is full-
+stop terrible at APIs.
 
 As a case study, let's examine what I had to do in order to use the most
 powerful collection of user-generated data that Google makes available to
@@ -21,8 +21,7 @@ companies probably know how deeply important having a user's email address is
 for marketing. Despite being invented before I was born, email has yet to be
 outmoded as the most effective way to push content to users on demand.
 
-Email is huge, and each GMail user's contact list is a treasure trove of
-potential customers. Recently here at [Everlane][2], we thought it might be a
+Recently here at [Everlane][2], we thought it might be a
 good idea to have a button a user could hit to view a list of their GMail
 contacts with portraits, select some of them, and then have us send those users
 an invitation email. Simple, obvious stuff to want to do, right?
@@ -42,19 +41,138 @@ about OAuth. Google provides for a [few authorization schemes][7]. We probably
 want the one titled ["Client-side Applications"][8], which saves us the trouble
 of having our application server be aware of any auth tokens.
 
+Now we can finally ask the Contacts API for a list of contacts! Easy enough,
+right? We'll just do a jsonp request to get around the cross-domain
+restrictions.
+
+<pre><code class="javascript">var authParams = { access_token: ..., token_type: ... }; // from Google oAuth
+
+$.ajax({
+  url: 'https://www.google.com/m8/feeds/contacts/default/full',
+  dataType: 'jsonp',
+  data: authParams,
+  success: function(data) { console.log(data); }
+});
+</code></pre>
+
+What does this give us? To our slow and creeping horror, we get back something
+like this for every contact:
+
+    <entry gd:etag='&quot;QHc_fDVSLit7I2A9WhJXFUkDQQ0.&quot;'>
+      <id>http://www.google.com/m8/feeds/contacts/your%40gmail.com/base/13659b580fe5686d</id>
+      <updated>2012-08-09T22:01:31.944Z</updated>
+      <app:edited xmlns:app='http://www.w3.org/2007/app'>2012-08-09T22:01:31.944Z</app:edited>
+      <category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/contact/2008#contact'/>
+      <title>Diane Duane</title>
+      <link
+        rel='http://schemas.google.com/contacts/2008/rel#photo'
+        type='image/*'
+        href='https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0'
+        gd:etag='&quot;UWlBIlclWit7I2A9AFQKRg9YFXoHL0oQSQA.&quot;'/>
+      <link
+        rel='self'
+        type='application/atom+xml'
+        href='https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'/>
+      <link
+        rel='edit'
+        type='application/atom+xml'
+        href='https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'/>
+      <gd:name>
+        <gd:fullName>Diane Duane</gd:fullName>
+        <gd:givenName>Diane</gd:givenName>
+        <gd:familyName>Duane</gd:familyName>
+      </gd:name>
+      <gd:email
+        rel='http://schemas.google.com/g/2005#other'
+        address='diane.duane@gmail.com'
+        primary='true'/>
+    </entry>
+
+You take several deep breaths. You ignore the fact that you are fetching roughly
+1kb of data per contact (out of potentially thousands) to get a name, and email,
+and the URL of an image. "Okay", you think to yourself, "this is still
+salvageable. I can parse XML on the client. In fact, jQuery can probably do it
+for me." You take a quick stab at grabbing names and emails.
+
+    success: function(data) {
+      var xml = $($.parseXML(data));
+      xml.find('entry').each(function() {
+        var entry = $(this);
+        var name  = entry.find('title').text();
+        var email = entry.find('email').attr('address');
+      });
+    }
+
+A quick browser test shows that this only appears to work in Chrome. A bit more
+digging finds, to your chagrin, that jQuery has trouble finding namespaced
+elements like "<gd:email>" in XML structures. You Google around and find a fix:
 
 
+    var email = entry.find('email, gd\\:email').attr('address');
 
+For now, you ignore [how inefficient this is][9], hoping merely to reach
+functionality. It works! Now you want to add images. It looks like one of the
+link elements under <entry> appears to point to an image for that contact. You
+fiddle around on the console:
 
+<pre><code class="javascript">entry.find('link[type="image/*"]').attr('href')
+// => https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0
+</code></pre>
 
+Attempting to load this in your browser gives you a 401. Taking a look a the
+[photo management section of the docs][10] seems to suggest you need to
+additionally apply auth credentials to this url. You amend your code:
 
+    var href = entry.find('link[type="image/*"]').attr('href');
+    var imageUrl = href + '&' + $.param(authParams);
 
+This seems to produce a real photo in your browser. Success! Let's extrapolate:
 
+    xml.find('entry').each(function() {
+      var entry = $(this);
+      var href = entry.find('link[type="image/*"]').attr('href');
+      var imageUrl = href + '&' + $.param(authParams);
+      $('body').append('<img src="' + imageUrl + '" />');
+    });
 
+Unfortuneately, only a few images load, what's going on? You squint at the docs
+more closely.
 
+> Note: If a contact does not have a photo, then the photo link element has no
+> gd:etag attribute.
 
+Great, so some image links have a magic attribute on them that says they're real
+images. You wonder why Google even bothered returning image links for photos
+that don't exist.
 
+      var link = entry.find('link[type="image/*"]');
+      if (entry.attr('gd:etag')) {
+        var imageUrl = link.attr('href') + '&' + $.param(authParams);
+        $('body').append('<img src="' + imageUrl + '" />');
+      }
 
+This time, a few more photos than before load, then they stop. The console shows
+a few successful image loads, but most of them returned with  **503 (Service
+Unavailable)**. You realize, after an hour or so, that each image load is being
+counted as an API call against you, and that there must be some rate limiting in
+place, despite this fact going completely undocumented. After some amount of
+both loving and hating the irony of having to write what is essentially the
+opposite of an image preloader, you arrive at the following code:
+
+    // After storing all contacts with images in contacts.pictured
+    function populateImages(index) {
+      if (index == contacts.pictured.length) return;
+      var contact = contacts.pictured[index];
+      var img = new Image();
+      img.onload = function() {
+        setTimeout(function() {
+          populateImages(index + 1);
+        }, 100);
+      };
+      img.src = contact.imageUrl;
+      contact.imgContainer.append(img);
+    }
+    populateImages(0);
 
 > Lastly, we're always on the lookout for talented developers who are interested
 in the fashion space here at [Everlane][2]. If that sounds like you and you want
@@ -70,3 +188,5 @@ to talk, send me an email at [me@vincentwoo.com](mailto:me@vincentwoo.com).
 [6]: https://code.google.com/apis/console#access
 [7]: https://developers.google.com/accounts/docs/OAuth2#scenarios
 [8]: https://developers.google.com/accounts/docs/OAuth2UserAgent
+[9]: http://www.steveworkman.com/html5-2/javascript/2011/improving-javascript-xml-node-finding-performance-by-2000/
+[10]: https://developers.google.com/google-apps/contacts/v3/index#retrieving_a_contacts_photo
