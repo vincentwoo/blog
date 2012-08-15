@@ -6,7 +6,7 @@ html, body {
   width: 100%;
 }
 p {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 article {
   margin-bottom: 90px;
@@ -62,7 +62,7 @@ hr {
 a, a:link {
   color: #333;
   text-decoration: none;
-  border-bottom: 2px solid #aaa;
+  border-bottom: 1px solid #999;
   cursor: pointer;
 }
 h2 a, h2 a:link {
