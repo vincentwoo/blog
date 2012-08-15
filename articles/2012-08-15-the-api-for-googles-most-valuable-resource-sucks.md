@@ -1,6 +1,6 @@
 ---
 title: The API for Google's most valuable resource sucks
-date: 11/08/2012
+date: 15/08/2012
 tags: notable
 
 > Disclosure: I recently worked for Google for about a year. It was alright.
