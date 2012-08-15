@@ -1,7 +1,6 @@
 --- 
 title: Cheap Toto Pagination
 date: 23/02/2011
-tags: notable
 
 [Toto](http://cloudhead.io/toto) is a great tiny blogging platform for 
 Ruby/Rack. However, it doesn't expose much in the way of a MVC structure 

@@ -35,7 +35,7 @@ h2, h3 {
   text-align: right;
   margin-bottom: 10px;
   clear: both;
-  font-size: 1.5em;
+  font-size: 29px;
 }
 h2 {
   margin-bottom: 25px;
@@ -149,4 +149,14 @@ em {
 }
 blockquote p {
   text-indent: 0;
+}
+p>img {
+  display: block;
+  margin: 0 auto;
+}
+h4 {
+  margin: -20px 0 25px 0;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
 }
