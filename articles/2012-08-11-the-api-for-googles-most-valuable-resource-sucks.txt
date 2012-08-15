@@ -42,7 +42,7 @@ Reading closely seems to reveal that there might already be a library for doing
 what we want, which is really nothing more than getting a bunch of names, faces,
 and emails. Those geniuses at Google *have* to have something already made for
 this, right? We head over to the [libraries and samples page][4]. Cool, a
-[javascript library][5]! This could be easy! *Nope*, they seem to support every
+[Javascript library][5]! This could be easy! *Nope*, they seem to support every
 Google API but Contacts. The Google+ read API doesn't seem to have a good way to
 grab emails, either.
 
