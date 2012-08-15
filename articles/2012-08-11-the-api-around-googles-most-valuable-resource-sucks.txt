@@ -25,6 +25,8 @@ companies probably know how deeply important having a user's email address is
 for marketing. Despite being invented before I was born, email has yet to be
 outmoded as the most effective way to push content to users on demand.
 
+### The feature
+
 Recently here at [Everlane][2], we thought it might be a
 good idea to have a button a user could hit to view a list of their GMail
 contacts with portraits, select some of them, and then have us send those users
@@ -49,6 +51,8 @@ our own. We register our application with the [API Console][6] and start reading
 about OAuth. Google provides for a [few authorization schemes][7]. We probably
 want the one titled ["Client-side Applications"][8], which saves us the trouble
 of having our application server be aware of any auth tokens.
+
+### API woes
 
 Now we can finally ask the Contacts API for a list of contacts! Easy enough,
 right? We'll just do a jsonp request to get around the cross-domain
@@ -144,6 +148,8 @@ This seems to produce a real photo in your browser. Success! Let's extrapolate:
       $('body').append('<img src="' + imageUrl + '" />');
     });
 
+### Image contortions
+
 Unfortunately, only a few images load. What's going on? You squint at the docs
 more closely.
 
@@ -159,7 +165,7 @@ that don't exist. You try something like the following
 .find('link[type="image/*"][etag]')
 </code></pre>
 
-But nope, jQuery can't deal with namespaced attribute selection, at all, so you
+But no, jQuery can't deal with namespaced attribute selection, at all, so you
 arrive at:
     
 <pre><code class="javascript">var link = entry.find('link[type="image/*"]');
@@ -170,35 +176,52 @@ if (entry.attr('gd:etag')) {
 </code></pre>
 
 This time, a few more photos than before load, then they stop. The console shows
-a few successful image loads, but most of them returned with  **503 (Service
+a few successful image loads, but most of them returned with **503 (Service
 Unavailable)**. You realize, after an hour or so, that each image load is being
 counted as an API call against you, and that there must be some rate limiting in
-place. Unluckily, this fact is completely undocumented. After some amount of
-both loving and hating the irony of having to write what is essentially the
-opposite of an image preloader, you arrive at the following code:
+place.
 
-    // After storing all contacts with images in contacts.pictured
-    function populateImages(index) {
-      if (index == contacts.pictured.length) return;
-      var contact = contacts.pictured[index];
+Naturally, this fact is completely undocumented. Playing around with the
+code, you find that Google doesn't like it if you have more than one in-flight
+API request at a time. You come up with essentially the opposite of an image
+preloader to stagger image loading:
+
+    var imageUrls = ['https://...', ...];
+    function staggerImages(index) {
+      if (index == imageUrls.length) return;
       var img = new Image();
       img.onload = function() {
         setTimeout(function() {
+          // Load the next image 100ms after this one finishes loading
           populateImages(index + 1);
         }, 100);
       };
-      img.src = contact.imageUrl;
+      img.src = imageUrls[index];
       $('body').append(img);
     }
     populateImages(0);
+
+Whew, that was fun, right? At this point it seems like a good idea to try to
+sort contacts by some sort of relevance metric. Unfortunately, the Contacts API
+doesn't support this at all. Oh well, you give up, having reached something
+approximating your original goals.
+
+### What have we learned?
+
+* Google doesn't get JSON
+* Google can't design clean APIs or document them well
+* Despite their browser-first mantra, Google doesn't put out first-party
+  Javascript libraries for the browser
+* Vic Gundotra is *soooooo* lying
+
+Developers waiting for Google+ to deliver on its full potential: you should
+probably just give up.
 
 > Lastly, we're always on the lookout for talented developers who are interested
 in the fashion space here at [Everlane][2]. You don't need to own more than one
 pair of shoes. My love of fashion is born of William Gibson novels and is almost
 entirely academic. If you're interested, check out our [jobs page][jobs] or send
 me an email at [me@vincentwoo.com][email].
-
-
 
 [1]: https://developers.google.com/google-apps/contacts/v3/
 [2]: https://www.everlane.com/about
