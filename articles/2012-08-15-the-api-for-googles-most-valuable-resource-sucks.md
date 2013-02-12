@@ -49,7 +49,7 @@ grab emails, either.
 That's fine -- we're pretty decent engineers and can call the Contacts API on
 our own. We register our application with the [API Console][6] and start reading
 about OAuth. Google provides a [few authorization schemes][7]. We probably want
-the one titled ["Client-side Applications"][8], which saves us the complexity of
+the one titled "[Client-side Applications][8]", which saves us the complexity of
 an application server having to be aware of any sensitive information.
 
 ### API woes
@@ -168,7 +168,7 @@ don't exist. You try something like the following:
 
 But no, jQuery can't deal with namespaced attribute selection, at all, so you
 arrive at:
-    
+
 <pre><code class="javascript">var link = entry.find('link[type="image/*"]');
 if (entry.attr('gd:etag')) {
   var imageUrl = link.attr('href') + '&' + $.param(authParams);
@@ -244,7 +244,7 @@ Google had made any mention of it whatsoever on their Contacts API page.
 [11]: http://code.google.com/p/gdata-javascript-client/
 
 [vic]: http://farm9.staticflickr.com/8440/7784924826_01c136c801.jpg "Vic Gundotra, ladies and gentlemen"
-[screen]: http://farm9.staticflickr.com/8293/7784680274_968248f0fb_z.jpg 
+[screen]: http://farm9.staticflickr.com/8293/7784680274_968248f0fb_z.jpg
 [ui]: http://farm9.staticflickr.com/8437/7785016330_cf1cf02710_z.jpg
 [jobs]: https://www.everlane.com/jobs
 [email]: mailto:me@vincentwoo.com

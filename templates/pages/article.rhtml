@@ -13,12 +13,20 @@
   <section class="comments">
     <% if @config[:disqus] %>
       <div id="disqus_thread"></div>
-      <noscript><a href="http://<%= @config[:disqus] %>.disqus.com/?url=ref">View the discussion thread.</a></noscript>
+      <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://closeenough.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>
+        <a href="http://<%= @config[:disqus] %>.disqus.com/?url=ref">View the discussion thread.</a>
+      </noscript>
     <% end %>
   </section>
 </article>
 
-<script type="text/javascript" src="http://disqus.com/forums/<%= @config[:disqus] %>/embed.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/suburst.css" />
 <script src="http://yandex.st/highlightjs/7.1/highlight.min.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>

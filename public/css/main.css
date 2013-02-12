@@ -60,14 +60,10 @@ hr {
 a, a:link {
   color: #333;
   text-decoration: none;
-  border-bottom: 1px solid #999;
   cursor: pointer;
 }
-h2 a, h2 a:link {
-  border: 0;
-}
-a:hover, h2 a:hover,  #sidebar li a:hover {
-  border-color: #29D9C2;
+p>a, p>a:link {
+  text-decoration: underline;
 }
 #content {
   float: right;
@@ -83,11 +79,7 @@ a:hover, h2 a:hover,  #sidebar li a:hover {
     line-height: 20px;
     margin-bottom: 15px;
   }
-    #sidebar li a {
-      border-color: transparent;
-    }
 .articleInfo {
-  font-size: 0.8em;
   float: right;
   margin-top: -20px;
   clear: both;
