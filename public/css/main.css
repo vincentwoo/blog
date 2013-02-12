@@ -12,11 +12,10 @@ article {
   margin-bottom: 90px;
 }
 article>p {
-  margin: 0 6% 25px 5%;
+  margin-bottom: 25px;
 }
 body {
   font-family: "Alegreya", Palatino, Georgia, serif;
-
   font-size: 20px;
   line-height: 1.5em;
   background: #fff;
@@ -30,10 +29,10 @@ body .typekit-badge {
   margin: 50px auto 0 auto;
 }
 h2, h3 {
-  text-align: right;
   margin-bottom: 10px;
   clear: both;
   font-size: 29px;
+  position: relative;
 }
 h2 {
   margin-bottom: 25px;
@@ -41,14 +40,18 @@ h2 {
 h3 {
   font-size: 18px;
 }
+article {
+  padding: 0 5%;
+}
 article>h3 {
   font-size: 23px;
-  margin: 0 6% 25px 0;
 }
 h3:before {
   content: '»';
   margin-right: 10px;
   color: #29D9C2;
+  position: absolute;
+  left: -25px;
 }
 hr {
   display: block;
