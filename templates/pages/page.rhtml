@@ -35,11 +35,16 @@
 <% end %>
 
 <p id="footer">
-    <% if prev_page %>
-        <a href="/page/<%=prev_page%>">&laquo; newer</a>
-        <% if next_page  %>|<% end %>
-    <% end %>
     <% if next_page %>
-        <a href="/page/<%=next_page%>">older &raquo;</a>
+        <a href="/page/<%=next_page%>">&laquo; older</a>
+    <% else %>
+        <span class="disabled">&laquo; older</span>
+    <% end %>
+    |
+    <% if prev_page %>
+        <a href="/page/<%=prev_page%>">newer &raquo;</a>
+        <% if next_page  %><% end %>
+    <% else %>
+        <span class="disabled">newer &raquo;</span>
     <% end %>
 </p>
