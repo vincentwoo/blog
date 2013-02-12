@@ -15,9 +15,7 @@ article>p {
   margin: 0 6% 25px 5%;
 }
 body {
-  font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', "museo-sans-n3", "museo-sans", sans-serif;
-  font-style: normal;
-  font-weight: 300;
+  font-family: "Alegreya", Palatino, Georgia, serif;
 
   font-size: 20px;
   line-height: 1.5em;
@@ -144,7 +142,7 @@ pre {
   overflow: auto;
 }
 blockquote {
-  padding: 10px 5% 5px 5%;
+  padding: 14px 5% 1px 5%;
   margin-bottom: 25px;
   font-style: italic;
   background: #f5f5f5;
