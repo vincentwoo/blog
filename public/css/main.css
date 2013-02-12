@@ -21,9 +21,6 @@ body {
   background: #fff;
   color: #333;
 }
-body .typekit-badge {
-  display: none !important;
-}
 #page-wrap {
   width: 960px;
   margin: 50px auto 0 auto;
