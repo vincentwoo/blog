@@ -10,6 +10,7 @@
 <% for article in page_results %>
   <article>
     <h2><a href="<%= article.path %>"><%= article.title %></a></h2>
+    <h5><%= article.date %></h5>
     <% if article[:flickr] %>
         <div class="centered">
             <a href="<%= article.path %>">
@@ -30,7 +31,6 @@
             markdown(terminate ? sum : sum.strip + '&hellip;')
         %>
     <% end %>
-    <p class="articleInfo"> <%= article.date %> | <a href="<%= article.path %>">more &raquo;</a></p>
   </article>
 <% end %>
 

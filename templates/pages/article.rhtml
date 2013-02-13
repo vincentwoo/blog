@@ -1,5 +1,6 @@
 <article>
   <h2><a href="<%= article.path %>"><%= article.title %></a></h2>
+  <h5><%= article.date %></h5>
   <% if article[:flickr] %>
     <div class="centered">
         <a href="<%= @config[:flickr_link] % article[:flickr].split('/').last.split('_').first %>">
@@ -8,7 +9,6 @@
     </div>
   <% end %>
   <%= body %>
-  <p class="articleInfo"> <%= article.date %> | <a href="<%= article.path %>">permalink</a></p>
 
   <section class="comments">
     <% if @config[:disqus] %>

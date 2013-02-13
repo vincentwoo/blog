@@ -38,10 +38,19 @@ h3 {
   font-size: 18px;
 }
 article {
-  padding: 0 5%;
+  margin: 0 5% 50px 5%;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #EEE;
 }
 article>h3 {
   font-size: 23px;
+}
+article>h5 {
+  margin-top: -27px;
+  margin-bottom: 13px;
+  color: #ccc;
+  font-weight: normal;
+  font-size: 1em;
 }
 h3:before {
   content: '»';
@@ -62,6 +71,9 @@ a, a:link {
   text-decoration: none;
   cursor: pointer;
 }
+a:hover {
+  color: #29D9C2;
+}
 p>a, p>a:link {
   text-decoration: underline;
 }
@@ -79,11 +91,6 @@ p>a, p>a:link {
     line-height: 20px;
     margin-bottom: 15px;
   }
-.articleInfo {
-  float: right;
-  margin-top: -20px;
-  clear: both;
-}
 #footer {
   float: left;
   margin-bottom: 20px;
