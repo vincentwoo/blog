@@ -8,16 +8,9 @@ html, body {
 p {
   margin-bottom: 15px;
 }
-article {
-  margin-bottom: 90px;
-}
-article>p {
-  margin-bottom: 25px;
-}
 body {
   font-family: "Alegreya", Palatino, Georgia, serif;
   font-size: 20px;
-  line-height: 1.5em;
   background: #fff;
   color: #333;
 }
@@ -39,9 +32,12 @@ h3 {
   font-size: 18px;
 }
 article {
-  margin: 0 5% 50px 5%;
+  margin: 0 10% 50px 10%;
   padding-bottom: 20px;
   border-bottom: 1px solid #EEE;
+}
+article>p {
+  margin-bottom: 25px;
 }
 article>h3 {
   font-size: 23px;
@@ -80,11 +76,12 @@ p>a, p>a:link {
 }
 #content {
   float: right;
-  width: 770px;
+  width: 760px;
 }
 #sidebar {
   float: left;
   width: 160px;
+  margin-left: 30px;
 }
   #sidebar li {
     padding: 0;
