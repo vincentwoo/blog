@@ -33,6 +33,7 @@ h2, h3 {
 }
 h2 {
   margin-bottom: 25px;
+  text-shadow: 1px 1px 0px #C8D0E7;
 }
 h3 {
   font-size: 18px;
