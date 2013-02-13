@@ -126,7 +126,7 @@ around and find a fix:
 
 For now, you ignore [how inefficient this is][9], hoping merely to reach
 functionality. It works! Now you want to add images. It looks like one of the
-link elements under <entry> appears to point to an image for that contact. You
+link elements under \<entry\> appears to point to an image for that contact. You
 fiddle around on the console:
 
 <pre><code class="javascript">entry.find('link[type="image/*"]').attr('href')
