@@ -7,14 +7,13 @@ module Liquid
     
     def truncatehtml(raw, max_length = 15, continuation_string = "…")
       raw.encode!('UTF-8')
-      doc = Nokogiri::HTML(raw)
+      doc = Nokogiri::HTML.fragment(raw)
       current_length = 0
       deleting = false
       to_delete = []
       terminator = !!raw.index('~')
 
       depth_first(doc.children.first) do |node|
-
         if deleting
           to_delete << node
         end
@@ -44,8 +43,7 @@ module Liquid
         end
       end
   
-      to_delete.each(&:remove)
-  
+      to_delete.each &:remove
       doc.inner_html
     end
     
