@@ -1,7 +1,9 @@
---- 
+---
 title: Interactive Google Doodle
 date: 14/02/2011
 tags: notable
+layout: post
+---
 
 <div class="centered">
 	<a href="/google.html">
@@ -10,11 +12,11 @@ tags: notable
 	</a>
 </div>
 
-Google's [take](http://www.pcmag.com/article2/0,2817,2368790,00.asp) on 
-an interactive ball logo was interesting enough to me that I felt that I 
-needed to write [something at least as fun](/google.html). My take is 
-backed by HTML5, so you will need a suitably compliant browser to view 
-it. 
+Google's [take](http://www.pcmag.com/article2/0,2817,2368790,00.asp) on
+an interactive ball logo was interesting enough to me that I felt that I
+needed to write [something at least as fun](/google.html). My take is
+backed by HTML5, so you will need a suitably compliant browser to view
+it.
 
 ~
 
@@ -26,19 +28,19 @@ it.
 *  Typing creates additional interactable balls
 *  Searching cues exit animation
 
-### Technical information 
+### Technical information
 
 The code for this demo (as well this entire blog) is on github. Here is
 [the primary javascript engine][3].
 
-In google's original doodle, the balls would react with changes in size 
-and velocity to the presence of the mouse. They would not, however, 
-collide with anything. I thought this was a shame, and set out to make a 
-HTML5 canvas app that could handle collisions between a large number of 
-objects. 
+In google's original doodle, the balls would react with changes in size
+and velocity to the presence of the mouse. They would not, however,
+collide with anything. I thought this was a shame, and set out to make a
+HTML5 canvas app that could handle collisions between a large number of
+objects.
 
 A naive initial implementation worked well enough. It looked like this
-(pseudocode is rubyish): 
+(pseudocode is rubyish):
 
     for i in 0 to circles.length - 2
         for j in i + 1 to circles.length - 1
@@ -46,7 +48,7 @@ A naive initial implementation worked well enough. It looked like this
         end
     end
 
-which served me well enough on Canary on my admittedly beefy desktop. It 
+which served me well enough on Canary on my admittedly beefy desktop. It
 wasn't until I tried to run the same on Firefox 3.x on my work laptop that
 I realized I probably wasn't performant on a wide range of configurations.
 
@@ -61,7 +63,7 @@ becomes something like
         end
     end
 
-    def grid.getPotentialColliders(pos) 
+    def grid.getPotentialColliders(pos)
         cell = getCell(pos)
         ret = []
         for neighbor in cell.neighbors

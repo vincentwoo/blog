@@ -1,0 +1,9 @@
+---
+layout: default
+title: close enough
+---
+
+{% for post in site.posts %}
+  <a href="{{ post.url }}"><span>{{ post.title }}</span></a>
+  {{ post.content | summary }}
+{% endfor %}

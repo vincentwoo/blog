@@ -6,7 +6,7 @@
     <link rel="alternate" type="application/atom+xml" title="<%= title %> - feed" href="/index.xml" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="description" content="Vincent Woo's blog: code and conversationalism" />
-    <title><%= title %></title>
+    <title>{{ page.title }}</title>
     <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-267782-2']);
@@ -45,7 +45,7 @@
         <div class="clear"></div>
       </div>
       <div id="content">
-        <%= yield %> 
+        {{ content }}
       </div>
     </div>
   </body>

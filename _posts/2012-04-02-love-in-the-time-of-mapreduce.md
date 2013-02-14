@@ -2,6 +2,8 @@
 title: Love in the Time of MapReduce
 date: 02/04/2012
 tags: notable
+layout: post
+---
 
 > This piece was written for an internal Google fiction contest, for the 100th
 edition of the engineering newsletter. The call to arms arrived in my inbox like

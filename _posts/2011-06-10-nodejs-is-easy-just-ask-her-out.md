@@ -2,6 +2,8 @@
 title: NodeJS is easy, just ask her out
 date: 10/06/2011
 tags: notable
+layout: post
+---
 
 NodeJS is the hot new girl on the block. You've flirted a few times at meetups,
 and you think you could probably get a date with her if you asked. However, you

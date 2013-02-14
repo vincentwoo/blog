@@ -1,6 +1,7 @@
 ---
 title: site online
-layout: default
+date: 20/01/2011
+layout: post
 ---
 
 So I guess I'm finished with this mostly minimal layout paired with an

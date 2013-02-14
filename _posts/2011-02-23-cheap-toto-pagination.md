@@ -1,21 +1,23 @@
---- 
+---
 title: Cheap Toto Pagination
 date: 23/02/2011
+layout: post
+---
 
-[Toto](http://cloudhead.io/toto) is a great tiny blogging platform for 
-Ruby/Rack. However, it doesn't expose much in the way of a MVC structure 
-and it can be just annoying enough when you want to add some feature 
-that isn't there. In this case, I wanted to add some simple older/newer 
-pagination to the front page. To my chagrin, I couldn't find a way to 
-pass variables to a Toto page without using the GET variable syntax 
-(i.e. ?page=1) and I still wanted to hold onto the rails RESTful 
+[Toto](http://cloudhead.io/toto) is a great tiny blogging platform for
+Ruby/Rack. However, it doesn't expose much in the way of a MVC structure
+and it can be just annoying enough when you want to add some feature
+that isn't there. In this case, I wanted to add some simple older/newer
+pagination to the front page. To my chagrin, I couldn't find a way to
+pass variables to a Toto page without using the GET variable syntax
+(i.e. ?page=1) and I still wanted to hold onto the rails RESTful
 paradigm of /page/1, so I monkey patched the Toto::Site dispatcher, like
 so:
 ~
     # in config.ru
     class Toto::Site
         alias_method :old_go, :go
-        
+
         def go route, env = {}, type = :html
             if not route.first =~ /\d{4}/ and route.size == 2 and route.last =~ /(\d+)/
                 @config[:id] = route.last.to_i
@@ -30,10 +32,10 @@ so:
     # and in the config initializer block:
     set :root, "page"                                           # page to load on /
 
-You can see that we intercept routes that look like name/1234 and pass 
-the numeric portion of the route in @config[:id], and then clear 
-@config[:id] (because @config is persistent). This is pretty hacky and 
-only really acceptable in the context of Heroku caching everything. 
+You can see that we intercept routes that look like name/1234 and pass
+the numeric portion of the route in @config[:id], and then clear
+@config[:id] (because @config is persistent). This is pretty hacky and
+only really acceptable in the context of Heroku caching everything.
 
 and in templates/pages/page.rhtml...
 

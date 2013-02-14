@@ -1,6 +1,8 @@
 ---
 title: HTML5 canvas isolines
 date: 20/3/2012
+layout: post
+---
 
 Here's a little page that [draws isolines in a canvas element](/js/isolines.html).
 It uses the [marching squares algorithm](http://en.wikipedia.org/wiki/Marching_squares)

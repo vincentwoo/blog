@@ -1,6 +1,8 @@
 ---
 title: The Riders and Hunters of Men
 date: 12/02/2013
+layout: post
+---
 
 I find myself often slipping into a certain easy narrative about man’s place in
 the world. For many of us, it is one of attainable luxury and relative agency. I
