@@ -1,7 +1,7 @@
 ---
 title: Arguing for Immortality
 date: 30/04/2011
-tags: [notable]
+notable: true
 layout: post
 ---
 
