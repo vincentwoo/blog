@@ -1,0 +1,9 @@
+markdown:       rdiscount
+permalink:      pretty
+auto:           true
+safe:           false
+paginate:       5
+paginate_path:  /page/:num
+exclude:        ['README', 'Rakefile', 'Gemfile.lock', 'Gemfile', 'Procfile', 'unicorn.rb', 'config.ru']
+flickr:
+  api_key:      28bba34a0ad8d67a0e0efa92a17d7960

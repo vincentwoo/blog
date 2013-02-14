@@ -1,0 +1,27 @@
+---
+layout: default
+---
+<article>
+  <h2><a href="{{ page.url }}">{{ page.title }}</a></h2>
+  <h5>{{ page.date | pretty }}</h5>
+
+  {{ content | replace_first: '~', ''}}
+
+  <section class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://closeenough.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>
+      <a href="http://<%= @config[:disqus] %>.disqus.com/?url=ref">View the discussion thread.</a>
+    </noscript>
+  </section>
+</article>
+
+<link rel="stylesheet" type="text/css" href="/css/suburst.css" />
+<script src="http://yandex.st/highlightjs/7.1/highlight.min.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
