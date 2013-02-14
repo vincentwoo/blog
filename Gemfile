@@ -10,6 +10,7 @@ gem 'rack-contrib'
 gem 'rdiscount'
 gem 'facets'
 gem 'nokogiri'
+gem 'typhoeus'
 
 group :development do
   gem 'foreman'

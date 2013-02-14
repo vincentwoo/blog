@@ -5,12 +5,7 @@ notable: true
 layout: post
 ---
 
-<div class="centered">
-	<a href="/google.html">
-		<img alt="Interactive Google Doodle"
-		src="http://farm6.static.flickr.com/5291/5446054061_7eab02d984_z.jpg" />
-	</a>
-</div>
+[{% flickr_photo 5446054061 'Medium 640' false %}](/google.html)
 
 Google's [take](http://www.pcmag.com/article2/0,2817,2368790,00.asp) on
 an interactive ball logo was interesting enough to me that I felt that I

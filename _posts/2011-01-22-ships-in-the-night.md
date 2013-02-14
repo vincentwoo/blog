@@ -1,8 +1,9 @@
 ---
 title: ships in the night
 date: 22/01/2011
-flickr: http://farm6.static.flickr.com/5009/5377188595_614f3e37f7_z.jpg
 layout: post
 ---
+
+{% flickr_photo 5377188595 'Medium 640' %}
 
 I got a D90, low light shooting is fun again.
