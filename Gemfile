@@ -8,6 +8,7 @@ gem 'rake'
 gem 'rack-contrib'
 
 gem 'rdiscount'
+gem 'RedCloth'
 gem 'facets'
 gem 'nokogiri'
 gem 'typhoeus'
