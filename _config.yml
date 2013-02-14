@@ -2,3 +2,6 @@ markdown:   rdiscount
 permalink:  /:year/:month/:day/:title
 auto:       true
 safe:       false
+paginate:   5
+paginate_path: /page/:num
+exclude:    ['README', 'Rakefile', 'Gemfile.lock', 'Gemfile', 'Procfile']
