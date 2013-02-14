@@ -4,7 +4,7 @@ require 'nokogiri'
 
 module Liquid
   module StandardFilters
-    
+
     def truncatehtml(raw, max_length = 15, continuation_string = "…")
       raw.encode!('UTF-8')
       doc = Nokogiri::HTML.fragment(raw)
@@ -35,27 +35,28 @@ module Liquid
 
           if !deleting && current_length > max_length
             deleting = true
-            
+
             trim_to_length = current_length - max_length + 1
             trim_to_length += 1 while node.text[trim_to_length] =~ /[[:alnum:]]/
             node.content = node.text[0..trim_to_length-1] + continuation_string
           end
         end
       end
-  
+
       to_delete.each &:remove
       doc.inner_html
     end
-    
+
   private
-  
+
     def depth_first(root, &block)
+      return unless root && root.parent
       parent = root.parent
       sibling = root.next
       first_child = root.children.first
-  
+
       yield(root)
-  
+
       if first_child
         depth_first(first_child, &block)
       else
@@ -73,8 +74,8 @@ module Liquid
             depth_first(n.next, &block)
           end
         end
-      end  
+      end
     end
-      
+
   end
 end
