@@ -1,7 +1,7 @@
 ---
 title: The API for Google's most valuable resource sucks
 date: 15/08/2012
-tags: notable
+tags: [notable]
 layout: post
 ---
 

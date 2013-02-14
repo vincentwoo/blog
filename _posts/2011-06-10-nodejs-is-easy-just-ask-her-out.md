@@ -1,7 +1,7 @@
 ---
 title: NodeJS is easy, just ask her out
 date: 10/06/2011
-tags: notable
+tags: [notable]
 layout: post
 ---
 
