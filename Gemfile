@@ -3,7 +3,14 @@ source :rubygems
 ruby '1.9.3'
 
 gem 'jekyll'
-gem 'rack-jekyll'
+gem 'unicorn'
+gem 'rake'
+gem 'rack-contrib'
+
 gem 'rdiscount'
-gem 'foreman'
 gem 'facets'
+gem 'nokogiri'
+
+group :development do
+  gem 'foreman'
+end

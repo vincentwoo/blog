@@ -2,10 +2,10 @@
 layout: default
 ---
 <article>
-  <h2><a href="<%= article.path %>">{{ page.title }}</a></h2>
+  <h2><a href="{{ page.url }}">{{ page.title }}</a></h2>
   <h5>{{ page.date | pretty }}</h5>
 
-  {{ content }}
+  {{ content | replace_first: '~', ''}}
 
   <section class="comments">
     <div id="disqus_thread"></div>

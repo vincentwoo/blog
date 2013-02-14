@@ -4,6 +4,9 @@ title: close enough
 ---
 
 {% for post in site.posts %}
-  <a href="{{ post.url }}"><span>{{ post.title }}</span></a>
-  {{ post.content | summary }}
+  <article>
+    <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+    <h5>{{ post.date | pretty }}</h5>
+    {{ post.content | truncatehtml: 250 }}
+  </article>
 {% endfor %}
