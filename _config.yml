@@ -1,5 +1,5 @@
 markdown:       rdiscount
-permalink:      /:year/:month/:day/:title
+permalink:      pretty
 auto:           true
 safe:           false
 paginate:       5
