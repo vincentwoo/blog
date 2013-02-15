@@ -1,6 +1,6 @@
 markdown:       rdiscount
 permalink:      pretty
-auto:           true
+auto:           false
 safe:           false
 paginate:       5
 paginate_path:  /page/:num

@@ -13,7 +13,7 @@ that the lack of write API access to Google+ is born not out of lack of
 foresight, planning, or even bandwidth, but out of trepidation, caution, and the
 desire to do right by developers.
 
-This is raw, barely-refined bullshit~ and I regret not being able to respond to
+This is raw, barely-refined bullshit and I regret not being able to respond to
 the thread with a pithier snarky comment. The truth is simpler: Google is
 full-stop terrible at APIs.
 
