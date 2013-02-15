@@ -1,6 +1,7 @@
 source :rubygems
 
 ruby '1.9.3'
+#ruby=1.9.3-p327
 
 gem 'jekyll'
 gem 'unicorn'
