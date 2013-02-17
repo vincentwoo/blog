@@ -8,7 +8,8 @@ use Rack::TryStatic,
   :root => "_site",
   :try  => ['index.html', '/index.html'],
   :header_rules => [
-    [:all, {'Cache-Control' => 'public, max-age=86400'}],
+    [%w(css js), {'Cache-Control' => 'public, max-age=86400'}],
+    [%w(ico gif jpg png), {'Cache-Control' => 'public, max-age=604800'}]
   ]
 
 run Rack::NotFound.new('_site/index.html')
