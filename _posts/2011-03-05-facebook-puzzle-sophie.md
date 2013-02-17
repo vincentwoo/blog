@@ -65,33 +65,33 @@ solve this, the [Floyd Warshall
 algorithm](http://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
 ). Trivially implemented in Ruby:
 
-
-
-    # note that $weights[x][y] is initialized to either
-    # Float::MAX if there is no edge between x and y, or
-    # to whatever the length of the edge is if there is.
-    def floyd_warshall
-        for k in 0..$num-1
-        for i in 0..$num-1
-        for j in 0..$num-1
-            if $weights[i][k] + $weights[k][j] < $weights[i][j]
-                $weights[i][j] = $weights[i][k] + $weights[k][j]
-                $next[i][j] = k
-            end
-        end
-        end
+{% highlight ruby %}
+# note that $weights[x][y] is initialized to either
+# Float::MAX if there is no edge between x and y, or
+# to whatever the length of the edge is if there is.
+def floyd_warshall
+    for k in 0..$num-1
+    for i in 0..$num-1
+    for j in 0..$num-1
+        if $weights[i][k] + $weights[k][j] < $weights[i][j]
+            $weights[i][j] = $weights[i][k] + $weights[k][j]
+            $next[i][j] = k
         end
     end
-
-    # links menoizes the list of nodes you need to traverse
-    # between nodes i and j
-    def links(i, j)
-        k = $next[i][j]
-        return k if k.class == Set
-        $next[j][i] = $next[i][j] = (k.nil? or i == j) ?
-            Set.new([]) :
-            (links(i, k) + Set.new([k]) + links(k, j))
     end
+    end
+end
+
+# links menoizes the list of nodes you need to traverse
+# between nodes i and j
+def links(i, j)
+    k = $next[i][j]
+    return k if k.class == Set
+    $next[j][i] = $next[i][j] = (k.nil? or i == j) ?
+        Set.new([]) :
+        (links(i, k) + Set.new([k]) + links(k, j))
+end
+{% endhighlight %}
 
 This gives a good starting point for actually trying to start solving
 the problem.
@@ -101,26 +101,28 @@ In my hubris, I figured a breadth first search where you expand on the
 path with the lowest current expected time would work. Here's what it
 looks like:
 
-    def solve
-        queue = MinHeap.new
-        queue.push 0.0, [[0], Set.new((1..$num-1).select {|n| $probs[n] > 0}), 0.0, 0.0]
-        while not queue.empty?
-            node, remain, time, expected = queue.pop
-            if remain.empty?
-                p node
-                return expected
-            end
-            # only iterate remaining nodes that you don't need to
-            # go through other remaining ndoes to reach
-            remain.select {|n|
-                (links(node.last, n) & remain).empty?
-            }.each do |n|
-                new_time = time + $weights[node.last][n]
-                new_expected = expected + $probs[n] * new_time
-                queue.push new_expected, [node + [n], remain - [n], new_time, new_expected]
-            end
+{% highlight ruby %}
+def solve
+    queue = MinHeap.new
+    queue.push 0.0, [[0], Set.new((1..$num-1).select {|n| $probs[n] > 0}), 0.0, 0.0]
+    while not queue.empty?
+        node, remain, time, expected = queue.pop
+        if remain.empty?
+            p node
+            return expected
+        end
+        # only iterate remaining nodes that you don't need to
+        # go through other remaining ndoes to reach
+        remain.select {|n|
+            (links(node.last, n) & remain).empty?
+        }.each do |n|
+            new_time = time + $weights[node.last][n]
+            new_expected = expected + $probs[n] * new_time
+            queue.push new_expected, [node + [n], remain - [n], new_time, new_expected]
         end
     end
+end
+{% endhighlight %}
 
 In my defense I hadn't yet realized that the sophie problem is a variant
 of the traveling salesman problem and that a BFS search would take
@@ -137,38 +139,44 @@ decided to try the canonical dynamic programming solution to TSP.
 
 The DP solution requires that you build a structure like
 
-    C[subset][j]
+{% highlight ruby %}
+C[subset][j]
+{% endhighlight %}
 
 where subset is some subset of all nodes, and j is a node in that
 subset. The value of this entry should be the minimum expected time to
 proceed from node 0 to node j and through all the nodes in the subset.
 The problem then reduces to finding the minimum of:
 
-    C[subset - [j]][i] # for all i in subset
+{% highlight ruby %}
+C[subset - [j]][i] # for all i in subset
+{% endhighlight %}
 
 There are some problems here, but first, some code:
 
-    def solve
-        relevant = (1..$num-1).select {|n| $probs[n] > 0}
-        hash = {}
-        hash[[0]] = {0 => [0, 0]}
-        for size in 1..relevant.size
-            relevant.combination(size).each do |subset|
-                subset.insert 0, 0
-                hash[subset] = {0 => [Float::MAX, Float::MAX]}
-                for j in subset
-                    next if j == 0
-                    reduced = subset - [j]
-                    hash[subset][j] = reduced.collect {|i|
-                        e, t = hash[reduced][i]
-                        t += $weights[i][j]
-                        [e + t * $probs[j], t]
-                    }.min {|a,b| a.first <=> b.first}
-                end
+{% highlight ruby %}
+def solve
+    relevant = (1..$num-1).select {|n| $probs[n] > 0}
+    hash = {}
+    hash[[0]] = {0 => [0, 0]}
+    for size in 1..relevant.size
+        relevant.combination(size).each do |subset|
+            subset.insert 0, 0
+            hash[subset] = {0 => [Float::MAX, Float::MAX]}
+            for j in subset
+                next if j == 0
+                reduced = subset - [j]
+                hash[subset][j] = reduced.collect {|i|
+                    e, t = hash[reduced][i]
+                    t += $weights[i][j]
+                    [e + t * $probs[j], t]
+                }.min {|a,b| a.first <=> b.first}
             end
         end
-        hash[[0] + relevant].values.collect {|x| x.first}.min
     end
+    hash[[0] + relevant].values.collect {|x| x.first}.min
+end
+{% endhighlight %}
 
 This works, but isn't fast. A 17 node graph took me about 10 minutes to
 finish. The problem is that since subsets aren't ordered, there is no
@@ -203,20 +211,22 @@ have before.
 
 And without further ado, here's the code.
 
-    $min = Float::MAX
-    def solve(node, remain, unseen, expect = 0, time = 0)
-        return if expect + unseen * time >= $min
-        return ($min = expect) if remain.empty?
-        remain.each do |n|
-            next_time  = time + $weights[node][n]
-            solve n,
-                  remain - [n],
-                  unseen - $probs[n],
-                  expect + next_time * $probs[n],
-                  next_time
-        end
-        $min
+{% highlight ruby %}
+$min = Float::MAX
+def solve(node, remain, unseen, expect = 0, time = 0)
+    return if expect + unseen * time >= $min
+    return ($min = expect) if remain.empty?
+    remain.each do |n|
+        next_time  = time + $weights[node][n]
+        solve n,
+              remain - [n],
+              unseen - $probs[n],
+              expect + next_time * $probs[n],
+              next_time
     end
+    $min
+end
+{% endhighlight %}
 
 This works fairly well. We can do that 17 node graph in 30 seconds now.
 I don't have a good estimate of the complexity improvement here, since
@@ -229,43 +239,49 @@ Ruby is slow. At least, Cygwin's default Ruby 1.8.7 interpreter is slow.
 I decided to reimplement the whole deal in C++ and see what kind of
 speedups I could achieve. Here is my initial implementation in C++:
 
-    double solve(int node, set<int> &remain, double unseen,
-            double expect = 0.0, double time = 0.0) {
-        static double min = numeric_limits<double>::max();
-        if (expect + unseen * time >= min)
-            return -1;
-        if (remain.size() == 0) {
-            min = expect;
-            return -1;
-        }
-        for (set<int>::iterator n = remain.begin(); n != remain.end(); n++) {
-            int next = *n;
-            double next_time = time + weights[node][next];
-            set<int> next_remain = remain;
-            next_remain.erase(next);
-            solve(next, next_remain, unseen - probs[next],
-                expect + next_time * probs[next], next_time);
-        }
-        return min;
+{% highlight cpp %}
+double solve(int node, set<int> &remain, double unseen,
+        double expect = 0.0, double time = 0.0) {
+    static double min = numeric_limits<double>::max();
+    if (expect + unseen * time >= min)
+        return -1;
+    if (remain.size() == 0) {
+        min = expect;
+        return -1;
     }
+    for (set<int>::iterator n = remain.begin(); n != remain.end(); n++) {
+        int next = *n;
+        double next_time = time + weights[node][next];
+        set<int> next_remain = remain;
+        next_remain.erase(next);
+        solve(next, next_remain, unseen - probs[next],
+            expect + next_time * probs[next], next_time);
+    }
+    return min;
+}
+{% endhighlight %}
 
 However, the speedup here was only a factor of two or so. Where are the
 bottlenecks? Turns out, a big one in both Ruby and C++ is the constant
 recreation of the remainder set at
 
-    set<int> next_remain = remain;
+{% highlight cpp %}
+set<int> next_remain = remain;
+{% endhighlight %}
 
 It's much faster to just do:
 
-    set<int> next_remain = remain;
-    for (set<int>::iterator n = remain.begin(); n != remain.end(); n++) {
-        int next = *n;
-        double next_time = time + weights[node][next];
-        next_remain.erase(next);
-        solve(next, next_remain, unseen - probs[next],
-            expect + next_time * probs[next], next_time);
-        next_remain.insert(next);
-    }
+{% highlight cpp %}
+set<int> next_remain = remain;
+for (set<int>::iterator n = remain.begin(); n != remain.end(); n++) {
+    int next = *n;
+    double next_time = time + weights[node][next];
+    next_remain.erase(next);
+    solve(next, next_remain, unseen - probs[next],
+        expect + next_time * probs[next], next_time);
+    next_remain.insert(next);
+}
+{% endhighlight %}
 
 This way, you only do one set copy per recursion, and then just pass
 around to all of your children. "But Vincent," you say, "why even
@@ -275,27 +291,29 @@ very annoying to not invalidate iterators to a set that is constantly
 shrinking and growing through iteration and recursion. Here's what I
 came up with:
 
-    double solve(int node, vector<node_entry> &remain, double unseen,
-            double expect = 0.0, double time = 0.0) {
-        static double min = numeric_limits<double>::max();
-        if (expect + unseen * time >= min)
-            return -1;
+{% highlight cpp %}
+double solve(int node, vector<node_entry> &remain, double unseen,
+        double expect = 0.0, double time = 0.0) {
+    static double min = numeric_limits<double>::max();
+    if (expect + unseen * time >= min)
+        return -1;
 
-        bool empty = true;
-        for (vector<node_entry>::iterator n = remain.begin(); n != remain.end(); n++) {
-            if (!n->active)
-                continue;
-            empty = false;
-            int next = n->index;
-            double next_time = time + weights[node][next];
-            n->active = false;
-            solve(next, remain, unseen - probs[next],
-                expect + next_time * probs[next], next_time);
-            n->active = true;
-        }
-        if (empty) min = expect;
-        return min;
+    bool empty = true;
+    for (vector<node_entry>::iterator n = remain.begin(); n != remain.end(); n++) {
+        if (!n->active)
+            continue;
+        empty = false;
+        int next = n->index;
+        double next_time = time + weights[node][next];
+        n->active = false;
+        solve(next, remain, unseen - probs[next],
+            expect + next_time * probs[next], next_time);
+        n->active = true;
     }
+    if (empty) min = expect;
+    return min;
+}
+{% endhighlight %}
 
 This way we just store whether an element is active or not in the data
 model itself, instead of representing that information with presence in

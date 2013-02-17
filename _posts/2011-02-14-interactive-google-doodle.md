@@ -36,11 +36,13 @@ objects.
 A naive initial implementation worked well enough. It looked like this
 (pseudocode is rubyish):
 
-    for i in 0 to circles.length - 2
-        for j in i + 1 to circles.length - 1
-            handleCollision(circles[i], circles[j]);
-        end
+{% highlight ruby %}
+for i in 0 to circles.length - 2
+    for j in i + 1 to circles.length - 1
+        handleCollision(circles[i], circles[j]);
     end
+end
+{% endhighlight %}
 
 which served me well enough on Canary on my admittedly beefy desktop. It
 wasn't until I tried to run the same on Firefox 3.x on my work laptop that
@@ -51,20 +53,22 @@ Each cell is about the diameter of a circle, and knows about any circles
 within itself, as well as up to four of its neighbors. Then, collision code
 becomes something like
 
-    for circle in circles
-        for potentialCollider in grid.getPotentialColliders(circle.pos)
-            handleCollision(circle, potentialCollider);
-        end
+{% highlight ruby %}
+for circle in circles
+    for potentialCollider in grid.getPotentialColliders(circle.pos)
+        handleCollision(circle, potentialCollider);
     end
+end
 
-    def grid.getPotentialColliders(pos)
-        cell = getCell(pos)
-        ret = []
-        for neighbor in cell.neighbors
-            ret = ret.concat(neighbor.objects)
-        end
-        ret
+def grid.getPotentialColliders(pos)
+    cell = getCell(pos)
+    ret = []
+    for neighbor in cell.neighbors
+        ret = ret.concat(neighbor.objects)
     end
+    ret
+end
+{% endhighlight %}
 
 which takes the runtime complexity down from n^2 to about n. Neat!
 

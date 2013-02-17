@@ -59,7 +59,8 @@ Now we can finally ask the Contacts API for a list of contacts! Easy enough,
 right? We'll just do a JSONP request to get around the cross-domain
 restrictions.
 
-<pre><code class="javascript">var authParams = { access_token: ..., token_type: ... }; // from Google oAuth
+{% highlight js %}
+var authParams = { access_token: ..., token_type: ... }; // from Google oAuth
 
 $.ajax({
   url: 'https://www.google.com/m8/feeds/contacts/default/full',
@@ -67,40 +68,42 @@ $.ajax({
   data: authParams,
   success: function(data) { console.log(data); }
 });
-</code></pre>
+{% endhighlight %}
 
 What does this give us? To our slow and creeping horror, we get back something
 like this for every contact:
 
-    <entry gd:etag='&quot;QHc_fDVSLit7I2A9WhJXFUkDQQ0.&quot;'>
-      <id>http://www.google.com/m8/feeds/contacts/your%40gmail.com/base/13659b580fe5686d</id>
-      <updated>2012-08-09T22:01:31.944Z</updated>
-      <app:edited xmlns:app='http://www.w3.org/2007/app'>2012-08-09T22:01:31.944Z</app:edited>
-      <category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/contact/2008#contact'/>
-      <title>Diane Duane</title>
-      <link
-        rel='http://schemas.google.com/contacts/2008/rel#photo'
-        type='image/*'
-        href='https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0'
-        gd:etag='&quot;UWlBIlclWit7I2A9AFQKRg9YFXoHL0oQSQA.&quot;'/>
-      <link
-        rel='self'
-        type='application/atom+xml'
-        href='https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'/>
-      <link
-        rel='edit'
-        type='application/atom+xml'
-        href='https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'/>
-      <gd:name>
-        <gd:fullName>Diane Duane</gd:fullName>
-        <gd:givenName>Diane</gd:givenName>
-        <gd:familyName>Duane</gd:familyName>
-      </gd:name>
-      <gd:email
-        rel='http://schemas.google.com/g/2005#other'
-        address='diane.duane@gmail.com'
-        primary='true'/>
-    </entry>
+{% highlight xml %}
+<entry gd:etag='&quot;QHc_fDVSLit7I2A9WhJXFUkDQQ0.&quot;'>
+  <id>http://www.google.com/m8/feeds/contacts/your%40gmail.com/base/13659b580fe5686d</id>
+  <updated>2012-08-09T22:01:31.944Z</updated>
+  <app:edited xmlns:app='http://www.w3.org/2007/app'>2012-08-09T22:01:31.944Z</app:edited>
+  <category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/contact/2008#contact'/>
+  <title>Diane Duane</title>
+  <link
+    rel='http://schemas.google.com/contacts/2008/rel#photo'
+    type='image/*'
+    href='https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0'
+    gd:etag='&quot;UWlBIlclWit7I2A9AFQKRg9YFXoHL0oQSQA.&quot;'/>
+  <link
+    rel='self'
+    type='application/atom+xml'
+    href='https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'/>
+  <link
+    rel='edit'
+    type='application/atom+xml'
+    href='https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'/>
+  <gd:name>
+    <gd:fullName>Diane Duane</gd:fullName>
+    <gd:givenName>Diane</gd:givenName>
+    <gd:familyName>Duane</gd:familyName>
+  </gd:name>
+  <gd:email
+    rel='http://schemas.google.com/g/2005#other'
+    address='diane.duane@gmail.com'
+    primary='true'/>
+</entry>
+{% endhighlight %}
 
 You take several deep breaths. You ignore the fact that you are fetching roughly
 1kb of data per contact (out of potentially thousands) to get a name, an email,
@@ -108,47 +111,55 @@ and the URL of an image. "Okay", you think to yourself, "this is still
 salvageable. I can parse XML on the client. In fact, jQuery can probably do it
 for me." You take a quick stab at grabbing names and emails.
 
-    success: function(data) {
-      var xml = $.parseXML(data);
-      $(xml).find('entry').each(function() {
-        var entry = $(this);
-        var name  = entry.find('title').text();
-        var email = entry.find('email').attr('address');
-      });
-    }
+{% highlight js %}
+success: function(data) {
+  var xml = $.parseXML(data);
+  $(xml).find('entry').each(function() {
+    var entry = $(this);
+    var name  = entry.find('title').text();
+    var email = entry.find('email').attr('address');
+  });
+}
+{% endhighlight %}
 
 A quick browser test shows that this only appears to work in Chrome. A bit more
 digging turns up, to your chagrin, that jQuery has trouble finding namespaced
 elements like "<gd:email>" in XML documents on different browsers. You Google
 around and find a fix:
 
-
-    var email = entry.find('email, gd\\:email').attr('address');
+{% highlight js %}
+var email = entry.find('email, gd\\:email').attr('address');
+{% endhighlight %}
 
 For now, you ignore [how inefficient this is][9], hoping merely to reach
 functionality. It works! Now you want to add images. It looks like one of the
 link elements under \<entry\> appears to point to an image for that contact. You
 fiddle around on the console:
 
-<pre><code class="javascript">entry.find('link[type="image/*"]').attr('href')
+{% highlight js %}
+entry.find('link[type="image/*"]').attr('href')
 // => https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0
-</code></pre>
+{% endhighlight %}
 
 Attempting to load this in your browser gives you a 401. Taking a look a the
 [photo management section of the docs][10] seems to suggest you need to
 additionally apply auth credentials to this url. You amend your code:
 
-    var href = entry.find('link[type="image/*"]').attr('href');
-    var imageUrl = href + '&' + $.param(authParams);
+{% highlight js %}
+var href = entry.find('link[type="image/*"]').attr('href');
+var imageUrl = href + '&' + $.param(authParams);
+{% endhighlight %}
 
 This seems to produce a real photo in your browser. Success! Let's extrapolate:
 
-    $(xml).find('entry').each(function() {
-      var entry = $(this);
-      var href = entry.find('link[type="image/*"]').attr('href');
-      var imageUrl = href + '&' + $.param(authParams);
-      $('body').append('<img src="' + imageUrl + '" />');
-    });
+{% highlight js %}
+$(xml).find('entry').each(function() {
+  var entry = $(this);
+  var href = entry.find('link[type="image/*"]').attr('href');
+  var imageUrl = href + '&' + $.param(authParams);
+  $('body').append('<img src="' + imageUrl + '" />');
+});
+{% endhighlight %}
 
 ### Image contortions
 
@@ -162,20 +173,22 @@ Great, so some image links have a magic attribute on them that says they're real
 images. You wonder why Google even bothers returning image links for photos that
 don't exist. You try something like the following:
 
-<pre><code class="javascript">.find('link[type="image/*"][gd\\:etag]') // or even
+{% highlight js %}
+.find('link[type="image/*"][gd\\:etag]') // or even
 .find('link[type="image/*"][gd:etag]') // nope? how about
 .find('link[type="image/*"][etag]')
-</code></pre>
+{% endhighlight %}
 
 But no, jQuery can't deal with namespaced attribute selection, at all, so you
 arrive at:
 
-<pre><code class="javascript">var link = entry.find('link[type="image/*"]');
+{% highlight js %}
+var link = entry.find('link[type="image/*"]');
 if (entry.attr('gd:etag')) {
   var imageUrl = link.attr('href') + '&' + $.param(authParams);
   $('body').append('&lt;img src="' + imageUrl + '" /&gt;');
 }
-</code></pre>
+{% endhighlight %}
 
 This time, a few more photos load, but then they stop coming. The console shows
 a few successful image loads, but most of the requests for images returned with
@@ -188,20 +201,22 @@ code, you find that Google doesn't like it if you have more than one in-flight
 API request at a time. You come up with essentially the opposite of an image
 preloader to stagger image loading:
 
-    var imageUrls = ['https://...', ...];
-    function staggerImages(index) {
-      if (index == imageUrls.length) return;
-      var img = new Image();
-      img.onload = function() {
-        setTimeout(function() {
-          // Load the next image 100ms after this one finishes loading
-          populateImages(index + 1);
-        }, 100);
-      };
-      img.src = imageUrls[index];
-      $('body').append(img);
-    }
-    populateImages(0);
+{% highlight js %}
+var imageUrls = ['https://...', ...];
+function staggerImages(index) {
+  if (index == imageUrls.length) return;
+  var img = new Image();
+  img.onload = function() {
+    setTimeout(function() {
+      // Load the next image 100ms after this one finishes loading
+      staggerImages(index + 1);
+    }, 100);
+  };
+  img.src = imageUrls[index];
+  $('body').append(img);
+}
+staggerImages(0);
+{% endhighlight %}
 
 Whew, that was fun, right? At this point it seems like a good idea to try to
 sort contacts by some sort of relevance metric. Unfortunately, the Contacts API

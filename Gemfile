@@ -12,6 +12,7 @@ gem 'rdiscount'
 gem 'facets'
 gem 'nokogiri'
 gem 'typhoeus'
+gem 'pygmentize'
 
 group :development do
   gem 'foreman'

@@ -14,22 +14,24 @@ with every other person in the group.
 
 I wrote a naive implementation at first that looked something like
 
-    # $seen is a hash to menoize previously seen sets
-    # $sparse is a hash of usernames to a list of neighboring usernames
-    # $set is the list of output clusters
+{% highlight ruby %}
+# $seen is a hash to menoize previously seen sets
+# $sparse is a hash of usernames to a list of neighboring usernames
+# $set is the list of output clusters
 
-    $seen = {}
-    def subgraph(set, adj)
-        hash = (set + adj).sort
-        return if $seen[hash]
-        $sets.push set.sort.join(", ") if adj.empty? and set.size > 2
-        adj.each {|node| subgraph(set + [node], $sparse[node] & adj)}
-        $seen[hash] = true
-    end
+$seen = {}
+def subgraph(set, adj)
+    hash = (set + adj).sort
+    return if $seen[hash]
+    $sets.push set.sort.join(", ") if adj.empty? and set.size > 2
+    adj.each {|node| subgraph(set + [node], $sparse[node] & adj)}
+    $seen[hash] = true
+end
 
-    $sparse.keys.each do |vertex|
-        subgraph([vertex], $sparse[vertex])
-    end
+$sparse.keys.each do |vertex|
+    subgraph([vertex], $sparse[vertex])
+end
+{% endhighlight %}
 
 This appeared to work pretty well on my tests, but continued to fail on
 Facebook puzzle submission for some reason I couldn't track down at the
@@ -50,62 +52,64 @@ abstract pdfs)
 which are two techniques used to cut down on the number of recursive calls.
 At this point my code looked something like
 
-    def generate_degeneracy_ordering
-        d = []  #degree buckets
-        dw = {} #degree for each vertex
-        $sparse.each_pair do |vertex, neighbors|
-            deg = neighbors.size
-            d[deg] ||= []
-            d[deg].push vertex
-            dw[vertex] = deg
-        end
-        d.each_index {|i| d[i] ||= []}
-        $sparse.size.times do
-            vertex = d.find {|x| !x.empty?}.pop
-            $degen.push vertex
-            for neighbor in $sparse[vertex]
-                if d[dw[neighbor]].delete neighbor
-                    dw[neighbor] -= 1
-                    d[dw[neighbor]].push neighbor
-                end
+{% highlight ruby %}
+def generate_degeneracy_ordering
+    d = []  #degree buckets
+    dw = {} #degree for each vertex
+    $sparse.each_pair do |vertex, neighbors|
+        deg = neighbors.size
+        d[deg] ||= []
+        d[deg].push vertex
+        dw[vertex] = deg
+    end
+    d.each_index {|i| d[i] ||= []}
+    $sparse.size.times do
+        vertex = d.find {|x| !x.empty?}.pop
+        $degen.push vertex
+        for neighbor in $sparse[vertex]
+            if d[dw[neighbor]].delete neighbor
+                dw[neighbor] -= 1
+                d[dw[neighbor]].push neighbor
             end
         end
     end
+end
 
-    def bron_kerbosch(set, points, exclude, pivot_neighbors=nil)
-        if points.empty?
-            $sets.push set.sort.join(', ') if set.size > 2 and exclude.empty?
-            return
-        end
-
-        pivot_neighbors ||= (exclude.empty? or $sparse[points.last].size > $sparse[exclude.last].size) ?
-            $sparse[points.last] : $sparse[exclude.last]
-
-        points.each_with_index do |vertex, i|
-            next if pivot_neighbors.include? vertex
-            points[i] = nil
-            bron_kerbosch(set + [vertex],
-                          points & $sparse[vertex],
-                          exclude & $sparse[vertex])
-            exclude.push vertex
-        end
+def bron_kerbosch(set, points, exclude, pivot_neighbors=nil)
+    if points.empty?
+        $sets.push set.sort.join(', ') if set.size > 2 and exclude.empty?
+        return
     end
 
-    exit unless ARGV.size == 1
-    ingest(ARGV[0])
+    pivot_neighbors ||= (exclude.empty? or $sparse[points.last].size > $sparse[exclude.last].size) ?
+        $sparse[points.last] : $sparse[exclude.last]
 
-    generate_degeneracy_ordering
-    before = []
-    after = $degen[1..$degen.size-1]
-    $degen.each do |vertex|
-        intersect = after & $sparse[vertex]
-        bron_kerbosch([vertex],
-                      intersect,
-                      before & $sparse[vertex],
-                      $sparse[intersect.last]) #last elements in $degen have highest degrees
-        before.push vertex
-        after.shift
+    points.each_with_index do |vertex, i|
+        next if pivot_neighbors.include? vertex
+        points[i] = nil
+        bron_kerbosch(set + [vertex],
+                      points & $sparse[vertex],
+                      exclude & $sparse[vertex])
+        exclude.push vertex
     end
+end
+
+exit unless ARGV.size == 1
+ingest(ARGV[0])
+
+generate_degeneracy_ordering
+before = []
+after = $degen[1..$degen.size-1]
+$degen.each do |vertex|
+    intersect = after & $sparse[vertex]
+    bron_kerbosch([vertex],
+                  intersect,
+                  before & $sparse[vertex],
+                  $sparse[intersect.last]) #last elements in $degen have highest degrees
+    before.push vertex
+    after.shift
+end
+{% endhighlight %}
 
 Which let me parse a 120MB input file in 1 minute flat. However, for
 some reason this was slower than my naive solution, which could do it,

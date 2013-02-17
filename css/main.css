@@ -134,10 +134,9 @@ article>ul li {
   display: none;
 }
 pre {
-  font: 0.7em/1.4em 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
-  border-left: 15px solid #777;
+  font: 14px/19px 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
   margin: 10px 0 25px 0;
-  background: #000;
+  padding: 10px 0;
   overflow: auto;
 }
 blockquote {
