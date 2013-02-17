@@ -1,6 +1,5 @@
 ---
 title: ships in the night
-date: 22/01/2011
 layout: post
 ---
 

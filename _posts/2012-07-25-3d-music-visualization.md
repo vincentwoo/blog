@@ -1,6 +1,5 @@
 ---
 title: 3D Music Visualization
-date: 25/07/2012
 layout: post
 ---
 

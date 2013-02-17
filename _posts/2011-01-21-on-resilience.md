@@ -1,6 +1,5 @@
 ---
 title: on resilience
-date: 21/01/2011
 layout: post
 ---
 

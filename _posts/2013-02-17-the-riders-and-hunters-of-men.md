@@ -1,6 +1,5 @@
 ---
 title: The Riders and Hunters of Men
-date: 12/02/2013
 layout: post
 notable: true
 ---

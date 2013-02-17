@@ -1,6 +1,5 @@
 ---
 title: Cheap Toto Pagination
-date: 23/02/2011
 layout: post
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: "Facebook Puzzle: peaktraffic"
-date: 28/02/2011
 layout: post
 ---
 

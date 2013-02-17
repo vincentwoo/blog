@@ -1,6 +1,5 @@
 ---
 title: "Facebook Puzzle: sophie"
-date: 05/03/2011
 layout: post
 ---
 

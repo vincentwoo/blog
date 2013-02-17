@@ -1,6 +1,5 @@
 ---
 title: Interactive Google Doodle
-date: 14/02/2011
 notable: true
 layout: post
 ---

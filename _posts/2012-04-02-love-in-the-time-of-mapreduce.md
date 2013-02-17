@@ -1,6 +1,5 @@
 ---
 title: Love in the Time of MapReduce
-date: 02/04/2012
 notable: true
 layout: post
 ---

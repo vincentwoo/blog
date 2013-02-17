@@ -1,6 +1,5 @@
 ---
 title: HTML5 canvas isolines
-date: 20/3/2012
 layout: post
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: site online
-date: 20/01/2011
 layout: post
 ---
 
