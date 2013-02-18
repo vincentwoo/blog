@@ -1,6 +1,11 @@
 require 'rack/contrib/try_static'
 require 'rack/contrib/not_found'
 
+if ENV['RACK_ENV'] == 'production'
+  require 'newrelic_rpm'
+  NewRelic::Agent.after_fork(:force_reconnect => true)
+end
+
 use Rack::Deflater
 
 use Rack::TryStatic,

@@ -14,6 +14,8 @@ gem 'nokogiri'
 gem 'typhoeus'
 gem 'pygmentize'
 
+gem 'newrelic_rpm'
+
 group :development do
   gem 'foreman'
 end

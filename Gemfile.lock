@@ -25,6 +25,7 @@ GEM
     maruku (0.6.1)
       syntax (>= 1.0.0)
     mime-types (1.21)
+    newrelic_rpm (3.5.6.55)
     nokogiri (1.5.6)
     posix-spawn (0.3.6)
     pygmentize (0.0.3)
@@ -54,6 +55,7 @@ DEPENDENCIES
   facets
   foreman
   jekyll
+  newrelic_rpm
   nokogiri
   pygmentize
   rack-contrib
