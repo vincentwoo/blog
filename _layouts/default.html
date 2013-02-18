@@ -6,7 +6,8 @@
     <link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,400,700' rel='stylesheet' type='text/css'>
     <link rel="alternate" type="application/atom+xml" title="{{ page.title }} - feed" href="/index.xml" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="description" content="Vincent Woo's blog: code and conversationalism" />
+    <meta name="description" content="close enough: a blog by Vincent Woo, t-shirt hawker at everlane.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{{ page.title }}</title>
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -24,17 +25,18 @@
   <body>
     <div id="page-wrap">
       <div id="sidebar">
+        <h2><a href="/">close enough</a></h2>
+        <p>is written by Vincent Woo, a t-shirt hawker at <a href="https://www.everlane.com">everlane.com</a></p>
         <div id="nav">
           <h3>nav</h3>
           <ul>
-            <li><a href="/">home</a></li>
-            <li><a href="/about">about me</a></li>
             <li><a href="/archives">archives</a></li>
             <li><a href="/index.xml">feed</a></li>
+            <li><a href="/resume.pdf">resume</a></li>
+            <li><a href="mailto:me@vincentwoo.com">email</a></li>
             <li><a href="https://github.com/vincentwoo/">github</a></li>
+            <li><a href="https://twitter.com/fulligin">twitter</a></li>
           </ul>
-        </div>
-        <div id="notable">
           <h3>notable</h3>
           <ul>
             {% for post in site.posts %}

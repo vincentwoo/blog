@@ -44,9 +44,9 @@ article>h3 {
 article>h5 {
   margin-top: -27px;
   margin-bottom: 13px;
-  color: #ccc;
+  color: #aaa;
   font-weight: normal;
-  font-size: 1em;
+  font-size: 20px;
 }
 h3:before {
   content: '»';
@@ -74,12 +74,12 @@ p>a, p>a:link {
   text-decoration: underline;
 }
 #content {
-  float: right;
+  float: left;
   width: 760px;
 }
 #sidebar {
   float: left;
-  width: 160px;
+  width: 170px;
   margin-left: 30px;
 }
   #sidebar li {
@@ -87,6 +87,22 @@ p>a, p>a:link {
     font-size: 16px;
     line-height: 20px;
     margin-bottom: 15px;
+  }
+  #sidebar h2 {
+    margin: 0;
+  }
+  #sidebar p {
+    font-size: 16px;
+    line-height: 16px;
+    color: #aaa;
+  }
+  #sidebar p>a {
+    color: #aaa;
+    text-decoration: none;
+  }
+  #sidebar p>a:hover {
+    color: #aaa;
+    text-decoration: underline;
   }
 #footer {
   float: left;
@@ -163,4 +179,28 @@ h4 {
 }
 .disabled {
   color: #ccc;
+}
+
+@media screen and (max-width: 720px) {
+  #page-wrap, #content {
+    width: 100%;
+  }
+  #page-wrap {
+    margin-top: 20px;
+  }
+  article {
+    margin: 0 4% 25px 4%;
+  }
+  #nav {
+    display: none;
+  }
+  #sidebar {
+    width: auto;
+    float: none;
+    margin: 0 4% 20px 4%;
+    border-bottom: 1px solid #eee;
+  }
+  body {
+    font-size: 18px;
+  }
 }
