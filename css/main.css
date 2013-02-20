@@ -199,6 +199,7 @@ h4 {
     float: none;
     margin: 0 4% 20px 4%;
     border-bottom: 1px solid #eee;
+    text-align: center;
   }
   body {
     font-size: 18px;
