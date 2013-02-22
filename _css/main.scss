@@ -2,59 +2,79 @@
   margin: 0;
   padding: 0;
 }
+
 html, body {
   width: 100%;
 }
+
 p {
   margin-bottom: 15px;
 }
+
 body {
   font-family: "Alegreya", Palatino, Georgia, serif;
   font-size: 20px;
   background: #fff;
   color: #333;
 }
+
 #page-wrap {
   width: 960px;
   margin: 50px auto 0 auto;
 }
+
 h2, h3 {
   margin-bottom: 10px;
   clear: both;
   font-size: 29px;
   position: relative;
 }
+
 h2 {
   margin-bottom: 25px;
 }
+
 h3 {
   font-size: 18px;
+
+  &:before {
+    content: '»';
+    margin-right: 10px;
+    color: #29D9C2;
+    position: absolute;
+    left: -25px;
+  }
 }
+
 article {
   margin: 0 10% 50px 10%;
   padding-bottom: 20px;
   border-bottom: 1px solid #EEE;
+
+  > {
+    p {
+      margin-bottom: 25px;
+    }
+    h3 {
+      font-size: 23px;
+    }
+    h5 {
+      margin-top: -27px;
+      margin-bottom: 13px;
+      color: #aaa;
+      font-weight: normal;
+      font-size: 20px;
+    }
+    ul {
+      margin: 0 0 25px 30px;
+      li {
+        list-style: disc outside none;
+        padding: 0;
+      }
+    }
+  }
 }
-article>p {
-  margin-bottom: 25px;
-}
-article>h3 {
-  font-size: 23px;
-}
-article>h5 {
-  margin-top: -27px;
-  margin-bottom: 13px;
-  color: #aaa;
-  font-weight: normal;
-  font-size: 20px;
-}
-h3:before {
-  content: '»';
-  margin-right: 10px;
-  color: #29D9C2;
-  position: absolute;
-  left: -25px;
-}
+
 hr {
   display: block;
   height: 2px;
@@ -62,121 +82,145 @@ hr {
   background: #666;
   margin: 0 0 1em 0;
 }
-a, a:link {
+
+a {
   color: #333;
   text-decoration: none;
   cursor: pointer;
+  &:link {
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  &:hover {
+    color: #29D9C2;
+  }
 }
-a:hover {
-  color: #29D9C2;
-}
-p>a, p>a:link {
+
+p > a {
   text-decoration: underline;
+  &:link {
+    text-decoration: underline;
+  }
 }
+
 #content {
   float: left;
   width: 760px;
 }
+
 #sidebar {
   float: left;
   width: 170px;
   margin-left: 30px;
-}
-  #sidebar li {
+
+  li {
     padding: 0;
     font-size: 16px;
     line-height: 20px;
     margin-bottom: 15px;
   }
-  #sidebar h2 {
+  h2 {
     margin: 0;
   }
-  #sidebar p {
+  p {
     font-size: 16px;
     line-height: 16px;
     color: #aaa;
+    > a {
+      color: #aaa;
+      text-decoration: none;
+      &:hover {
+        color: #aaa;
+        text-decoration: underline;
+      }
+    }
   }
-  #sidebar p>a {
-    color: #aaa;
-    text-decoration: none;
-  }
-  #sidebar p>a:hover {
-    color: #aaa;
-    text-decoration: underline;
-  }
+}
+
 #footer {
   float: left;
   margin-bottom: 20px;
   clear: both;
   padding: 0 5%;
 }
+
 .archiveInfo {
   float: right;
   text-align: right;
   width: 110px;
 }
+
 .continue {
   font-size: 18px;
 }
+
 .centered {
   margin: 10px auto 25px auto;
   width: 640px;
+  a {
+    border: 0;
+  }
 }
-.centered a {
-  border: 0;
-}
+
 ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
+
 li {
   margin: 0;
   margin-bottom: 10px;
   padding: 0 0 0 25px;
   position: relative;
 }
-article>ul {
-  margin: 0 0 25px 63px;
-}
-article>ul li {
-  list-style: disc outside none;
-  padding: 0;
-}
-.clear, #disqus_thread  {
+
+.clear {
   clear: both;
 }
-#disqus_thread li > *:first-child:before {
-  display: none;
+
+#disqus_thread {
+  clear: both;
+  li > *:first-child:before {
+    display: none;
+  }
 }
+
 pre {
-  font: 14px/19px 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
+  font: 14px / 19px "Anonymous Pro", "Bitstream Vera Sans", "Monaco", Courier, mono;
   margin: 10px 0 25px 0;
   padding: 10px 0;
   overflow: auto;
 }
+
 blockquote {
   padding: 14px 5% 1px 5%;
   margin-bottom: 25px;
   font-style: italic;
   background: #f5f5f5;
 }
+
 em {
   font-style: italic;
 }
+
 blockquote p {
   text-indent: 0;
 }
-p>img {
+
+p > img {
   display: block;
   margin: 0 auto;
 }
+
 h4 {
   margin: -20px 0 25px 0;
   font-size: 16px;
   font-weight: normal;
   text-align: center;
 }
+
 .disabled {
   color: #ccc;
 }

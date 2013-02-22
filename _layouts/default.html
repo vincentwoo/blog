@@ -1,8 +1,10 @@
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="/css/main.css" />
-    <link rel="stylesheet" type="text/css" href="/css/friendly.css" />
+    {% css_asset_tag application %}
+    - /_css/main.scss
+    - /_css/friendly.css
+    {% endcss_asset_tag %}
     <link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,400,700' rel='stylesheet' type='text/css'>
     <link rel="alternate" type="application/atom+xml" title="{{ page.title }} - feed" href="/index.xml" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>

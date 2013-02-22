@@ -8,6 +8,10 @@ gem 'unicorn'
 gem 'rake'
 gem 'rack-contrib'
 
+gem 'jekyll-asset-pipeline'
+gem 'sass'
+gem 'yui-compressor'
+
 gem 'rdiscount'
 gem 'facets'
 gem 'nokogiri'
