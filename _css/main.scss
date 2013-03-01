@@ -180,11 +180,10 @@ li {
   clear: both;
 }
 
-#disqus_thread {
-  clear: both;
-  li > *:first-child:before {
-    display: none;
-  }
+.comments {
+  margin-top: 40px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
 }
 
 pre {

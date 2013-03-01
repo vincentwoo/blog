@@ -20,4 +20,4 @@ use Rack::TryStatic,
   :try  => ['index.html', '/index.html'],
   :header_rules => rules
 
-run Rack::NotFound.new('_site/index.html')
+run Rack::NotFound.new('_site/404.html')
