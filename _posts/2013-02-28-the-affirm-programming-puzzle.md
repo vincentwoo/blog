@@ -52,7 +52,7 @@ though, is that higher numbers must be on larger "rings" of hexagons. Indeed,
 closer examination shows that each larger ring of hexagons has 6 more nodes than
 the last. Therefore:
 
-<p>$$ y = 3x^2 + 3x + 1 $$</p>
+<p>$$ MaxNumberOnRing(i) = ‎{ ‎\sum\limits_{ring=0}^i 6ring } + 1  $$</p>
 
 {% highlight ruby %}
 require 'matrix'
