@@ -3,6 +3,9 @@ title: The Affirm Programming Puzzle
 layout: post
 ---
 
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 The latest startup from internet luminary [Max Levchin][1] recently launched,
 and they have a very entertaining programming puzzle up on their [jobs page][2].
 
@@ -14,26 +17,42 @@ following manner:
 
 ### Approach
 
-The problem is interesting because the problem suggests a traditional graph
-theory approach, but Affirm also suggests that your solution should work at the
-scale of ten billion nodes. These two ideas don't really jibe, so one wonders if
+The problem is interesting because the problem seems like a traditional graph
+theory approach, but Affirm hints that your solution should work at the
+scale of ten billion nodes. These two ideas don't really jive, so one wonders if
 there's an analytic solution that doesn't involve any graph traversal.
 
 It seems plausible that there is one, since the problem seems very similar to
 calculating the [Manhattan Distance][4] between any two nodes in a rectangular
 grid, except in this case we have a hexagonal grid where there are six ways to
-move between neighboring nodes instead of four. These six neighboring cells lie along three axes of movement.
+move between neighboring nodes instead of four. These six neighboring cells lie
+along three axes of movement.
 
 picture of axes of movement
 
-If you play around with the axes in your head, you can see that you can represent any hexagon in terms of any two of the three axes of movement. The corollary to that conclusion is that any translation down one axis of movement can be thought of as some combination of the other two. Essentially, we have one almost-unnecessary axis.
+If you play around with the axes in your head, you can see that you can
+represent any hexagon in terms of any two of the three axes of movement. The
+corollary to that conclusion is that any translation down one axis of movement
+can be thought of as some combination of the other two. Essentially, we have one
+almost-unnecessary axis.
+
+picture of axes with grid
+
+This suggests an approach:
+
+* Turn a hex's number into its grid coordinates
+* Figure out the distance between two arbitrary grid coordinates
+
+### Translating a hex number into coordinates
 
 Going from an arbitrary hex number to coordinates seems a bit tricky at first.
 You can't modulo or divide by anything obvious to get some aspect of the
-geometry. The hex at 1000 could be almost anywhere. What does seem obvious,
+geometry. The hex at position 1000 could be almost anywhere. What does seem obvious,
 though, is that higher numbers must be on larger "rings" of hexagons. Indeed,
 closer examination shows that each larger ring of hexagons has 6 more nodes than
-the last.
+the last. Therefore:
+
+<p>$$ y = 3x^2 + 3x + 1 $$</p>
 
 {% highlight ruby %}
 require 'matrix'
