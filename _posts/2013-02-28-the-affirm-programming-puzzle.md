@@ -28,6 +28,13 @@ picture of axes of movement
 
 If you play around with the axes in your head, you can see that you can represent any hexagon in terms of any two of the three axes of movement. The corollary to that conclusion is that any translation down one axis of movement can be thought of as some combination of the other two. Essentially, we have one almost-unnecessary axis.
 
+Going from an arbitrary hex number to coordinates seems a bit tricky at first.
+You can't modulo or divide by anything obvious to get some aspect of the
+geometry. The hex at 1000 could be almost anywhere. What does seem obvious,
+though, is that higher numbers must be on larger "rings" of hexagons. Indeed,
+closer examination shows that each larger ring of hexagons has 6 more nodes than
+the last.
+
 {% highlight ruby %}
 require 'matrix'
 
