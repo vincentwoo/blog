@@ -44,8 +44,8 @@ Going from an arbitrary hex number to coordinates seems a bit tricky at first.
 You can't modulo or divide by anything obvious to get some aspect of the
 geometry. The hex at position 1000 could be almost anywhere. What does seem
 obvious, though, is that higher numbers must be on larger "rings" of hexagons.
-Indeed, closer examination shows that each larger ring of hexagons has 6 more
-nodes than the last. Therefore:
+Closer examination shows that each larger ring of hexagons has 6 more nodes than
+the last. Therefore:
 
 <p>$$
   MaxNumOnRing(n) = ‎1 + ‎\sum\limits_{ring=0}^n 6ring        \\
@@ -79,6 +79,13 @@ particular configuration should become clear later:
 
 ![The grid with coordinates][6]
 
+Following the pattern of coordinates here, you can see the largest number on
+each ring occurs on the negative Y axis. Essentially we can say that if a number
+is the largest number on ring n, its position will be (0, -n). After a bit more
+thought, I figured that you could represent the various corners of the unit
+hexagon as six vectors that all pointed to hexagons exactly one away from the
+origin, like so:
+
 {% highlight ruby %}
 require 'matrix'
 
@@ -90,7 +97,13 @@ UNIT_HEXAGON = {
   4 => Vector[ 0, -1],
   5 => Vector[-1, -1]
 }
+{% endhighlight %}
 
+You can get any number's position along its hexagon ring by figuring out which
+of the six sides of the hexagon it is on, and its distance from the last corner
+of the hexagon.
+
+{% highlight ruby %}
 def ring_to_max_num ring
   3 * ring**2 + 3 * ring + 1
 end
@@ -102,17 +115,23 @@ end
 def num_to_coords num
   return Vector[0, 0] if num == 1
 
-  ring = num_to_ring num
-  offset = ring_to_max_num(ring) - num
+  side_length = ring = num_to_ring num # The length of a side is also the ring number
+  offset = ring_to_max_num(ring) - num # How far away am I from the end of my ring?
 
-  side_number = offset / ring
-  side_offset = offset % ring
+  side_number = offset / side_length
+  side_offset = offset % side_length
 
   translation = UNIT_HEXAGON[side_number]
-  transition = UNIT_HEXAGON[(side_number + 1) % 6] - translation
-  (translation * ring) + (transition * side_offset)
-end
 
+  # The direction to the next corner is just the position of the next corner
+  # minus the position of the current one.
+  direction = UNIT_HEXAGON[(side_number + 1) % 6] - translation
+
+  (translation * ring) + (direction * side_offset)
+end
+{% endhighlight %}
+
+{% highlight ruby %}
 def length_of_delta delta
   delta = -1 * delta if delta.all? {|i| i < 0}
   [delta.max, delta.max - delta.min].max

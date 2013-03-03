@@ -107,6 +107,7 @@ p > a {
 #content {
   float: left;
   width: 760px;
+  overflow: hidden;
 }
 
 #sidebar {
@@ -198,6 +199,10 @@ blockquote {
   margin-bottom: 25px;
   font-style: italic;
   background: #f5f5f5;
+}
+
+.highlight {
+  width: 115%;
 }
 
 em {
