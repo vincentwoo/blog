@@ -131,10 +131,36 @@ def num_to_coords num
 end
 {% endhighlight %}
 
+Gif illustrating the process
+
+### Solving for distance
+
+So now we can easily get the grid coordinates of the start and end node. We
+still have to solve for the distance between them. A quick observation shows
+that the distance necessary to travel any delta vector is the same regardless of
+starting and ending nodes. That is to say, moving (+3, +2) units is the same
+distance whether you start at hex 1 or 1000. Luckily, with the axes I've chosen,
+calculating this distance isn't too hard. At any given hexagon, you can move one
+unit along either the X or Y axes. You can also move one unit up or down the
+third axis, which is equivalent to moving by either (+1, +1) or (-1, -1). Our
+choice of axes has made that bit simple.
+
+The process for finding the distance of a delta is:
+
+* If the coordinates of the delta share a sign (both positive or negative), the
+  distance is just the maximum of the absolute values of both coordinates. In
+  moving (+3, +5), for instance, you move first to (+3, +3) in three moves, and
+  then to (+3, +5) in another two for a total distance of five. The same is true
+  of (-3, -5), with reversed directions.
+* If they do not share a sign, merely add both of their asbolute values
+  together. For instance, moving (+2, -6) takes eight moves, because you have to
+  move +2 in the X direction and -6 in the Y. Moving along the Z axis cannot aid
+  you here.
+
 {% highlight ruby %}
 def length_of_delta delta
   delta = -1 * delta if delta.all? {|i| i < 0}
-  [delta.max, delta.max - delta.min].max
+  delta.all? {|i| i > 0} ? delta.max : delta.max - delta.min
 end
 
 def distance_between num1, num2
@@ -142,6 +168,26 @@ def distance_between num1, num2
   length_of_delta delta
 end
 
+num1 = ARGV[0].to_i
+num2 = ARGV[1].to_i
+puts "distance between #{num1} and #{num2} is #{distance_between num1, num2}"
+{% endhighlight %}
+
+And viola, a constant-time algorithm that works fine at 10 billion nodes:
+
+{% highlight bash %}
+~/misc/affirm $ time ruby honeycomb.rb 1 100
+distance between 1 and 100 is 6
+
+real  0m0.030s
+user  0m0.023s
+sys 0m0.005s
+~/misc/affirm $ time ruby honeycomb.rb 1 10000000000
+distance between 1 and 10000000000 is 57735
+
+real  0m0.030s
+user  0m0.024s
+sys 0m0.005s
 {% endhighlight %}
 
 <script type="text/x-mathjax-config">
