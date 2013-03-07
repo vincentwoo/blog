@@ -1,3 +1,7 @@
+until File.exist? '_site/404.html'
+  sleep 1
+end
+
 require 'rack/contrib/try_static'
 require 'rack/contrib/not_found'
 
