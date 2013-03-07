@@ -1,7 +1,7 @@
-source :rubygems
+source 'https://rubygems.org'
 
-ruby '1.9.3'
-#ruby=1.9.3-p327
+ruby '2.0.0'
+#ruby=2.0.0-rc2
 
 gem 'jekyll'
 gem 'unicorn'
