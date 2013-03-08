@@ -1,5 +1,5 @@
 ---
-title: The Affirm Programming Puzzle
+title: Above and Beyond the Affirm Job Puzzle
 layout: post
 ---
 
@@ -15,7 +15,7 @@ following manner:
 ### Approach
 
 The problem is interesting because the problem seems like a traditional graph
-theory approach, but Affirm hints that your solution should work at the scale of
+theory exercise, but Affirm hints that your solution should work at the scale of
 ten billion nodes. These two ideas don't really jive, so one wonders if there's
 an analytic solution that doesn't involve any graph traversal.
 
@@ -38,10 +38,10 @@ This suggests an approach:
 * Turn a hex's number into its grid coordinates
 * Figure out the distance between two arbitrary grid coordinates
 
-### Translating a hex number into coordinates
+### Translating a hexagon number into coordinates
 
-Going from an arbitrary hex number to coordinates seems a bit tricky at first.
-You can't modulo or divide by anything obvious to get some aspect of the
+Going from an arbitrary hexagon number to coordinates seems a bit tricky at
+first. You can't modulo or divide by anything obvious to get some aspect of the
 geometry. The hex at position 1000 could be almost anywhere. What does seem
 obvious, though, is that higher numbers must be on larger "rings" of hexagons.
 Closer examination shows that each larger ring of hexagons has 6 more nodes than
@@ -55,7 +55,7 @@ the last. Therefore:
 $$</p>
 
 The formula seems to check out, since the 0^th ring ends in 1, the 1^st ring in
-7, the 2^nd ring in 19, and so on. Programatically, you could tell which ring a
+7, the 2^nd ring in 19, and so on. Programmatically, you could tell which ring a
 hex falls on by finding which two "max-ring" numbers the hex is between. In the
 case of say, 12, it would be the 2^nd ring, since it is greater than 7 and less
 than 19. However, we can do better mathematically by simply inverting the
@@ -115,23 +115,24 @@ end
 def num_to_coords num
   return Vector[0, 0] if num == 1
 
-  side_length = ring = num_to_ring num # The length of a side is also the ring number
-  offset = ring_to_max_num(ring) - num # How far away am I from the end of my ring?
+  # The length of a side is also the ring number
+  side_length = ring = num_to_ring num
+
+  # How far away am I from the end of my ring?
+  offset = ring_to_max_num(ring) - num
 
   side_number = offset / side_length
   side_offset = offset % side_length
 
-  translation = UNIT_HEXAGON[side_number]
+  corner = UNIT_HEXAGON[side_number]
 
-  # The direction to the next corner is just the position of the next corner
-  # minus the position of the current one.
-  direction = UNIT_HEXAGON[(side_number + 1) % 6] - translation
+  # The direction to the next corner is just the position of the
+  # next corner minus the position of the current one.
+  direction = UNIT_HEXAGON[(side_number + 1) % 6] - corner
 
-  (translation * ring) + (direction * side_offset)
+  (corner * ring) + (direction * side_offset)
 end
 {% endhighlight %}
-
-Gif illustrating the process
 
 ### Solving for distance
 
@@ -152,7 +153,7 @@ The process for finding the distance of a delta is:
   moving (+3, +5), for instance, you move first to (+3, +3) in three moves, and
   then to (+3, +5) in another two for a total distance of five. The same is true
   of (-3, -5), with reversed directions.
-* If they do not share a sign, merely add both of their asbolute values
+* If they do not share a sign, merely add both of their absolute values
   together. For instance, moving (+2, -6) takes eight moves, because you have to
   move +2 in the X direction and -6 in the Y. Moving along the Z axis cannot aid
   you here.
@@ -190,8 +191,92 @@ user  0m0.024s
 sys 0m0.005s
 {% endhighlight %}
 
+### Extra Credit
+
+Solving for distance was nice, but honestly a bit anticlimactic. Wouldn't it be
+more impressive if we could actually output the number of each hexagon on the
+way to our destination?
+
+{% highlight ruby %}
+def path_between pos1, pos2
+  delta = pos1 - pos2
+
+  path = []
+
+  while delta != Vector[0, 0]
+    path.push(pos2 + delta)
+
+    move = if delta.all? {|i| i < 0}
+      Vector[1, 1]
+    elsif delta.all? {|i| i > 0}
+      Vector[-1, -1]
+    elsif delta[0] != 0
+      Vector[delta[0] > 0 ? -1 : 1, 0]
+    else
+      Vector[0, delta[1] > 0 ? -1 : 1]
+    end
+
+    delta += move
+  end
+
+  path.push pos2
+
+  path
+end
+{% endhighlight %}
+
+This function constructs a path of coordinates from pos1 to pos2, by attempting
+to move one hex at a time, favoring the Z axis where possible and otherwise just
+moving down the X or Y axes if there exists a remaining delta on either axis.
+
+However, we still only have a path in coordinates. To get back to hexagon
+numbers, we need a translation function. This article is getting a bit long, so
+I'll just leave it here as an exercise for the reader to puzzle out:
+
+{% highlight ruby %}
+def coords_to_num pos
+  return 1 if pos == Vector[0, 0]
+
+  ring = [pos.max - pos.min : pos.map(&:abs).max].max
+
+  side = if pos[0] == ring then 2
+    elsif pos[0] == -ring then 5
+    elsif pos[1] == ring then 1
+    elsif pos[1] == -ring then 4
+    elsif pos[0] > pos[1] then 3
+    else 0
+  end
+
+  max_num = ring_to_max_num ring
+  corner = UNIT_HEXAGON[side] * ring
+  offset = side * ring + length_of_delta(pos - corner)
+  offset == ring * 6 ? max_num : max_num - offset
+end
+{% endhighlight %}
+
+Bring all the pieces together and you get...
+
+{% highlight bash %}
+~/misc/affirm $ ruby ../misc/affirm/honeycomb.rb 1 100
+distance between 1 and 100 is 6
+path is [1, 2, 9, 22, 42, 68, 100]
+{% endhighlight %}
+
+Magic! The runtime here is $O(\sqrt{n})$, because the path-finding algorithm is
+linear on the length of the path, and the path can only be as long as the square
+root of the largest hexagon number on the path. Recall that the ring of a
+hexagon number is a function of the square root of that number.
+
+Thanks for the fun times, Levchin and co.
+
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({messageStyle: 'none'});
+  MathJax.Hub.Config({
+    messageStyle: 'none',
+    tex2jax: {
+     inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
 </script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
