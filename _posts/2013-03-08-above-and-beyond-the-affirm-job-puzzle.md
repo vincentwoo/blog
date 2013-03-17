@@ -50,7 +50,7 @@ the last. Therefore:
 <p>$$
   MaxNumOnRing(n) = ‎1 + ‎\sum\limits_{ring=0}^n 6ring        \\
   ... = 1 + 6\sum\limits_{ring=0}^n ring                    \\
-  ... = 1 + 6 \frac{n + (n + 1)}{2}                         \\
+  ... = 1 + 6 \frac{n(n + 1)}{2}                         \\
   ... = 3n^2 + 3n + 1
 $$</p>
 
