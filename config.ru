@@ -12,7 +12,7 @@ if ENV['RACK_ENV'] == 'production'
   NewRelic::Agent.after_fork(:force_reconnect => true)
   rules = [
     [%w(html),            {'Cache-Control' => 'public, max-age=0'}],
-    [%w(css js ico gif jpg png), {'Cache-Control' => 'public, max-age=604800'}]
+    [%w(css js ico gif jpg png pdf), {'Cache-Control' => 'public, max-age=604800'}]
   ];
 end
 
