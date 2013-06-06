@@ -80,7 +80,7 @@ particular configuration should become clear later:
 ![The grid with coordinates][6]
 
 Following the pattern of coordinates here, you can see the largest number on
-each ring occurs on the negative Y axis. Essentially we can say that if a number
+each ring occurs on the negative X axis. Essentially we can say that if a number
 is the largest number on ring n, its position will be (0, -n). After a bit more
 thought, I figured that you could represent the various corners of the unit
 hexagon as six vectors that all pointed to hexagons exactly one away from the
