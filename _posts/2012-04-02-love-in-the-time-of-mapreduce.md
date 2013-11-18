@@ -144,7 +144,7 @@ bring to bear. In the coming decade, your books might even make it into the
 black.”
 
 Robert was not easily placated. “Can you say for certain that this is the way
-its going to play out? The world has never seen this kind of mass social
+it’s going to play out? The world has never seen this kind of mass social
 movement. What if the people become complacent instead of motivated? What if
 your algorithms can’t guarantee long term stability?”
 
