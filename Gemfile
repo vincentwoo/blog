@@ -1,15 +1,14 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.2'
 
 gem 'jekyll'
 gem 'unicorn'
 gem 'rake'
 gem 'rack-contrib'
 
-gem 'jekyll-asset-pipeline'
+gem 'jekyll-assets'
 gem 'sass'
-gem 'yui-compressor'
 
 gem 'rdiscount'
 gem 'facets'

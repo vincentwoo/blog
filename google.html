@@ -1,87 +1,90 @@
 <!doctype html>
 <html>
 <head>
-    <title>Google Interactive Balls Experiment</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-	<!-- vector.js is just a cut version of sylvester's js
-		 vector API, with only the Vector class. See 
-		 http://sylvester.jcoglan.com/ for more info
-	-->
-    <script type="text/javascript" src="/js/vector.js"></script>
-    <script type="text/javascript" src="/js/balls.js"></script>
-	<script type="text/javacript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-267782-2']);
-      _gaq.push(['_setDomainName', '.vincentwoo.com']);
-      _gaq.push(['_trackPageview']);
+  <title>Google Interactive Balls Experiment</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <!-- vector.js is just a cut version of sylvester's js
+     vector API, with only the Vector class. See
+     http://sylvester.jcoglan.com/ for more info
+  -->
+  <script type="text/javascript" src="/js/vector.js"></script>
+  <script type="text/javascript" src="/js/balls.js"></script>
+  <script type="text/javacript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-267782-2']);
+    _gaq.push(['_setDomainName', '.vincentwoo.com']);
+    _gaq.push(['_trackPageview']);
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
-	<meta name="description" content="A fun, interactive verison of the google search page with ball collision physics." />
-    <style type="text/css">
-        * { 
-			font: 17px arial,sans-serif;
-            color: black;
-        }
-        
-		html, body {
-			margin: 0;
-			padding: 0;
-			width: 100%;
-			height: 100%;
-		}
-        canvas {
-            width: 100%;
-			height: 100%;
-			position: fixed;
-			top: 0;
-			left: 0;
-			z-index: -1;
-        }
-		#wrap {
-			width: 700px;
-			margin: 0 auto;
-			position: relative;
-			top: 300px;
-		}
-		
-		#q {
-			border-color: #C9D7F1 #3366CC #3366CC #A2BAE7;
-			border-width: 1px;
-			padding-left: 6px;
-			padding-right: 10px;
-			vertical-align: top;
-			width: 100%;
-		}
-        
-        #info {
-            position:fixed;
-            bottom: 15px;
-            left: 15px;
-        }
-        
-        a {
-            text-decoration: none;
-            border: 0;
-        }
-        a:hover {
-            cursor: pointer;
-            border-bottom: 2px solid #29D9C2;
-            margin-bottom: -2px;
-        }
-    </style>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  <meta name="description" content="A fun, interactive verison of the google search page with ball collision physics." />
+  <style type="text/css">
+    * {
+      font: 17px arial,sans-serif;
+      color: black;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    #wrap {
+      width: 700px;
+      margin: 0 auto;
+      position: relative;
+      top: 300px;
+    }
+
+    #q {
+      border-color: #C9D7F1 #3366CC #3366CC #A2BAE7;
+      border-width: 1px;
+      padding-left: 6px;
+      padding-right: 10px;
+      vertical-align: top;
+      width: 100%;
+    }
+
+    #info {
+      position:fixed;
+      bottom: 15px;
+      left: 15px;
+    }
+
+    a {
+      text-decoration: none;
+      border: 0;
+    }
+
+    a:hover {
+      cursor: pointer;
+      border-bottom: 2px solid #29D9C2;
+      margin-bottom: -2px;
+    }
+  </style>
 </head>
 <body>
-	<canvas id="c"></canvas>
-	<div id="wrap" >
-		<form action="http://google.com/search" method="get" name="query" id="query">
-		<input id="q" name="q" type="text" title="Search" maxlength="2048" autocomplete="off" />
-		</form>
-	</div>
-    <a id="info" href="/2011/02/14/interactive-google-doodle/">about this page</a>
+  <canvas id="c"></canvas>
+  <div id="wrap">
+    <form action="http://google.com/search" method="get" name="query" id="query">
+    <input id="q" name="q" type="text" title="Search" maxlength="2048" autocomplete="off" />
+    </form>
+  </div>
+  <a id="info" href="/2011/02/14/interactive-google-doodle/">about this page</a>
 </body>
 </html>
