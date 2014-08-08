@@ -7,3 +7,6 @@ paginate_path:  /page/:num
 permalink:      pretty
 highligher:     pygments
 safe:           false
+assets:
+  css_compressor: sass
+  gzip: false
