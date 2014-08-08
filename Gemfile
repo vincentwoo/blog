@@ -12,7 +12,3 @@ gem 'nokogiri'
 gem 'pygmentize'
 
 gem 'typhoeus'
-
-group :development do
-  gem 'foreman'
-end
