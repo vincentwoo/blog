@@ -1,4 +1,4 @@
-exclude:        ['README', 'Gemfile.lock', 'Gemfile', 'vendor']
+exclude:        ['README', 'Gemfile.lock', 'Gemfile', 'Rakefile']
 flickr:
   api_key:      28bba34a0ad8d67a0e0efa92a17d7960
 markdown:       rdiscount
