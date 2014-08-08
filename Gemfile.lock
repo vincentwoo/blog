@@ -53,7 +53,6 @@ GEM
       sass (~> 3.2)
     jekyll-watch (1.0.0)
       listen (~> 2.7)
-    kgio (2.9.2)
     kramdown (1.4.1)
     liquid (2.6.1)
     listen (2.7.9)
@@ -63,7 +62,6 @@ GEM
     mercenary (0.3.4)
     mini_portile (0.6.0)
     multi_json (1.10.1)
-    newrelic_rpm (3.9.1.236)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     parslet (1.5.0)
@@ -74,10 +72,6 @@ GEM
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
     rack (1.5.2)
-    rack-contrib (1.1.0)
-      rack (>= 0.9.1)
-    raindrops (0.13.0)
-    rake (10.3.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
@@ -102,10 +96,6 @@ GEM
       parslet (~> 1.5.0)
     typhoeus (0.6.9)
       ethon (>= 0.7.1)
-    unicorn (4.8.3)
-      kgio (~> 2.6)
-      rack
-      raindrops (~> 0.7)
     yajl-ruby (1.1.0)
 
 PLATFORMS
@@ -116,12 +106,8 @@ DEPENDENCIES
   foreman
   jekyll
   jekyll-assets
-  newrelic_rpm
   nokogiri
   pygmentize
-  rack-contrib
-  rake
   rdiscount
   sass
   typhoeus
-  unicorn
