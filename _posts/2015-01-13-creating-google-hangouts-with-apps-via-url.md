@@ -36,7 +36,7 @@ I assume this is mostly fine.
 
 ### Reverse Engineering the Hangouts Button
 
-Google's example for generating a hangouts button via the JS API looks like:
+Google's example for generating a hangouts button via the JS API is:
 
 {% highlight js %}
   gapi.hangout.render('placeholder-rr', {
@@ -49,8 +49,8 @@ Google's example for generating a hangouts button via the JS API looks like:
 });
 {% endhighlight %}
 
-Which renders a button that, when clicked on, briefly opens a window with a
-URL like:
+which renders a button that, when clicked on, briefly opens a window with this
+URL:
 
 ```
 https://talkgadget.google.com/hangouts/_/?hl=en&hcb=0&lm1=1421214770979
@@ -63,8 +63,8 @@ EiLDJdXV0.
 ```
 
 which then redirects to a normal hangouts URL where your app is embedded as a
-full room app. Let's break apart what's going on with this url! The params in
-that URL are:
+full room app. Let's break apart what's going on here. The params in that URL
+are:
 
 ```
 param | value
