@@ -3,14 +3,12 @@ title: 3D Music Visualization
 layout: post
 ---
 
-<div class="centered">
-    <iframe title="YouTube video player"
-            class="youtube-player"
-            width="640"
-            height="390"
-            src="http://www.youtube.com/embed/JzczKjcOyIs?rel=0">
-    </iframe>
-</div>
+<iframe title="YouTube video player"
+        class="youtube-player"
+        width="640"
+        height="390"
+        src="http://www.youtube.com/embed/JzczKjcOyIs?rel=0">
+</iframe>
 
 I made this visualization of a
 [violin and piano performance](http://www.youtube.com/watch?v=fjZOL4C0oVo)
