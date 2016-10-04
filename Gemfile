@@ -1,15 +1,15 @@
 source 'https://rubygems.org'
 
-ruby '2.3.0'
+ruby '2.3.1'
 
 gem 'jekyll'
 gem 'jekyll-assets'
 gem 'jekyll-paginate'
 gem 'sass'
 
-gem 'rdiscount'
+gem 'kramdown'
 gem 'facets'
 gem 'nokogiri'
-gem 'pygmentize'
+gem 'rouge'
 
 gem 'typhoeus'

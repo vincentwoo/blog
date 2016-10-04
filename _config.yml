@@ -2,11 +2,15 @@ gems:           ['jekyll-paginate']
 exclude:        ['README', 'Gemfile.lock', 'Gemfile', 'Rakefile']
 flickr:
   api_key:      28bba34a0ad8d67a0e0efa92a17d7960
-markdown:       rdiscount
 paginate:       5
 paginate_path:  /page/:num
 permalink:      pretty
-highligher:     pygments
+
+markdown:       kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
 safe:           false
 assets:
   css_compressor: sass
