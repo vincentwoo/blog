@@ -13,3 +13,4 @@ gem 'nokogiri'
 gem 'rouge'
 
 gem 'typhoeus'
+gem 'rake'
