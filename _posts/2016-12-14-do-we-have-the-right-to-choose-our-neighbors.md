@@ -1,6 +1,7 @@
 ---
 title: Do We Have The Right To Choose Our Neighbors?
 layout: post
+notable: true
 ---
 
 > I wrote an opinion piece for the SF Chronicle. They [ran it](http://www.sfchronicle.com/opinion/openforum/article/SF-supports-immigrants-just-not-into-our-10791974.php) with some great edits for length, so I figured I'd put my original, longer, and worse version here for posterity's sake.
