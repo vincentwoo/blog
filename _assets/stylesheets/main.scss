@@ -43,14 +43,6 @@ h2 {
 h3 {
   font-size: 18px;
   margin-bottom: 10px;
-
-  &:before {
-    content: '»';
-    margin-right: 10px;
-    color: #29D9C2;
-    position: absolute;
-    left: -25px;
-  }
 }
 
 article {
@@ -133,6 +125,14 @@ p > a {
   }
   h3 {
     margin-top: 25px;
+
+    &:before {
+      content: '»';
+      margin-right: 10px;
+      color: #29D9C2;
+      position: absolute;
+      left: -25px;
+    }
   }
   p {
     font-size: 16px;
@@ -254,4 +254,16 @@ h4 {
   body {
     font-size: 18px;
   }
+}
+
+blockquote {
+  font-style: normal;
+}
+
+table {
+  margin: 15px 0;
+}
+
+td {
+  padding: 4px;
 }
