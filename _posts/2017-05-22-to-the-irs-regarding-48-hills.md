@@ -4,9 +4,13 @@ layout: post
 notable: true
 ---
 
+> This piece also ran as part of [Heather Knight's column](http://www.sfchronicle.com/news/article/SF-teacher-housing-suddenly-gains-momentum-11165409.php) in the San Francisco Chronicle on May 23rd, 2017. A point that I should correct is that 501(c)(3)s actually do pay payroll tax. However, the nonprofit entity itself does not pay federal income tax, and of course donations are tax-deductible for donors, which is the main benefit.
+
 To the IRS and the public,
 
 48 Hills is an independent publication run by the San Francisco Media Center (SFMC). Its editor and executive director, Tim Redmond, writes about San Francisco current events and politics. SFMC is also an IRS-approved 501(c)(3) nonprofit entity, which not only exempts SFMC from paying taxes on Tim Redmond's salary, but also grants a tax deduction to any donor who contributes to 48 Hills. This would all be well and good if it weren't for the fact that 48 Hills routinely engages in one of the acts **expressly forbidden** to a 501(c)(3): electioneering.
+
+~
 
 The IRS is [crystal clear](https://www.irs.gov/charities-non-profits/charitable-organizations/the-restriction-of-political-campaign-intervention-by-section-501-c-3-tax-exempt-organizations) on this mandate: “Under the Internal Revenue Code, all section 501(c)(3) organizations are absolutely prohibited from directly or indirectly participating in, or intervening in, any political campaign on behalf of (or in opposition to) any candidate for elective public office.” 48 Hills as a publication is a unilateral supporter of the “progressive” faction of the Democratic party in San Francisco, and does not hesitate to attack any politician outside of this camp. This is not a free speech issue. Most SF newspapers are not incorporated as 501(c)(3)s and do not receive special tax treatment. 48 Hills is quite likely the only SF politics-focused publication that also happens to be a 501(c)(3).
 
