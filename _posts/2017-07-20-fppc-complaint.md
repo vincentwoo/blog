@@ -23,7 +23,7 @@ Typically, an SMO will approach candidates or ballot measure campaigns that it f
 
 ![Sample slate](/images/sample_mailer.png)
 
-Individuals and organizations making independent expenditures, typically PACs, are not allowed to communicate with campaigns, but SMOs are free to do so for the purposes of arranging payment from the campaign. This is a reflection of what is assumed to be the fundamental difference between an SMO and a PAC: an SMO raises money from campaigns, but a PAC raises money for campaigns. This very important distinction is why SMOs are allowed to communicate with campaigns.
+Individuals and organizations making independent expenditures, typically PACs, are not allowed to communicate with campaigns, but SMOs are free to do so for the purposes of arranging payment from the campaign. This is a reflection of what is assumed to be the fundamental difference between an SMO and a PAC: an SMO raises money *from* campaigns, but a PAC raises money *for* campaigns. This very important distinction is why SMOs are allowed to communicate with campaigns.
 
 However, this distinction has broken down with Jim Stearns and the AHA. Not only did Stearns serve on both the Fewer and AHA campaigns, he raised funds at the AHA while representing the Fewer campaign and coordinated the the marketing efforts of both campaigns simultaneously. He essentially had a secret slush fund to draw on while advocating for Fewer.
 
