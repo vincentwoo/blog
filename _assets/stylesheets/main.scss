@@ -96,7 +96,7 @@ a {
   }
 }
 
-p > a {
+article a {
   text-decoration: underline;
   &:link {
     text-decoration: underline;
@@ -218,6 +218,7 @@ blockquote p {
 p > img {
   display: block;
   margin: 0 auto;
+  max-width: 100%;
 }
 
 h4 {
