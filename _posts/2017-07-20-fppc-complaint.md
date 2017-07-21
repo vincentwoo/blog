@@ -7,7 +7,7 @@ notable: true
 
 To whom it may concern at the California Fair Political Practices Commission,
 
-Jim Stearns, a political consultant in San Francisco, has evaded laws governing independent expenditures by coordinating with a political candidate and laundering money through a Slate Mailer Organization (SMO). To my knowledge, this is a novel means of evading coordination restrictions that typically govern external spending on candidate campaigns. Normally, independent expenditures like PACs are expressly forbidden from communicating with a campaign.
+Jim Stearns, a political consultant in San Francisco, has evaded laws governing independent expenditures by coordinating with a political candidate and laundering money through a Slate Mailer Organization (SMO). To my knowledge, this is a novel means of avoiding coordination restrictions that typically govern external spending on candidate campaigns. Normally, independent expenditures like PACs are expressly forbidden from communicating with a campaign.
 
 During the 2016 San Francisco election, Jim Stearns was employed as the sole campaign consultant of both the Sandra Fewer campaign and the Affordable Housing Alliance. Stearns used his position at both groups to campaign for Fewer from both inside and outside the campaign. Typically, illegal coordination between candidates and external groups occurs via passed messages or illicit telephone calls. In this case, Jim Stearns was brazenly coordinating with himself.
 
