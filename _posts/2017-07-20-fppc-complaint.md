@@ -6,6 +6,8 @@ notable: true
 ---
 
 > July 21st update: Rachel Swan [wrote about this complaint](http://www.sfchronicle.com/news/article/State-elections-complaint-filed-against-veteran-11303811.php) for the Chronicle, which includes a short, unsatisfying response from Stearns.
+>
+> August 3rd update: The FPPC has [responded](/static/fppc_response_1.pdf) that they need a few more weeks to judge whether they should pursue a claim. The letter indicates that Stearns has lawyered up.
 
 To whom it may concern at the California Fair Political Practices Commission,
 
