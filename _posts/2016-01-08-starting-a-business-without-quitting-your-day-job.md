@@ -17,4 +17,3 @@ small business and some mistakes you probably want to avoid making.
         src="http://www.youtube.com/embed/J8UwcyYT3z0?rel=0">
 </iframe>
 
-~

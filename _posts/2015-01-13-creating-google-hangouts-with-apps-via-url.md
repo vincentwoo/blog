@@ -13,7 +13,6 @@ can craft a URL to open a new hangout without any of the bloat like so:
 But what if you want to make a hangout with your app and set its `app_type` to
 `ROOM_APP` so that your app is loaded for everyone by default?
 
-~
 
 Well, some digging on the internet suggests that you can write a URL of the form
 

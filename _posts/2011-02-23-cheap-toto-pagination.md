@@ -12,7 +12,6 @@ pass variables to a Toto page without using the GET variable syntax
 (i.e. ?page=1) and I still wanted to hold onto the rails RESTful
 paradigm of /page/1, so I monkey patched the Toto::Site dispatcher, like
 so:
-~
 
 {% highlight ruby %}
 # in config.ru

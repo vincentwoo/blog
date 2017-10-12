@@ -12,7 +12,6 @@ so:
 fiction contest. You can write about anything, but the story must begin with
 these two words: "The MapReduce".
 
-~
 
 > Please note that some meaning may be lost on non-Googler's, notably the bits
 concerning company hierarchy. All the opinions expressed are my own and

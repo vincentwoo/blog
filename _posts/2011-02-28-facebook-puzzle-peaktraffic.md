@@ -10,7 +10,6 @@ represents mutual friendships between Facebook users. Then you are to
 find every group of friends where each friend in the group is friends
 with every other person in the group.
 
-~
 
 I wrote a naive implementation at first that looked something like
 

@@ -7,13 +7,12 @@ notable: true
 
 > July 21st update: Rachel Swan [wrote about this complaint](http://www.sfchronicle.com/news/article/State-elections-complaint-filed-against-veteran-11303811.php) for the Chronicle, which includes a short, unsatisfying response from Stearns.
 >
-> August 3rd update: The FPPC has [responded](/static/fppc_response_1.pdf) that they need a few more weeks to judge whether they should pursue a claim. The letter indicates that Stearns has lawyered up.
+> August 3rd update: The FPPC has [responded](/public/fppc_response_1.pdf) that they need a few more weeks to judge whether they should pursue a claim. The letter indicates that Stearns has lawyered up.
 
 To whom it may concern at the California Fair Political Practices Commission,
 
 Jim Stearns, a political consultant in San Francisco, has evaded laws governing independent expenditures by coordinating with a political candidate and laundering money through a Slate Mailer Organization (SMO). To my knowledge, this is a novel means of avoiding coordination restrictions that typically govern external spending on candidate campaigns. Normally, independent expenditures like PACs are expressly forbidden from communicating with a campaign.
 
-~
 
 During the 2016 San Francisco election, Jim Stearns was employed as the sole campaign consultant of both the Sandra Fewer campaign and the Affordable Housing Alliance. Stearns used his position at both groups to campaign for Fewer from both inside and outside the campaign. Typically, illegal coordination between candidates and external groups occurs via passed messages or illicit telephone calls. In this case, Jim Stearns was brazenly coordinating with himself.
 
@@ -27,7 +26,7 @@ The AHA was registered as a Slate Mailer Organization. “Slate mailers” are p
 
 Typically, an SMO will approach candidates or ballot measure campaigns that it favors and say, “Hey, we’d love to put you on our slate to endorse you. Can you pay us $500?” After all the campaigns pay up, the SMO mails out this combined slate to voters. The SMO gets to pocket the difference between how much it cost to mail the slates and how much it raised from campaigns, which is why so many of them are for-profit ventures. Here’s a sample image provided by the FPPC as an example of how one of these slate mailers should look:
 
-![Sample slate](/images/sample_mailer.png)
+![Sample slate](/public/images/sample_mailer.png)
 
 Individuals and organizations making independent expenditures, typically PACs, are not allowed to communicate with campaigns, but SMOs are free to do so for the purposes of arranging payment from the campaign. This is a reflection of what is assumed to be the fundamental difference between an SMO and a PAC: an SMO raises money *from* campaigns, but a PAC raises money *for* campaigns. This very important distinction is why SMOs are allowed to communicate with campaigns.
 
@@ -37,7 +36,7 @@ However, this distinction has broken down with Jim Stearns and the AHA. Not only
 
 The AHA deviated from the standard SMO playbook in a number of key ways that call its status as a legitimate SMO into question. Firstly, their slates don’t seem awfully much like slates. I’ve attached three “slate mailers” sent by the AHA in the Richmond. In each, three out of the four pages visible on the mailer are solely devoted to attacking Fewer’s opponent, Philhour. The remaining page makes only a cursory endorsement of three citywide ballot measures, and makes no mention of endorsing any particular political candidate.
 
-![Attack mailer example](/images/attack_mailer_example.jpg)
+![Attack mailer example](/public/images/attack_mailer_example.jpg)
 
 This is very unusual for a Slate Mailer Organization, and is behavior more typical of a standard PAC. It’s not clear if attack ads can even be considered slates at all. The Fair Political Practices Commission (FPPC) manual on SMOs hasn’t addressed the issue yet. Slates often endorse a “No” vote for measures they’re opposed to, but these AHA “slates” devoted 75% of their space to attacking a candidate, and then didn’t even bother to endorse the opponent the AHA presumably supported. It seems clear that these were simply attack ads with a small appendix to have minimum plausible deniability that they were really slates.
 
@@ -90,25 +89,25 @@ Peter Keane, Chairperson, San Francisco Ethics Commission<br>
 
 ## Attack mailers sent by the AHA
 
-* [AHA_attack_mailer_1.jpg](/images/AHA_attack_mailer_1.jpg)
-* [AHA_attack_mailer_2.jpg](/images/AHA_attack_mailer_2.jpg)
-* [AHA_attack_mailer_3.jpg](/images/AHA_attack_mailer_3.jpg)
+* [AHA_attack_mailer_1.jpg](/public/images/AHA_attack_mailer_1.jpg)
+* [AHA_attack_mailer_2.jpg](/public/images/AHA_attack_mailer_2.jpg)
+* [AHA_attack_mailer_3.jpg](/public/images/AHA_attack_mailer_3.jpg)
 
 ## Fewer campaign mailer showing shared design
 
-[Fewer_mailer_1.jpg](/images/Fewer_mailer_1.jpg)
+[Fewer_mailer_1.jpg](/public/images/Fewer_mailer_1.jpg)
 
 ## AHA Slate Mailer Organization Campaign Statement
 
-[AHA_SMO_Form_401.pdf](/static/AHA_SMO_Form_401.pdf)
+[AHA_SMO_Form_401.pdf](/public/AHA_SMO_Form_401.pdf)
 
 ## Stearns Campaign Consultant Registration
 
-[Stearns_Registration.pdf](/static/Stearns_Registration.pdf)
+[Stearns_Registration.pdf](/public/Stearns_Registration.pdf)
 
 ## Soda PAC filings showing payments to Stearns (Form 460)
 
-* [soda_460_7-01_to_9-24.pdf](/static/soda_460_7-01_to_9-24.pdf)
-* [soda_460_9-25_to_10-22.pdf](/static/soda_460_9-25_to_10-22.pdf)
-* [soda_460_10-23_to_12-31.pdf](/static/soda_460_10-23_to_12-31.pdf)
+* [soda_460_7-01_to_9-24.pdf](/public/soda_460_7-01_to_9-24.pdf)
+* [soda_460_9-25_to_10-22.pdf](/public/soda_460_9-25_to_10-22.pdf)
+* [soda_460_10-23_to_12-31.pdf](/public/soda_460_10-23_to_12-31.pdf)
 

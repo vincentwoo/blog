@@ -5,7 +5,7 @@ layout: post
 
 Here's a little page that [draws isolines in a canvas element](/js/isolines.html).
 It uses the [marching squares algorithm](http://en.wikipedia.org/wiki/Marching_squares)
-and can take dynamic data in the form of a tab separated value file (.tsv). ~
+and can take dynamic data in the form of a tab separated value file (.tsv).
 
 Such a file should be formatted thusly:
 

@@ -12,7 +12,7 @@ cat in your apartment, where you know where the cat is likely to be, as
 well as the transit times between the various locations in your home.
 
 I'll document here the various bad solutions I came up with on my way to
-a decent one, and as a bonus: an optimized-ish version in C++! ~
+a decent one, and as a bonus: an optimized-ish version in C++!
 
 ### About the math
 The problem asks you to minimize the expected time to find sophie. What

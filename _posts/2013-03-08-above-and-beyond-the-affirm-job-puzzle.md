@@ -10,7 +10,7 @@ You should read the page for some background, but in summary the problem is to
 find the distances between any two cells in a hexagonal grid numbered in the
 following manner:
 
-![The hexagonal grid][3]~
+![The hexagonal grid][3]
 
 ### Approach
 
@@ -282,7 +282,7 @@ Thanks for the fun times, Levchin and co.
 
 [1]: http://en.wikipedia.org/wiki/Max_Levchin
 [2]: https://affirm.com/jobs
-[3]: /images/affirm/hexgrid.png
+[3]: /public/images/affirm/hexgrid.png
 [4]: http://en.wikipedia.org/wiki/Taxicab_geometry
-[5]: /images/affirm/axes.png
-[6]: /images/affirm/coordinates.png
+[5]: /public/images/affirm/axes.png
+[6]: /public/images/affirm/coordinates.png

@@ -10,7 +10,7 @@ whom I usually agree with on most topics strongly disagree with me on
 this one. Rather than write yet another piece extolling the virtues of
 a far-future post-scarcity post-singularity world, I thought I'd just
 document some of the objections to immortality I get and my
-counterarguments. ~
+counterarguments.
 
 Note that for the purposes of giving my conversational partners
 opportunities to disagree, I typically posit a form of immortality where

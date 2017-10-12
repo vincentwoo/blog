@@ -12,7 +12,6 @@ needed to write [something at least as fun](/google.html). My take is
 backed by HTML5, so you will need a suitably compliant browser to view
 it.
 
-~
 
 ### Features
 

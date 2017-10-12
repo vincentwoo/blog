@@ -1,61 +1,15 @@
-<!doctype html>
-<html>
-  <head>
-    {% stylesheet main %}
-    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,400,700" rel="stylesheet" type="text/css">
-    <link rel="alternate" type="application/atom+xml" title="{{ page.title }} - feed" href="/index.xml" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="description" content="a blog by Vincent Woo, founder of coderpad.io" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{{ page.title }}</title>
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-267782-2']);
-      _gaq.push(['_setDomainName', '.vincentwoo.com']);
-      _gaq.push(['_trackPageview']);
+<!DOCTYPE html>
+<html lang="en-us">
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
-  </head>
+  {% include head.html %}
+
   <body>
-    <div id="page-wrap">
-      <div id="sidebar">
-        <h2><a href="/">close enough</a></h2>
-        <p>is written by Vincent Woo, founder of <a href="https://coderpad.io">coderpad.io</a></p>
-        <div id="nav">
-          <h3>navigation</h3>
-          <ul>
-            <li><a href="/archives">archives</a></li>
-            <li><a href="/index.xml">feed</a></li>
-            <li><a href="mailto:me@vincentwoo.com">email</a></li>
-            <li><a href="https://github.com/vincentwoo/">github</a></li>
-            <li><a href="https://twitter.com/fulligin">twitter</a></li>
-            <li><a href="https://keybase.io/vwoo">keybase</a></li>
-          </ul>
-          <h3>notable posts</h3>
-          <ul>
-            {% for post in site.posts %}
-              {% if post.notable %}
-                <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-          <h3>side projects</h3>
-          <ul>
-            <li><a href="http://coderpad.io">CoderPad</a></li>
-            <li><a href="http://krugmantimes.com">The Krugman Times</a></li>
-            <li><a href="http://multiplayerset.com">Multiplayer Set</a></li>
-          </ul>
-        </div>
-        <div class="clear"></div>
-      </div>
-      <div id="content">
-        {{ content }}
-      </div>
+
+    {% include sidebar.html %}
+
+    <div class="content container">
+      {{ content }}
     </div>
+
   </body>
 </html>
