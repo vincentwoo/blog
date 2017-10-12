@@ -20,14 +20,6 @@
           {% endif %}
         {% endif %}
       {% endfor %}
-
-
-      <h2>Notable Posts</h2>
-      {% for post in site.posts %}
-        {% if post.notable %}
-          <a class="sidebar-nav-item{% if page.url == post.url %} active{% endif %}" href="{{ post.url }}">{{ post.title }}</a>
-        {% endif %}
-      {% endfor %}
-
+    </nav>
   </div>
 </div>

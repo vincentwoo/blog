@@ -99,10 +99,6 @@ a.sidebar-nav-item:focus {
 .sidebar-nav-item.active {
   font-weight: bold;
 }
-.sidebar h2 {
-  margin: 1rem 0;
-  color: rgba(255,255,255,.5)
-}
 
 /* Sticky sidebar
  *
