@@ -7,11 +7,11 @@ layout: post
         class="youtube-player"
         width="640"
         height="390"
-        src="http://www.youtube.com/embed/JzczKjcOyIs?rel=0">
+        src="https://www.youtube.com/embed/JzczKjcOyIs?rel=0">
 </iframe>
 
 I made this visualization of a
-[violin and piano performance](http://www.youtube.com/watch?v=fjZOL4C0oVo)
+[violin and piano performance](https://www.youtube.com/watch?v=fjZOL4C0oVo)
 a year or so ago in Adobe After Effects and then promptly forgot about it.
 
 

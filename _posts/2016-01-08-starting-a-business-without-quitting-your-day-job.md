@@ -14,6 +14,6 @@ small business and some mistakes you probably want to avoid making.
         class="youtube-player"
         width="640"
         height="390"
-        src="http://www.youtube.com/embed/J8UwcyYT3z0?rel=0">
+        src="https://www.youtube.com/embed/J8UwcyYT3z0?rel=0">
 </iframe>
 
