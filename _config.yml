@@ -6,21 +6,21 @@ exclude:
   - Gemfile.lock
   - Rakefile
 flickr:
-  api_key:      28bba34a0ad8d67a0e0efa92a17d7960
-paginate:       5
-paginate_path:  /page/:num
-permalink:      pretty
+  api_key: 28bba34a0ad8d67a0e0efa92a17d7960
+paginate: 5
+paginate_path: /page/:num
+permalink: pretty
 
-markdown:       kramdown
+markdown: kramdown
 kramdown:
   input: GFM
   syntax_highlighter: rouge
 
-safe:           false
+safe: false
 assets:
   css_compressor: sass
   gzip: false
 
 # Setup
-title:            Close Enough
-description:      'I''m Vincent Woo, the guy who runs <a href="https://coderpad.io">CoderPad</a> and occasionally writes about local SF politics.'
+title: Vincent Woo's blog
+description: 'I''m Vincent Woo, the guy who runs <a href="https://coderpad.io">CoderPad</a> and occasionally writes about local SF politics.'
