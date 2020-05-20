@@ -1,2 +1,0 @@
-to serve: bundle exec jekyll s
-to deploy: rake deploy
