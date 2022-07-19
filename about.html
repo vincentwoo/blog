@@ -3,17 +3,34 @@ layout: page
 title: About
 ---
 
-<p>My name's Vincent Woo. I was born in the Bay Area and currently live in San Francisco.</p>
+<p>
+  My name's Vincent Woo. I was born in the Bay Area and currently live in San
+  Francisco.
+</p>
 
-<p>I started my small software business, <a href="https://coderpad.io">CoderPad</a> in 2013 and have been running it ever since.</p>
+<p>
+  I started my small software business,
+  <a href="https://coderpad.io">CoderPad</a> in 2013 and sold it in early 2020.
+  Nowadays I do some amateur photography and journalism.
+</p>
 
-<p>I'm also pretty involved in San Francisco local politics and advocate for increased housing density with <a href="http://www.sfyimby.org">YIMBY Action</a>.</p>
+<p>
+  I'm also pretty involved in San Francisco local politics and advocate for
+  increased housing density with
+  <a href="http://www.sfyimby.org">YIMBY Action</a>.
+</p>
 
-<p>You can reach me on Twitter as <a href="https://twitter.com/fulligin">@fulligin</a> or via email at <a href="mailto:me@vincentwoo.com">me@vincentwoo.com</a>.</p>
+<p>
+  You can reach me on Twitter as
+  <a href="https://twitter.com/fulligin">@fulligin</a> or via email at
+  <a href="mailto:me@vincentwoo.com">me@vincentwoo.com</a>.
+</p>
 
 <h2>Notable Posts</h2>
-{% for post in site.posts %}
-  {% if post.notable %}
-    <a class="sidebar-nav-item{% if page.url == post.url %} active{% endif %}" href="{{ post.url }}">{{ post.title }}</a>
-  {% endif %}
-{% endfor %}
+{% for post in site.posts %} {% if post.notable %}
+<a
+  class="sidebar-nav-item{% if page.url == post.url %} active{% endif %}"
+  href="{{ post.url }}"
+  >{{ post.title }}</a
+>
+{% endif %} {% endfor %}
