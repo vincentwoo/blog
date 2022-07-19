@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.1.0'
+ruby '> 2.6'
 
 gem 'jekyll'
 gem 'jekyll-paginate'
