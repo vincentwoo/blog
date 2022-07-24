@@ -5,8 +5,6 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - Rakefile
-flickr:
-  api_key: 28bba34a0ad8d67a0e0efa92a17d7960
 paginate: 5
 paginate_path: /page/:num
 permalink: pretty

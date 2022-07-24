@@ -1,0 +1,48 @@
+---
+layout: page
+# individual pages for each gallery
+---
+
+{{ page.description }}
+
+<style>
+  .image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    gap: 15px;
+    list-style: none;
+    margin-top: 1rem;
+  }
+
+  .image-gallery > li {
+    flex-basis: 250px; /* width: 250px; */
+  }
+
+  .image-gallery li img {
+    margin:  0;
+  }
+
+  body, .page-title {background: #202020; color: #fff;}
+  .content { max-width: initial; }
+</style>
+
+<div>
+  <ul class="image-gallery">
+    {% for image in page.images %}
+    <li>
+      <a href="{{ image }}">
+        {% if page.captions[image] == nil %}
+        <img src="thumbs/{{ image }}" />
+        {% else %}
+        <img
+          src="thumbs/{{ image }}"
+          alt="{{ page.captions[image] }}"
+          title="{{ page.captions[image] }}"
+        />
+        {% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

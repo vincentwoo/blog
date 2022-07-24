@@ -4,7 +4,7 @@ notable: true
 layout: post
 ---
 
-[{% flickr_photo 5446054061 'Medium 640' false %}](/google.html)
+[<img src="/public/images/google_doodle.jpeg" />](/google.html)
 
 Google's [take](http://www.pcmag.com/article2/0,2817,2368790,00.asp) on
 an interactive ball logo was interesting enough to me that I felt that I
@@ -12,14 +12,13 @@ needed to write [something at least as fun](/google.html). My take is
 backed by HTML5, so you will need a suitably compliant browser to view
 it.
 
-
 ### Features
 
-*  Mass based ball collisions
-*  Mouse input to scatter balls
-*  Balls "anchored" to positions with dampened springs
-*  Typing creates additional interactable balls
-*  Searching cues exit animation
+- Mass based ball collisions
+- Mouse input to scatter balls
+- Balls "anchored" to positions with dampened springs
+- Typing creates additional interactable balls
+- Searching cues exit animation
 
 ### Technical information
 
@@ -37,9 +36,9 @@ A naive initial implementation worked well enough. It looked like this
 
 {% highlight ruby %}
 for i in 0 to circles.length - 2
-    for j in i + 1 to circles.length - 1
-        handleCollision(circles[i], circles[j]);
-    end
+for j in i + 1 to circles.length - 1
+handleCollision(circles[i], circles[j]);
+end
 end
 {% endhighlight %}
 
@@ -54,18 +53,18 @@ becomes something like
 
 {% highlight ruby %}
 for circle in circles
-    for potentialCollider in grid.getPotentialColliders(circle.pos)
-        handleCollision(circle, potentialCollider);
-    end
+for potentialCollider in grid.getPotentialColliders(circle.pos)
+handleCollision(circle, potentialCollider);
+end
 end
 
 def grid.getPotentialColliders(pos)
-    cell = getCell(pos)
-    ret = []
-    for neighbor in cell.neighbors
-        ret = ret.concat(neighbor.objects)
-    end
-    ret
+cell = getCell(pos)
+ret = []
+for neighbor in cell.neighbors
+ret = ret.concat(neighbor.objects)
+end
+ret
 end
 {% endhighlight %}
 
