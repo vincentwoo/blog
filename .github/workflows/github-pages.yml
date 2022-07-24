@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # - uses: actions/cache@v2
-      #   with:
-      #     path: vendor/bundle
-      #     key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gems-
-      - uses: fabacab/jekyll-builder-for-github-pages-action@master
+      - uses: actions/cache@v2
         with:
-          secret_gh_pages_api_token: ${{ secrets.GH_PAGES_TOKEN }}
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - uses: ./
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
