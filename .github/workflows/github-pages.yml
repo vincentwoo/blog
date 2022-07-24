@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install ImageMagick
-        run: sudo apt install imagemagick
+        run: sudo apt-get install libmagickcore-dev libmagickwand-dev
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
