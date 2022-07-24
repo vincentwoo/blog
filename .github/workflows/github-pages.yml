@@ -16,6 +16,6 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-      - uses: fabacab/jekyll-builder-for-github-pages-action@master
+      - uses: fabacab/jekyll-builder-for-github-pages-action@v1
         with:
           secret_gh_pages_api_token: ${{ secrets.GITHUB_TOKEN }}
