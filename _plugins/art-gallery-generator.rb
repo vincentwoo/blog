@@ -164,7 +164,7 @@ module Jekyll
             end
             # puts "gtot #{date_array} date" + date_times[image].to_s
           rescue Exception => e
-            puts "Error getting date_time "+date_times[image]+" for #{image}: #{e}"
+            puts "Error getting date_time #{date_times[image]} for #{image}: #{e}"
           end
         end
           # cleanup, watermark and copy the files
