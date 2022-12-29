@@ -10,8 +10,8 @@
 
 source_dir: _portfolio # original images, that will be cropped according to the size_limit, thumbnailed and posted
 title: Portfolio
-#sort_field: "timestamp"
-sort_field: "title" # sorting of the galleries on the gallery index page
+sort_field: "timestamp"
+# sort_field: "title" # sorting of the galleries on the gallery index page
 #sort_reverse: true
 thumbnail_size:
   x: 250
@@ -33,7 +33,7 @@ size_limit: 1500 # maximum size, px in either dimension, to limit the images to
 galleries:
   Photos:
     title: Photography
-    description: An uncategorized bunch of photos I've taken that I like
+    description: An uncategorized bunch of photos I've taken that I like, roughly sorted from newest to oldest.
     sort_field: "timestamp" # rule for sorting images within galleries.
     sort_reverse: true
     # best_image: cat.jpg

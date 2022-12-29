@@ -3,6 +3,7 @@
 # sourced from https://github.com/ggreer/jekyll-gallery-generator
 #
 require 'pry'
+require 'pry-rescue'
 require 'rmagick'
 include Magick
 
@@ -143,7 +144,8 @@ module Jekyll
       date_times = {}
       Dir.foreach(dir) do |image|
         next if image.chars.first == "."
-        next unless image.downcase().end_with?(*$image_extensions)
+        image.downcase!
+        next unless image.end_with?(*$image_extensions)
 
         image_path = File.join(dir, image) # source image short path
         # img_src = site.in_source_dir(image_path) # absolute path for the source image
@@ -154,9 +156,11 @@ module Jekyll
             #date_times[image] = EXIFR::JPEG.new(image_path).date_time.to_i
             date_times[image]=0
             #  ["DateTime"], ["DateTimeDigitized"], ["DateTimeOriginal"]
-            date_array = ImageList.new(image_path).get_exif_by_entry("DateTime")
-            if date_array != nil && date_array.length > 0 and date_array[0].length > 1
-              date_times[image]=DateTime.strptime(date_array[0][1],"%Y:%m:%d %H:%M:%S").to_time.to_i
+            date_array = ImageList.new(image_path).get_exif_by_entry("DateTimeOriginal")
+            if date_array != nil && date_array.length > 0 && date_array[0].length > 1 && date_array[0][1]
+              date_times[image]=DateTime.strptime(
+                date_array[0][1].gsub('-', ':'), "%Y:%m:%d %H:%M:%S"
+              ).to_time.to_i
             end
             # puts "gtot #{date_array} date" + date_times[image].to_s
           rescue Exception => e
@@ -235,13 +239,7 @@ module Jekyll
       # sort pictures inside the gallery
       begin
         if sort_field == "timestamp"
-          @images.sort! {|a,b|
-            if date_times[a] == date_times[b]
-              a <=> b # do the name if the timestamps match
-            else
-              date_times[a] <=> date_times[b]
-            end
-          }
+          @images.sort_by! { |a| [date_times[a], a] }
         else
           @images.sort!
         end
