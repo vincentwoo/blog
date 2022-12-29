@@ -144,7 +144,6 @@ module Jekyll
       date_times = {}
       Dir.foreach(dir) do |image|
         next if image.chars.first == "."
-        image.downcase!
         next unless image.end_with?(*$image_extensions)
 
         image_path = File.join(dir, image) # source image short path
@@ -153,11 +152,11 @@ module Jekyll
         # extract timestamp
         if sort_field == "timestamp"
           begin
-            date_times[image]=0
+            date_times[image.downcase] = 0
             #  ["DateTime"], ["DateTimeDigitized"], ["DateTimeOriginal"]
             date_array = ImageList.new(image_path).get_exif_by_entry("DateTimeOriginal")
             if date_array != nil && date_array.length > 0 && date_array[0].length > 1 && date_array[0][1]
-              date_times[image]=DateTime.strptime(
+              date_times[image.downcase]=DateTime.strptime(
                 date_array[0][1].gsub('-', ':'), "%Y:%m:%d %H:%M:%S"
               ).to_time.to_i
             end
