@@ -153,7 +153,6 @@ module Jekyll
         # extract timestamp
         if sort_field == "timestamp"
           begin
-            #date_times[image] = EXIFR::JPEG.new(image_path).date_time.to_i
             date_times[image]=0
             #  ["DateTime"], ["DateTimeDigitized"], ["DateTimeOriginal"]
             date_array = ImageList.new(image_path).get_exif_by_entry("DateTimeOriginal")
