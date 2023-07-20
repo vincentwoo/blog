@@ -1,5 +1,5 @@
 ---
-title: Tunnel Vision: An Unauthorized BART Ride
+title: Tunnel Vision&#58; An Unauthorized BART Ride
 layout: post
 notable: true
 ---
