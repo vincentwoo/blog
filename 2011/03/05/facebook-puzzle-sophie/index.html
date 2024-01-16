@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Facebook Puzzle: sophie
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Facebook Puzzle: sophie</h1>
+  <span class="post-date">05 Mar 2011</span>
+  <p>This week: Facebook’s <a href="http://www.facebook.com/careers/puzzles.php?puzzle_id=11">sophie
+puzzle</a>. This
+one is “buffet” difficulty, which translates roughly to “the underlying
+problem is NP-complete,” which explains why I have such a hard time
+choosing food at sushi buffets. In any case, the problem is to find your
+cat in your apartment, where you know where the cat is likely to be, as
+well as the transit times between the various locations in your home.</p>
+
+<p>I’ll document here the various bad solutions I came up with on my way to
+a decent one, and as a bonus: an optimized-ish version in C++!</p>
+
+<h3 id="about-the-math">About the math</h3>
+<p>The problem asks you to minimize the expected time to find sophie. What
+does this mean? Take a look at the example input (comments mine).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>4
+#node name    #probability sophie is there
+front_door    .2
+in_cabinet    .3
+under_bed     .4
+behind_blinds .1
+5
+#node x    #node y       #time between x and y
+front_door under_bed     5
+under_bed  behind_blinds 9
+front_door behind_blinds 5
+front_door in_cabinet    2
+in_cabinet behind_blinds 6
+</code></pre></div></div>
+
+<p>This says there are four nodes and five edges between those nodes, and
+that 40% of the time, sophie is going to be under the bed. If sophie was
+under the bed 100% of the time, the optimal path to minimize the
+expected time to find her would be just the path that takes you to the
+bed in the shortest amount of time. But since some nodes are unlikely to
+hide sophie, you can afford to take your sweet time getting to them.</p>
+
+<p>For this sample input, the optimal path is front_door, in_cabinet,
+under_bed, behind_blind. Note that to go from in_cabinet to under_bed,
+you should pass through the front_door node. The expectation for this
+path is 6.00 seconds, as explained from this snippet from <a href="http://www.davideisenstat.com/fbpfaq/#sophie">David
+Eisenstat’s site</a>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Pr(front_door) * 0
++ Pr(in_cabinet) * Distance(front_door, in_cabinet)
++ Pr(under_bed) * (Distance(front_door, in_cabinet)
+                   + Distance(in_cabinet, under_bed))
++ Pr(behind_blinds) * (Distance(front_door, in_cabinet)
+                       + Distance(in_cabinet, under_bed)
+                       + Distance(under_bed, behind_blinds))
+    = .2 * 0 + .3 * 2 + .4 * (2 + 7) + .1 * (2 + 7 + 9) = 6.00
+</code></pre></div></div>
+
+<h3 id="building-the-graph">Building the graph</h3>
+
+<p>The input only includes edges between particular nodes. In order to know
+that, say, the distance between the cabinet and the bed is 7 (through
+the front door), you have to build up the shortest distances between
+every node in the graph. This is known as the “all pairs shortest path”
+problem. There exists a quite famous dynamic programming algorithm to
+solve this, the <a href="http://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm">Floyd Warshall
+algorithm</a>. Trivially implemented in Ruby:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># note that $weights[x][y] is initialized to either</span>
+<span class="c1"># Float::MAX if there is no edge between x and y, or</span>
+<span class="c1"># to whatever the length of the edge is if there is.</span>
+<span class="k">def</span> <span class="nf">floyd_warshall</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="vg">$next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># links menoizes the list of nodes you need to traverse</span>
+<span class="c1"># between nodes i and j</span>
+<span class="k">def</span> <span class="nf">links</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="vg">$next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">k</span> <span class="k">if</span> <span class="n">k</span><span class="p">.</span><span class="nf">class</span> <span class="o">==</span> <span class="no">Set</span>
+    <span class="vg">$next</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="vg">$next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="p">.</span><span class="nf">nil?</span> <span class="n">or</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span> <span class="p">?</span>
+        <span class="no">Set</span><span class="p">.</span><span class="nf">new</span><span class="p">([])</span> <span class="p">:</span>
+        <span class="p">(</span><span class="n">links</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="no">Set</span><span class="p">.</span><span class="nf">new</span><span class="p">([</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="n">links</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This gives a good starting point for actually trying to start solving
+the problem.</p>
+
+<h3 id="bfs-solution">BFS solution</h3>
+<p>In my hubris, I figured a breadth first search where you expand on the
+path with the lowest current expected time would work. Here’s what it
+looks like:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">solve</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="no">MinHeap</span><span class="p">.</span><span class="nf">new</span>
+    <span class="n">queue</span><span class="p">.</span><span class="nf">push</span> <span class="mf">0.0</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">],</span> <span class="no">Set</span><span class="p">.</span><span class="nf">new</span><span class="p">((</span><span class="mi">1</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">select</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">}),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+    <span class="k">while</span> <span class="n">not</span> <span class="n">queue</span><span class="p">.</span><span class="nf">empty?</span>
+        <span class="n">node</span><span class="p">,</span> <span class="n">remain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">expected</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">pop</span>
+        <span class="k">if</span> <span class="n">remain</span><span class="p">.</span><span class="nf">empty?</span>
+            <span class="nb">p</span> <span class="n">node</span>
+            <span class="k">return</span> <span class="n">expected</span>
+        <span class="k">end</span>
+        <span class="c1"># only iterate remaining nodes that you don't need to</span>
+        <span class="c1"># go through other remaining ndoes to reach</span>
+        <span class="n">remain</span><span class="p">.</span><span class="nf">select</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span>
+            <span class="p">(</span><span class="n">links</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="nf">last</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">remain</span><span class="p">).</span><span class="nf">empty?</span>
+        <span class="p">}.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+            <span class="n">new_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="nf">last</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+            <span class="n">new_expected</span> <span class="o">=</span> <span class="n">expected</span> <span class="o">+</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">new_time</span>
+            <span class="n">queue</span><span class="p">.</span><span class="nf">push</span> <span class="n">new_expected</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span> <span class="o">+</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">remain</span> <span class="o">-</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">new_time</span><span class="p">,</span> <span class="n">new_expected</span><span class="p">]</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>In my defense I hadn’t yet realized that the sophie problem is a variant
+of the traveling salesman problem and that a BFS search would take
+forever on large graphs. This doesn’t work because you incrementally
+build all the bad paths on your way to finding the first path to
+complete. Complexity: proportional to the number of paths, or O(n!).</p>
+
+<h3 id="dp-solution">DP Solution</h3>
+
+<p>Hitting upon the realization that the problem is a variant of the
+<a href="http://en.wikipedia.org/wiki/Traveling_salesman_problem">traveling salesman
+problem</a> I
+decided to try the canonical dynamic programming solution to TSP.</p>
+
+<p>The DP solution requires that you build a structure like</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">C</span><span class="p">[</span><span class="n">subset</span><span class="p">][</span><span class="n">j</span><span class="p">]</span></code></pre></figure>
+
+<p>where subset is some subset of all nodes, and j is a node in that
+subset. The value of this entry should be the minimum expected time to
+proceed from node 0 to node j and through all the nodes in the subset.
+The problem then reduces to finding the minimum of:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">C</span><span class="p">[</span><span class="n">subset</span> <span class="o">-</span> <span class="p">[</span><span class="n">j</span><span class="p">]][</span><span class="n">i</span><span class="p">]</span> <span class="c1"># for all i in subset</span></code></pre></figure>
+
+<p>There are some problems here, but first, some code:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">solve</span>
+    <span class="n">relevant</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">select</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="nb">hash</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">hash</span><span class="p">[[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]}</span>
+    <span class="k">for</span> <span class="n">size</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="n">relevant</span><span class="p">.</span><span class="nf">size</span>
+        <span class="n">relevant</span><span class="p">.</span><span class="nf">combination</span><span class="p">(</span><span class="n">size</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">subset</span><span class="o">|</span>
+            <span class="n">subset</span><span class="p">.</span><span class="nf">insert</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="nb">hash</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="no">Float</span><span class="o">::</span><span class="no">MAX</span><span class="p">,</span> <span class="no">Float</span><span class="o">::</span><span class="no">MAX</span><span class="p">]}</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="n">subset</span>
+                <span class="k">next</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="n">reduced</span> <span class="o">=</span> <span class="n">subset</span> <span class="o">-</span> <span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="nb">hash</span><span class="p">[</span><span class="n">subset</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">reduced</span><span class="p">.</span><span class="nf">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span>
+                    <span class="n">e</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">[</span><span class="n">reduced</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">t</span> <span class="o">+=</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                    <span class="p">[</span><span class="n">e</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">t</span><span class="p">]</span>
+                <span class="p">}.</span><span class="nf">min</span> <span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="n">a</span><span class="p">.</span><span class="nf">first</span> <span class="o">&lt;=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="nf">first</span><span class="p">}</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="nb">hash</span><span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">relevant</span><span class="p">].</span><span class="nf">values</span><span class="p">.</span><span class="nf">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="p">.</span><span class="nf">first</span><span class="p">}.</span><span class="nf">min</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This works, but isn’t fast. A 17 node graph took me about 10 minutes to
+finish. The problem is that since subsets aren’t ordered, there is no
+convenient way to represent them as array indices and you must therefore
+hash entire subsets. Since there are 2<sup>n</sup> subsets, and you must
+compute the path that ends in each node in each subset, which itself
+requires examining all other previous paths of the subset minus one of
+its elements (breathe), the complexity here is
+O(2<sup>n</sup>n<sup>2</sup>).</p>
+
+<h3 id="recursive-backtracking-pruning-solution">Recursive Backtracking (Pruning) Solution</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Backtracking">Backtracking</a> can be thought
+of as essentially a DFS search with fast failure. For example, say you
+have found a complete path that you know will give you an expected time
+of 30 seconds. Now you are attempting to build another path, and halfway
+through you know your partial expected time is already 31 seconds. You
+can abandon building this path, saving yourself the hassle of expanding
+all of that partial path’s children.</p>
+
+<p>Skipping entire subtrees is known as pruning, and you can achieve some
+pretty massive savings depending on how well you implement it. My
+solution was to very conservatively estimate the remaining expectation
+of a partial path. For instance, if you are halfway through a path with
+a current expected time of 10 seconds, a path length of 20 seconds and
+you have covered 60% of the places where sophie can be, then even in the
+perfect case where the next node was 0 seconds away and had a 40%
+probability of hiding sophie, you would still incur an additional 20 *
+.4 = .8 seconds of expected time. If you have already found a minimum
+path length of say, 10.5, you can prune this subtree where you could not
+have before.</p>
+
+<p>And without further ado, here’s the code.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vg">$min</span> <span class="o">=</span> <span class="no">Float</span><span class="o">::</span><span class="no">MAX</span>
+<span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">remain</span><span class="p">,</span> <span class="n">unseen</span><span class="p">,</span> <span class="n">expect</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="n">expect</span> <span class="o">+</span> <span class="n">unseen</span> <span class="o">*</span> <span class="n">time</span> <span class="o">&gt;=</span> <span class="vg">$min</span>
+    <span class="k">return</span> <span class="p">(</span><span class="vg">$min</span> <span class="o">=</span> <span class="n">expect</span><span class="p">)</span> <span class="k">if</span> <span class="n">remain</span><span class="p">.</span><span class="nf">empty?</span>
+    <span class="n">remain</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+        <span class="n">next_time</span>  <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+        <span class="n">solve</span> <span class="n">n</span><span class="p">,</span>
+              <span class="n">remain</span> <span class="o">-</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span>
+              <span class="n">unseen</span> <span class="o">-</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+              <span class="n">expect</span> <span class="o">+</span> <span class="n">next_time</span> <span class="o">*</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+              <span class="n">next_time</span>
+    <span class="k">end</span>
+    <span class="vg">$min</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This works fairly well. We can do that 17 node graph in 30 seconds now.
+I don’t have a good estimate of the complexity improvement here, since
+you can generate corner cases that can prevent any pruning from
+happening.</p>
+
+<h3 id="optimizations">Optimizations!</h3>
+
+<p>Ruby is slow. At least, Cygwin’s default Ruby 1.8.7 interpreter is slow.
+I decided to reimplement the whole deal in C++ and see what kind of
+speedups I could achieve. Here is my initial implementation in C++:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">double</span> <span class="nf">solve</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">,</span> <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">remain</span><span class="p">,</span> <span class="kt">double</span> <span class="n">unseen</span><span class="p">,</span>
+        <span class="kt">double</span> <span class="n">expect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">double</span> <span class="n">min</span> <span class="o">=</span> <span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">expect</span> <span class="o">+</span> <span class="n">unseen</span> <span class="o">*</span> <span class="n">time</span> <span class="o">&gt;=</span> <span class="n">min</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">remain</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">min</span> <span class="o">=</span> <span class="n">expect</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">n</span> <span class="o">=</span> <span class="n">remain</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">n</span> <span class="o">!=</span> <span class="n">remain</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="o">*</span><span class="n">n</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">next_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">weights</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">next</span><span class="p">];</span>
+        <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next_remain</span> <span class="o">=</span> <span class="n">remain</span><span class="p">;</span>
+        <span class="n">next_remain</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+        <span class="n">solve</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">next_remain</span><span class="p">,</span> <span class="n">unseen</span> <span class="o">-</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span>
+            <span class="n">expect</span> <span class="o">+</span> <span class="n">next_time</span> <span class="o">*</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span> <span class="n">next_time</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">min</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>However, the speedup here was only a factor of two or so. Where are the
+bottlenecks? Turns out, a big one in both Ruby and C++ is the constant
+recreation of the remainder set at</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next_remain</span> <span class="o">=</span> <span class="n">remain</span><span class="p">;</span></code></pre></figure>
+
+<p>It’s much faster to just do:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next_remain</span> <span class="o">=</span> <span class="n">remain</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">n</span> <span class="o">=</span> <span class="n">remain</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">n</span> <span class="o">!=</span> <span class="n">remain</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="o">*</span><span class="n">n</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">next_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">weights</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">next</span><span class="p">];</span>
+    <span class="n">next_remain</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+    <span class="n">solve</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">next_remain</span><span class="p">,</span> <span class="n">unseen</span> <span class="o">-</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span>
+        <span class="n">expect</span> <span class="o">+</span> <span class="n">next_time</span> <span class="o">*</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span> <span class="n">next_time</span><span class="p">);</span>
+    <span class="n">next_remain</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This way, you only do one set copy per recursion, and then just pass
+around to all of your children. “But Vincent,” you say, “why even
+bother recreating the set at each recursion? Can’t you just pass alone
+one set of remaining nodes and add and remove from it?” Sure, but its
+very annoying to not invalidate iterators to a set that is constantly
+shrinking and growing through iteration and recursion. Here’s what I
+came up with:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">double</span> <span class="nf">solve</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">node_entry</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">remain</span><span class="p">,</span> <span class="kt">double</span> <span class="n">unseen</span><span class="p">,</span>
+        <span class="kt">double</span> <span class="n">expect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">double</span> <span class="n">min</span> <span class="o">=</span> <span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">expect</span> <span class="o">+</span> <span class="n">unseen</span> <span class="o">*</span> <span class="n">time</span> <span class="o">&gt;=</span> <span class="n">min</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="n">empty</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">node_entry</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">n</span> <span class="o">=</span> <span class="n">remain</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">n</span> <span class="o">!=</span> <span class="n">remain</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">active</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">index</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">next_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">weights</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">next</span><span class="p">];</span>
+        <span class="n">n</span><span class="o">-&gt;</span><span class="n">active</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">solve</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">remain</span><span class="p">,</span> <span class="n">unseen</span> <span class="o">-</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span>
+            <span class="n">expect</span> <span class="o">+</span> <span class="n">next_time</span> <span class="o">*</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span> <span class="n">next_time</span><span class="p">);</span>
+        <span class="n">n</span><span class="o">-&gt;</span><span class="n">active</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">empty</span><span class="p">)</span> <span class="n">min</span> <span class="o">=</span> <span class="n">expect</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">min</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This way we just store whether an element is active or not in the data
+model itself, instead of representing that information with presence in
+a set. This is nice because adding/removing from a set, while O(log(n))
+fast, ain’t no O(1). This gets us (for our 17 node graph):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ make &amp;&amp; time ./sophie in_sophie5.txt
+make: `sophie' is up to date.
+38.20
+
+real    0m0.220s
+user    0m0.156s
+sys     0m0.030s
+</code></pre></div></div>
+
+<p>Hooray!</p>
+
+<h3 id="final-thoughts">Final Thoughts</h3>
+
+<p>I didn’t talk about any of the edge cases, but you need to check for if
+it’s actually possible to be sure to find sophie. In particular, if
+there are nodes that aren’t reachable from the first node that sophie
+has a chance of being in then you need to fail.</p>
+
+<blockquote>
+  <p>Dear submitter,</p>
+
+  <p>Thank you for your submission of a puzzle solution
+to Facebook! After running your solution to sophie (received on March 5,
+2011, 8:14 pm), I have determined it to be correct. Your solution ran
+for 25.118 ms on its longest test case.</p>
+</blockquote>
+
+<p>Also, full source and some plagiarized test cases are all on
+<a href="https://github.com/vincentwoo/rubycode/tree/master/sophie">github</a>.</p>
+
+</div>
+
+    </div>
+
+  </body>
+</html>

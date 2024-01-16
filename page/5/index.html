@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+    Vincent Woo's blog 
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="posts">
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2011/02/28/facebook-puzzle-peaktraffic/">
+        Facebook Puzzle: peaktraffic
+      </a>
+    </h1>
+
+    <time datetime="2011-02-28T00:00:00+00:00" class="post-date">28 Feb 2011</time>
+
+    <p>Last week I was working on Facebook’s <a href="http://www.facebook.com/careers/puzzles.php?puzzle_id=8">peak traffic puzzle</a>,
+which was a pretty entertaining and informative exercise. The idea is
+basically to parse a log file and generate an undirected graph that
+represents mutual friendships between Facebook users. Then you are to
+find every group of friends where each friend in the group is friends
+with every other person in the group.</p>
+
+<p>I wrote a naive implementation at first that looked something like</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># $seen is a hash to menoize previously seen sets</span>
+<span class="c1"># $sparse is a hash of usernames to a list of neighboring usernames</span>
+<span class="c1"># $set is the list of output clusters</span>
+
+<span class="vg">$seen</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">def</span> <span class="nf">subgraph</span><span class="p">(</span><span class="n">set</span><span class="p">,</span> <span class="n">adj</span><span class="p">)</span>
+    <span class="nb">hash</span> <span class="o">=</span> <span class="p">(</span><span class="n">set</span> <span class="o">+</span> <span class="n">adj</span><span class="p">).</span><span class="nf">sort</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="vg">$seen</span><span class="p">[</span><span class="nb">hash</span><span class="p">]</span>
+    <span class="vg">$sets</span><span class="p">.</span><span class="nf">push</span> <span class="n">set</span><span class="p">.</span><span class="nf">sort</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s2">", "</span><span class="p">)</span> <span class="k">if</span> <span class="n">adj</span><span class="p">.</span><span class="nf">empty?</span> <span class="n">and</span> <span class="n">set</span><span class="p">.</span><span class="nf">size</span> <span class="o">&gt;</span> <span class="mi">2</span>
+    <span class="n">adj</span><span class="p">.</span><span class="nf">each</span> <span class="p">{</span><span class="o">|</span><span class="n">node</span><span class="o">|</span> <span class="n">subgraph</span><span class="p">(</span><span class="n">set</span> <span class="o">+</span> <span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">adj</span><span class="p">)}</span>
+    <span class="vg">$seen</span><span class="p">[</span><span class="nb">hash</span><span class="p">]</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="k">end</span>
+
+<span class="vg">$sparse</span><span class="p">.</span><span class="nf">keys</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">vertex</span><span class="o">|</span>
+    <span class="n">subgraph</span><span class="p">([</span><span class="n">vertex</span><span class="p">],</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This appeared to work pretty well on my tests, but continued to fail on
+Facebook puzzle submission for some reason I couldn’t track down at the
+time. In my frustration, I went to the internet. Turns out, this problem
+is actually known as <a href="http://en.wikipedia.org/wiki/Clique_problem#Listing_all_maximal
+_cliques">list maximal
+cliques</a>, a category of clique problem. The prior link has more
+information about cliques, which are subgraphs that have the friend
+property desired by this problem. Additionally, there is a known “pretty
+good” strategy for solving this problem, the <a href="http://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm">Bron Kerbosch
+algorithm</a>
+.</p>
+
+<p>I went all out and applied a couple optimizations, namely (warning:
+abstract pdfs)
+<a href="ftp://ftp-sop.inria.fr/geometrica/fcazals/papers/ncliques.pdf">pivoting</a> and
+<a href="http://drops.dagstuhl.de/opus/volltexte/2011/2935/pdf/10441.EppsteinDavid.Paper.2935.pdf">degeneracy ordering</a>,
+which are two techniques used to cut down on the number of recursive calls.
+At this point my code looked something like</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">generate_degeneracy_ordering</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#degree buckets</span>
+    <span class="n">dw</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1">#degree for each vertex</span>
+    <span class="vg">$sparse</span><span class="p">.</span><span class="nf">each_pair</span> <span class="k">do</span> <span class="o">|</span><span class="n">vertex</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">|</span>
+        <span class="n">deg</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">.</span><span class="nf">size</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">deg</span><span class="p">]</span> <span class="o">||=</span> <span class="p">[]</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">deg</span><span class="p">].</span><span class="nf">push</span> <span class="n">vertex</span>
+        <span class="n">dw</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span> <span class="o">=</span> <span class="n">deg</span>
+    <span class="k">end</span>
+    <span class="n">d</span><span class="p">.</span><span class="nf">each_index</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">||=</span> <span class="p">[]}</span>
+    <span class="vg">$sparse</span><span class="p">.</span><span class="nf">size</span><span class="p">.</span><span class="nf">times</span> <span class="k">do</span>
+        <span class="n">vertex</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="nf">find</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="o">!</span><span class="n">x</span><span class="p">.</span><span class="nf">empty?</span><span class="p">}.</span><span class="nf">pop</span>
+        <span class="vg">$degen</span><span class="p">.</span><span class="nf">push</span> <span class="n">vertex</span>
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="k">in</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">dw</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]].</span><span class="nf">delete</span> <span class="n">neighbor</span>
+                <span class="n">dw</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">dw</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]].</span><span class="nf">push</span> <span class="n">neighbor</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">bron_kerbosch</span><span class="p">(</span><span class="n">set</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">exclude</span><span class="p">,</span> <span class="n">pivot_neighbors</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">points</span><span class="p">.</span><span class="nf">empty?</span>
+        <span class="vg">$sets</span><span class="p">.</span><span class="nf">push</span> <span class="n">set</span><span class="p">.</span><span class="nf">sort</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s1">', '</span><span class="p">)</span> <span class="k">if</span> <span class="n">set</span><span class="p">.</span><span class="nf">size</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="n">and</span> <span class="n">exclude</span><span class="p">.</span><span class="nf">empty?</span>
+        <span class="k">return</span>
+    <span class="k">end</span>
+
+    <span class="n">pivot_neighbors</span> <span class="o">||=</span> <span class="p">(</span><span class="n">exclude</span><span class="p">.</span><span class="nf">empty?</span> <span class="n">or</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">points</span><span class="p">.</span><span class="nf">last</span><span class="p">].</span><span class="nf">size</span> <span class="o">&gt;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">exclude</span><span class="p">.</span><span class="nf">last</span><span class="p">].</span><span class="nf">size</span><span class="p">)</span> <span class="p">?</span>
+        <span class="vg">$sparse</span><span class="p">[</span><span class="n">points</span><span class="p">.</span><span class="nf">last</span><span class="p">]</span> <span class="p">:</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">exclude</span><span class="p">.</span><span class="nf">last</span><span class="p">]</span>
+
+    <span class="n">points</span><span class="p">.</span><span class="nf">each_with_index</span> <span class="k">do</span> <span class="o">|</span><span class="n">vertex</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
+        <span class="k">next</span> <span class="k">if</span> <span class="n">pivot_neighbors</span><span class="p">.</span><span class="nf">include?</span> <span class="n">vertex</span>
+        <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+        <span class="n">bron_kerbosch</span><span class="p">(</span><span class="n">set</span> <span class="o">+</span> <span class="p">[</span><span class="n">vertex</span><span class="p">],</span>
+                      <span class="n">points</span> <span class="o">&amp;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">],</span>
+                      <span class="n">exclude</span> <span class="o">&amp;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span>
+        <span class="n">exclude</span><span class="p">.</span><span class="nf">push</span> <span class="n">vertex</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="nb">exit</span> <span class="k">unless</span> <span class="no">ARGV</span><span class="p">.</span><span class="nf">size</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="n">ingest</span><span class="p">(</span><span class="no">ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">generate_degeneracy_ordering</span>
+<span class="n">before</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">after</span> <span class="o">=</span> <span class="vg">$degen</span><span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="vg">$degen</span><span class="p">.</span><span class="nf">size</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="vg">$degen</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">vertex</span><span class="o">|</span>
+    <span class="n">intersect</span> <span class="o">=</span> <span class="n">after</span> <span class="o">&amp;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span>
+    <span class="n">bron_kerbosch</span><span class="p">([</span><span class="n">vertex</span><span class="p">],</span>
+                  <span class="n">intersect</span><span class="p">,</span>
+                  <span class="n">before</span> <span class="o">&amp;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">],</span>
+                  <span class="vg">$sparse</span><span class="p">[</span><span class="n">intersect</span><span class="p">.</span><span class="nf">last</span><span class="p">])</span> <span class="c1">#last elements in $degen have highest degrees</span>
+    <span class="n">before</span><span class="p">.</span><span class="nf">push</span> <span class="n">vertex</span>
+    <span class="n">after</span><span class="p">.</span><span class="nf">shift</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Which let me parse a 120MB input file in 1 minute flat. However, for
+some reason this was slower than my naive solution, which could do it,
+ironically, in 48s. It did pass the Facebook puzzle checker, though, so
+at least I had that. If anyone has any insight into why my naive
+solution appears to outperform bron_kerbosch I would greatly appreciate
+it, as it does not seem correct. My guess is slow implementations in
+Ruby of Array “set-like” operators (&amp;, +).</p>
+
+<h3 id="final-thoughts">final thoughts</h3>
+
+<p>I spent 2-3 days stuck on bugs that amounted to</p>
+
+<ul>
+  <li>parsing input off by one whitespace</li>
+  <li>output missing a final newline</li>
+  <li>mysterious bug that turned out to be RUBY 1.8.6 NOT HAVING MAX_BY AND
+ME TESTING IN 1.8.7</li>
+</ul>
+
+<p>Facebook absolutely does not provide you any clues as to what went wrong
+besides there being a syntax error in your build. In this case it falls
+on you to both duplicate their runtime environment and generate workable
+tests. But finally seeing the confirmation email is definitely worth it.
+Here are the results after finally getting my naive solution running.</p>
+
+<blockquote>
+  <p>Dear submitter,</p>
+
+  <p>Thank you for your submission of a puzzle solution to Facebook! After running your solution to peaktraffic (received on February 28, 2011, 4:07 pm), I have determined it to be correct. Your solution ran for 1162.186 ms on its longest test case.</p>
+</blockquote>
+
+<p>Here are my two <a href="https://github.com/vincentwoo/rubycode/blob/master/peaktraffic">solutions</a>
+to this problem. The codepath that executes the Bron Kerbosch algorithm is not active but
+fairly obvious. They both work.</p>
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2011/02/23/cheap-toto-pagination/">
+        Cheap Toto Pagination
+      </a>
+    </h1>
+
+    <time datetime="2011-02-23T00:00:00+00:00" class="post-date">23 Feb 2011</time>
+
+    <p><a href="http://cloudhead.io/toto">Toto</a> is a great tiny blogging platform for
+Ruby/Rack. However, it doesn’t expose much in the way of a MVC structure
+and it can be just annoying enough when you want to add some feature
+that isn’t there. In this case, I wanted to add some simple older/newer
+pagination to the front page. To my chagrin, I couldn’t find a way to
+pass variables to a Toto page without using the GET variable syntax
+(i.e. ?page=1) and I still wanted to hold onto the rails RESTful
+paradigm of /page/1, so I monkey patched the Toto::Site dispatcher, like
+so:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># in config.ru</span>
+<span class="k">class</span> <span class="nc">Toto::Site</span>
+    <span class="kp">alias_method</span> <span class="ss">:old_go</span><span class="p">,</span> <span class="ss">:go</span>
+
+    <span class="k">def</span> <span class="nf">go</span> <span class="n">route</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">type</span> <span class="o">=</span> <span class="ss">:html</span>
+        <span class="k">if</span> <span class="n">not</span> <span class="n">route</span><span class="p">.</span><span class="nf">first</span> <span class="o">=~</span> <span class="sr">/\d{4}/</span> <span class="n">and</span> <span class="n">route</span><span class="p">.</span><span class="nf">size</span> <span class="o">==</span> <span class="mi">2</span> <span class="n">and</span> <span class="n">route</span><span class="p">.</span><span class="nf">last</span> <span class="o">=~</span> <span class="sr">/(\d+)/</span>
+            <span class="vi">@config</span><span class="p">[</span><span class="ss">:id</span><span class="p">]</span> <span class="o">=</span> <span class="n">route</span><span class="p">.</span><span class="nf">last</span><span class="p">.</span><span class="nf">to_i</span>
+            <span class="n">route</span><span class="p">.</span><span class="nf">pop</span>
+        <span class="k">end</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">old_go</span> <span class="n">route</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">type</span>
+        <span class="vi">@config</span><span class="p">.</span><span class="nf">delete</span> <span class="ss">:id</span>
+        <span class="n">ret</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="o">...</span>
+<span class="c1"># and in the config initializer block:</span>
+<span class="n">set</span> <span class="ss">:root</span><span class="p">,</span> <span class="s2">"page"</span>                                           <span class="c1"># page to load on /</span></code></pre></figure>
+
+<p>You can see that we intercept routes that look like name/1234 and pass
+the numeric portion of the route in @config[:id], and then clear
+@config[:id] (because @config is persistent). This is pretty hacky and
+only really acceptable in the context of Heroku caching everything.</p>
+
+<p>and in templates/pages/page.rhtml…</p>
+
+<figure class="highlight"><pre><code class="language-rhtml" data-lang="rhtml"><span class="cp">&lt;%</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="vi">@config</span><span class="p">[</span><span class="ss">:id</span><span class="p">]</span>
+    <span class="n">per_page</span> <span class="o">=</span> <span class="vi">@config</span><span class="p">[</span><span class="ss">:articles_per_page</span><span class="p">]</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">page</span><span class="p">.</span><span class="nf">nil?</span> <span class="n">or</span> <span class="p">(</span><span class="n">page</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">per_page</span> <span class="o">&gt;</span> <span class="vi">@articles</span><span class="p">.</span><span class="nf">length</span><span class="p">)</span> <span class="n">or</span> <span class="n">page</span> <span class="o">&lt;</span> <span class="mi">1</span>
+    <span class="n">page_results</span> <span class="o">=</span> <span class="vi">@articles</span><span class="p">[(</span><span class="n">page</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">per_page</span> <span class="o">..</span> <span class="n">page</span> <span class="o">*</span> <span class="n">per_page</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">prev_page</span> <span class="o">=</span> <span class="n">page</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">?</span> <span class="n">page</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="kp">nil</span>
+    <span class="n">next_page</span> <span class="o">=</span> <span class="vi">@articles</span><span class="p">.</span><span class="nf">length</span> <span class="o">&gt;</span> <span class="n">page</span> <span class="o">*</span> <span class="n">per_page</span> <span class="p">?</span> <span class="n">page</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="kp">nil</span>
+<span class="cp">%&gt;</span>
+...
+<span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"footer"</span><span class="nt">&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">prev_page</span> <span class="cp">%&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/page/</span><span class="cp">&lt;%=</span><span class="n">prev_page</span><span class="cp">%&gt;</span><span class="s">"</span><span class="nt">&gt;</span><span class="ni">&amp;laquo;</span> newer<span class="nt">&lt;/a&gt;</span>
+    <span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">next_page</span>  <span class="cp">%&gt;</span>|<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">next_page</span> <span class="cp">%&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/page/</span><span class="cp">&lt;%=</span><span class="n">next_page</span><span class="cp">%&gt;</span><span class="s">"</span><span class="nt">&gt;</span>older <span class="ni">&amp;raquo;</span><span class="nt">&lt;/a&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/p&gt;</span></code></pre></figure>
+
+<p>Also, syntax highlighting brought to you by <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>.</p>
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2011/02/14/interactive-google-doodle/">
+        Interactive Google Doodle
+      </a>
+    </h1>
+
+    <time datetime="2011-02-14T00:00:00+00:00" class="post-date">14 Feb 2011</time>
+
+    <p><a href="/google.html"><img src="/public/images/google_doodle.jpeg" /></a></p>
+
+<p>Google’s <a href="http://www.pcmag.com/article2/0,2817,2368790,00.asp">take</a> on
+an interactive ball logo was interesting enough to me that I felt that I
+needed to write <a href="/google.html">something at least as fun</a>. My take is
+backed by HTML5, so you will need a suitably compliant browser to view
+it.</p>
+
+<h3 id="features">Features</h3>
+
+<ul>
+  <li>Mass based ball collisions</li>
+  <li>Mouse input to scatter balls</li>
+  <li>Balls “anchored” to positions with dampened springs</li>
+  <li>Typing creates additional interactable balls</li>
+  <li>Searching cues exit animation</li>
+</ul>
+
+<h3 id="technical-information">Technical information</h3>
+
+<p>The code for this demo (as well this entire blog) is on github. Here is
+<a href="https://github.com/vincentwoo/blog/blob/master/public/js/balls.js">the primary javascript engine</a>.</p>
+
+<p>In google’s original doodle, the balls would react with changes in size
+and velocity to the presence of the mouse. They would not, however,
+collide with anything. I thought this was a shame, and set out to make a
+HTML5 canvas app that could handle collisions between a large number of
+objects.</p>
+
+<p>A naive initial implementation worked well enough. It looked like this
+(pseudocode is rubyish):</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="n">to</span> <span class="n">circles</span><span class="p">.</span><span class="nf">length</span> <span class="o">-</span> <span class="mi">2</span>
+<span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">circles</span><span class="p">.</span><span class="nf">length</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">handleCollision</span><span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">circles</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>which served me well enough on Canary on my admittedly beefy desktop. It
+wasn’t until I tried to run the same on Firefox 3.x on my work laptop that
+I realized I probably wasn’t performant on a wide range of configurations.</p>
+
+<p>The thing to do, then, was to set up a 2D grid covering the entire canvas.
+Each cell is about the diameter of a circle, and knows about any circles
+within itself, as well as up to four of its neighbors. Then, collision code
+becomes something like</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">for</span> <span class="n">circle</span> <span class="k">in</span> <span class="n">circles</span>
+<span class="k">for</span> <span class="n">potentialCollider</span> <span class="k">in</span> <span class="n">grid</span><span class="p">.</span><span class="nf">getPotentialColliders</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="nf">pos</span><span class="p">)</span>
+<span class="n">handleCollision</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">potentialCollider</span><span class="p">);</span>
+<span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nc">grid</span><span class="o">.</span><span class="nf">getPotentialColliders</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">getCell</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">neighbor</span> <span class="k">in</span> <span class="n">cell</span><span class="p">.</span><span class="nf">neighbors</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">neighbor</span><span class="p">.</span><span class="nf">objects</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="n">ret</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>which takes the runtime complexity down from n^2 to about n. Neat!</p>
+
+<p>Probably the hardest part was making circles appear for the query text.
+Understanding whether the user added characters, deleted, replaced, pasted,
+etc. is kind of difficult. I honestly hacked together a solution that works
+in 95% of use cases, but the best solution would to be to implement a full
+fledged dynamic programming algorithm to find the <a href="http://www.csse.monash.edu.au/~lloyd/tildeAlgDS/Dynamic/Edit/">minimum edit distance</a>.</p>
+
+<p>And finally, a big thanks to <a href="http://rawkes.com/blog/2010/09/07/recreating-googles-bouncing-balls-logo-in-html5-canvas">Rob Hawke’s recreation of the google ball logo</a>
+for both reference and initial source data points.</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2011/01/24/gustav/">
+        The Gustav: A BC2 Hack
+      </a>
+    </h1>
+
+    <time datetime="2011-01-24T00:00:00+00:00" class="post-date">24 Jan 2011</time>
+
+    <iframe title="YouTube video player" class="youtube-player" width="640" height="390" src="https://www.youtube.com/embed/AXaMAa7XBKw?rel=0">
+</iframe>
+
+<p>The Gustav is a closed source C++ hack for <a href="http://battlefieldbadcompany2.com">Battlefield: Bad Company
+2</a>. It incorporates realtime physics
+simulation to determine potential targets, as well as unique D3D hooking
+to provide visual cues for the user in the game world itself.</p>
+
+<p>It has taken me about three months of tinkering in my time off to put
+together and I am more or less satisfied with what it has taught me
+about physics and reverse engineering, which are two subjects that are
+very easy to unlearn without practice.</p>
+
+<p>I have written up a couple pieces of interest encountered while
+developing the Gustav, namely <a href="http://www.gamedeception.net/threads/21070-Drawing-in-the-3D-world-of-a-modern-game-WITH-z-depth-testing">how to draw in 3D within the game world
+while respecting Z-depth</a> and a <a href="http://www.gamedeception.net/threads/21167-finally-a-menu-class-that-doesn-t-suck">short primer on how to write a
+tree-recursive menu</a>, the latter of which will probably be nothing
+new to any experienced dev.</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2011/01/21/on-resilience/">
+        on resilience
+      </a>
+    </h1>
+
+    <time datetime="2011-01-21T00:00:00+00:00" class="post-date">21 Jan 2011</time>
+
+    <blockquote>
+  <p><strong>Russell Bennett</strong>:<br />
+i’m worried about steve man<br />
+all this resilience is getting to his head<br />
+he keeps trying to get people to hurt him in real life<br />
+talking about how it’s “going to hurt 40% less”<br />
+i think you need to talk to him</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Vincent Woo</strong><br />
+hahahaha<br />
+shit man<br />
+have you talked to him about how your health pool is still more important</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Russell Bennett</strong><br />
+yeah man<br />
+still running around with 96k hp, gemming everything res<br />
+saying “no it’s better i don’t need socket bonuses i read it on ej”</p>
+</blockquote>
+
+  </article>
+  
+</div>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/page/6">Older</a>
+  
+  
+    <a class="pagination-item newer" href="/page/4">Newer</a>
+  
+</div>
+
+    </div>
+
+  </body>
+</html>

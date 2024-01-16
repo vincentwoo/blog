@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Facebook Puzzle: peaktraffic
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Facebook Puzzle: peaktraffic</h1>
+  <span class="post-date">28 Feb 2011</span>
+  <p>Last week I was working on Facebook’s <a href="http://www.facebook.com/careers/puzzles.php?puzzle_id=8">peak traffic puzzle</a>,
+which was a pretty entertaining and informative exercise. The idea is
+basically to parse a log file and generate an undirected graph that
+represents mutual friendships between Facebook users. Then you are to
+find every group of friends where each friend in the group is friends
+with every other person in the group.</p>
+
+<p>I wrote a naive implementation at first that looked something like</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># $seen is a hash to menoize previously seen sets</span>
+<span class="c1"># $sparse is a hash of usernames to a list of neighboring usernames</span>
+<span class="c1"># $set is the list of output clusters</span>
+
+<span class="vg">$seen</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">def</span> <span class="nf">subgraph</span><span class="p">(</span><span class="n">set</span><span class="p">,</span> <span class="n">adj</span><span class="p">)</span>
+    <span class="nb">hash</span> <span class="o">=</span> <span class="p">(</span><span class="n">set</span> <span class="o">+</span> <span class="n">adj</span><span class="p">).</span><span class="nf">sort</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="vg">$seen</span><span class="p">[</span><span class="nb">hash</span><span class="p">]</span>
+    <span class="vg">$sets</span><span class="p">.</span><span class="nf">push</span> <span class="n">set</span><span class="p">.</span><span class="nf">sort</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s2">", "</span><span class="p">)</span> <span class="k">if</span> <span class="n">adj</span><span class="p">.</span><span class="nf">empty?</span> <span class="n">and</span> <span class="n">set</span><span class="p">.</span><span class="nf">size</span> <span class="o">&gt;</span> <span class="mi">2</span>
+    <span class="n">adj</span><span class="p">.</span><span class="nf">each</span> <span class="p">{</span><span class="o">|</span><span class="n">node</span><span class="o">|</span> <span class="n">subgraph</span><span class="p">(</span><span class="n">set</span> <span class="o">+</span> <span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">adj</span><span class="p">)}</span>
+    <span class="vg">$seen</span><span class="p">[</span><span class="nb">hash</span><span class="p">]</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="k">end</span>
+
+<span class="vg">$sparse</span><span class="p">.</span><span class="nf">keys</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">vertex</span><span class="o">|</span>
+    <span class="n">subgraph</span><span class="p">([</span><span class="n">vertex</span><span class="p">],</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This appeared to work pretty well on my tests, but continued to fail on
+Facebook puzzle submission for some reason I couldn’t track down at the
+time. In my frustration, I went to the internet. Turns out, this problem
+is actually known as <a href="http://en.wikipedia.org/wiki/Clique_problem#Listing_all_maximal
+_cliques">list maximal
+cliques</a>, a category of clique problem. The prior link has more
+information about cliques, which are subgraphs that have the friend
+property desired by this problem. Additionally, there is a known “pretty
+good” strategy for solving this problem, the <a href="http://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm">Bron Kerbosch
+algorithm</a>
+.</p>
+
+<p>I went all out and applied a couple optimizations, namely (warning:
+abstract pdfs)
+<a href="ftp://ftp-sop.inria.fr/geometrica/fcazals/papers/ncliques.pdf">pivoting</a> and
+<a href="http://drops.dagstuhl.de/opus/volltexte/2011/2935/pdf/10441.EppsteinDavid.Paper.2935.pdf">degeneracy ordering</a>,
+which are two techniques used to cut down on the number of recursive calls.
+At this point my code looked something like</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">generate_degeneracy_ordering</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#degree buckets</span>
+    <span class="n">dw</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1">#degree for each vertex</span>
+    <span class="vg">$sparse</span><span class="p">.</span><span class="nf">each_pair</span> <span class="k">do</span> <span class="o">|</span><span class="n">vertex</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">|</span>
+        <span class="n">deg</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">.</span><span class="nf">size</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">deg</span><span class="p">]</span> <span class="o">||=</span> <span class="p">[]</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">deg</span><span class="p">].</span><span class="nf">push</span> <span class="n">vertex</span>
+        <span class="n">dw</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span> <span class="o">=</span> <span class="n">deg</span>
+    <span class="k">end</span>
+    <span class="n">d</span><span class="p">.</span><span class="nf">each_index</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">||=</span> <span class="p">[]}</span>
+    <span class="vg">$sparse</span><span class="p">.</span><span class="nf">size</span><span class="p">.</span><span class="nf">times</span> <span class="k">do</span>
+        <span class="n">vertex</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="nf">find</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="o">!</span><span class="n">x</span><span class="p">.</span><span class="nf">empty?</span><span class="p">}.</span><span class="nf">pop</span>
+        <span class="vg">$degen</span><span class="p">.</span><span class="nf">push</span> <span class="n">vertex</span>
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="k">in</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">dw</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]].</span><span class="nf">delete</span> <span class="n">neighbor</span>
+                <span class="n">dw</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">dw</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]].</span><span class="nf">push</span> <span class="n">neighbor</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">bron_kerbosch</span><span class="p">(</span><span class="n">set</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">exclude</span><span class="p">,</span> <span class="n">pivot_neighbors</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">points</span><span class="p">.</span><span class="nf">empty?</span>
+        <span class="vg">$sets</span><span class="p">.</span><span class="nf">push</span> <span class="n">set</span><span class="p">.</span><span class="nf">sort</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s1">', '</span><span class="p">)</span> <span class="k">if</span> <span class="n">set</span><span class="p">.</span><span class="nf">size</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="n">and</span> <span class="n">exclude</span><span class="p">.</span><span class="nf">empty?</span>
+        <span class="k">return</span>
+    <span class="k">end</span>
+
+    <span class="n">pivot_neighbors</span> <span class="o">||=</span> <span class="p">(</span><span class="n">exclude</span><span class="p">.</span><span class="nf">empty?</span> <span class="n">or</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">points</span><span class="p">.</span><span class="nf">last</span><span class="p">].</span><span class="nf">size</span> <span class="o">&gt;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">exclude</span><span class="p">.</span><span class="nf">last</span><span class="p">].</span><span class="nf">size</span><span class="p">)</span> <span class="p">?</span>
+        <span class="vg">$sparse</span><span class="p">[</span><span class="n">points</span><span class="p">.</span><span class="nf">last</span><span class="p">]</span> <span class="p">:</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">exclude</span><span class="p">.</span><span class="nf">last</span><span class="p">]</span>
+
+    <span class="n">points</span><span class="p">.</span><span class="nf">each_with_index</span> <span class="k">do</span> <span class="o">|</span><span class="n">vertex</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
+        <span class="k">next</span> <span class="k">if</span> <span class="n">pivot_neighbors</span><span class="p">.</span><span class="nf">include?</span> <span class="n">vertex</span>
+        <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kp">nil</span>
+        <span class="n">bron_kerbosch</span><span class="p">(</span><span class="n">set</span> <span class="o">+</span> <span class="p">[</span><span class="n">vertex</span><span class="p">],</span>
+                      <span class="n">points</span> <span class="o">&amp;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">],</span>
+                      <span class="n">exclude</span> <span class="o">&amp;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">])</span>
+        <span class="n">exclude</span><span class="p">.</span><span class="nf">push</span> <span class="n">vertex</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="nb">exit</span> <span class="k">unless</span> <span class="no">ARGV</span><span class="p">.</span><span class="nf">size</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="n">ingest</span><span class="p">(</span><span class="no">ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">generate_degeneracy_ordering</span>
+<span class="n">before</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">after</span> <span class="o">=</span> <span class="vg">$degen</span><span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="vg">$degen</span><span class="p">.</span><span class="nf">size</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="vg">$degen</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">vertex</span><span class="o">|</span>
+    <span class="n">intersect</span> <span class="o">=</span> <span class="n">after</span> <span class="o">&amp;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span>
+    <span class="n">bron_kerbosch</span><span class="p">([</span><span class="n">vertex</span><span class="p">],</span>
+                  <span class="n">intersect</span><span class="p">,</span>
+                  <span class="n">before</span> <span class="o">&amp;</span> <span class="vg">$sparse</span><span class="p">[</span><span class="n">vertex</span><span class="p">],</span>
+                  <span class="vg">$sparse</span><span class="p">[</span><span class="n">intersect</span><span class="p">.</span><span class="nf">last</span><span class="p">])</span> <span class="c1">#last elements in $degen have highest degrees</span>
+    <span class="n">before</span><span class="p">.</span><span class="nf">push</span> <span class="n">vertex</span>
+    <span class="n">after</span><span class="p">.</span><span class="nf">shift</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Which let me parse a 120MB input file in 1 minute flat. However, for
+some reason this was slower than my naive solution, which could do it,
+ironically, in 48s. It did pass the Facebook puzzle checker, though, so
+at least I had that. If anyone has any insight into why my naive
+solution appears to outperform bron_kerbosch I would greatly appreciate
+it, as it does not seem correct. My guess is slow implementations in
+Ruby of Array “set-like” operators (&amp;, +).</p>
+
+<h3 id="final-thoughts">final thoughts</h3>
+
+<p>I spent 2-3 days stuck on bugs that amounted to</p>
+
+<ul>
+  <li>parsing input off by one whitespace</li>
+  <li>output missing a final newline</li>
+  <li>mysterious bug that turned out to be RUBY 1.8.6 NOT HAVING MAX_BY AND
+ME TESTING IN 1.8.7</li>
+</ul>
+
+<p>Facebook absolutely does not provide you any clues as to what went wrong
+besides there being a syntax error in your build. In this case it falls
+on you to both duplicate their runtime environment and generate workable
+tests. But finally seeing the confirmation email is definitely worth it.
+Here are the results after finally getting my naive solution running.</p>
+
+<blockquote>
+  <p>Dear submitter,</p>
+
+  <p>Thank you for your submission of a puzzle solution to Facebook! After running your solution to peaktraffic (received on February 28, 2011, 4:07 pm), I have determined it to be correct. Your solution ran for 1162.186 ms on its longest test case.</p>
+</blockquote>
+
+<p>Here are my two <a href="https://github.com/vincentwoo/rubycode/blob/master/peaktraffic">solutions</a>
+to this problem. The codepath that executes the Bron Kerbosch algorithm is not active but
+fairly obvious. They both work.</p>
+
+</div>
+
+    </div>
+
+  </body>
+</html>
