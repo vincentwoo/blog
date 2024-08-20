@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Above and Beyond the Affirm Job Puzzle
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Above and Beyond the Affirm Job Puzzle</h1>
+  <span class="post-date">08 Mar 2013</span>
+  <p>The latest startup from internet luminary <a href="http://en.wikipedia.org/wiki/Max_Levchin">Max Levchin</a> recently launched,
+and they have a very entertaining programming puzzle up on their <a href="https://affirm.com/jobs">jobs page</a>.</p>
+
+<p>You should read the page for some background, but in summary the problem is to
+find the distances between any two cells in a hexagonal grid numbered in the
+following manner:</p>
+
+<p><img src="/public/images/affirm/hexgrid.png" alt="The hexagonal grid" /></p>
+
+<h3 id="approach">Approach</h3>
+
+<p>The problem is interesting because the problem seems like a traditional graph
+theory exercise, but Affirm hints that your solution should work at the scale of
+ten billion nodes. These two ideas don’t really jive, so one wonders if there’s
+an analytic solution that doesn’t involve any graph traversal.</p>
+
+<p>It seems plausible that there is one, since the problem seems very similar to
+calculating the <a href="http://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan Distance</a> between any two nodes in a rectangular
+grid, except in this case we have a hexagonal grid where there are six ways to
+move between neighboring nodes instead of four. These six neighboring cells lie
+along three axes of movement.</p>
+
+<p><img src="/public/images/affirm/axes.png" alt="The grid with axes" /></p>
+
+<p>If you play around with the axes in your head, you can see that you can
+represent any hexagon in terms of any two of the three axes of movement. The
+corollary to that conclusion is that any translation down one axis of movement
+can be thought of as some combination of the other two. Essentially, we have one
+almost-unnecessary axis.</p>
+
+<p>This suggests an approach:</p>
+
+<ul>
+  <li>Turn a hex’s number into its grid coordinates</li>
+  <li>Figure out the distance between two arbitrary grid coordinates</li>
+</ul>
+
+<h3 id="translating-a-hexagon-number-into-coordinates">Translating a hexagon number into coordinates</h3>
+
+<p>Going from an arbitrary hexagon number to coordinates seems a bit tricky at
+first. You can’t modulo or divide by anything obvious to get some aspect of the
+geometry. The hex at position 1000 could be almost anywhere. What does seem
+obvious, though, is that higher numbers must be on larger “rings” of hexagons.
+Closer examination shows that each larger ring of hexagons has 6 more nodes than
+the last. Therefore:</p>
+
+<p>$$
+  MaxNumOnRing(n) = ‎1 + ‎\sum\limits_{ring=0}^n 6ring        \\
+  ... = 1 + 6\sum\limits_{ring=0}^n ring                    \\
+  ... = 1 + 6 \frac{n(n + 1)}{2}                         \\
+  ... = 3n^2 + 3n + 1
+$$</p>
+
+<p>The formula seems to check out, since the 0^th ring ends in 1, the 1^st ring in
+7, the 2^nd ring in 19, and so on. Programmatically, you could tell which ring a
+hex falls on by finding which two “max-ring” numbers the hex is between. In the
+case of say, 12, it would be the 2^nd ring, since it is greater than 7 and less
+than 19. However, we can do better mathematically by simply inverting the
+previous formula, to get one that takes a number and outputs a ring:</p>
+
+<p>$$
+  num = 3n^2 + 3n + 1                                       \\
+  num = 3(n^2 + n) + 1                                      \\
+  num = 3(n^2 + n + \tfrac{1}{4} - \tfrac{1}{4}) + 1        \\
+  num = 3((n + \tfrac{1}{2})^2 - \tfrac{1}{4}) + 1          \\
+  \frac{num - 1}{3} + \tfrac{1}{4} = (n + \tfrac{1}{2})^2   \\
+  \frac{4num - 1}{12} = (n + \tfrac{1}{2})^2\               \\
+  \sqrt\frac{4num - 1}{12} - \tfrac{1}{2} = n
+$$</p>
+
+<p>Plugging in num = 10 gets us a ring number of ~1.3, which we round up to 2.
+Looks good! Now that we have the ring, we have to do the hard part: figure out
+where exactly on the ring we are. It also means we need to finalize our axes.
+I’ve illustrated the coordinate system I went with below. Why I choose this
+particular configuration should become clear later:</p>
+
+<p><img src="/public/images/affirm/coordinates.png" alt="The grid with coordinates" /></p>
+
+<p>Following the pattern of coordinates here, you can see the largest number on
+each ring occurs on the negative X axis. Essentially we can say that if a number
+is the largest number on ring n, its position will be (0, -n). After a bit more
+thought, I figured that you could represent the various corners of the unit
+hexagon as six vectors that all pointed to hexagons exactly one away from the
+origin, like so:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'matrix'</span>
+
+<span class="no">UNIT_HEXAGON</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="mi">0</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+  <span class="mi">1</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">],</span>
+  <span class="mi">2</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">],</span>
+  <span class="mi">3</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+  <span class="mi">4</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+  <span class="mi">5</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>You can get any number’s position along its hexagon ring by figuring out which
+of the six sides of the hexagon it is on, and its distance from the last corner
+of the hexagon.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ring_to_max_num</span> <span class="n">ring</span>
+  <span class="mi">3</span> <span class="o">*</span> <span class="n">ring</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">ring</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">num_to_ring</span> <span class="n">num</span>
+  <span class="p">(</span><span class="no">Math</span><span class="p">.</span><span class="nf">sqrt</span><span class="p">((</span><span class="mi">4</span> <span class="o">*</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">).</span><span class="nf">ceil</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">num_to_coords</span> <span class="n">num</span>
+  <span class="k">return</span> <span class="no">Vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">1</span>
+
+  <span class="c1"># The length of a side is also the ring number</span>
+  <span class="n">side_length</span> <span class="o">=</span> <span class="n">ring</span> <span class="o">=</span> <span class="n">num_to_ring</span> <span class="n">num</span>
+
+  <span class="c1"># How far away am I from the end of my ring?</span>
+  <span class="n">offset</span> <span class="o">=</span> <span class="n">ring_to_max_num</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="o">-</span> <span class="n">num</span>
+
+  <span class="n">side_number</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">/</span> <span class="n">side_length</span>
+  <span class="n">side_offset</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">%</span> <span class="n">side_length</span>
+
+  <span class="n">corner</span> <span class="o">=</span> <span class="no">UNIT_HEXAGON</span><span class="p">[</span><span class="n">side_number</span><span class="p">]</span>
+
+  <span class="c1"># The direction to the next corner is just the position of the</span>
+  <span class="c1"># next corner minus the position of the current one.</span>
+  <span class="n">direction</span> <span class="o">=</span> <span class="no">UNIT_HEXAGON</span><span class="p">[(</span><span class="n">side_number</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">6</span><span class="p">]</span> <span class="o">-</span> <span class="n">corner</span>
+
+  <span class="p">(</span><span class="n">corner</span> <span class="o">*</span> <span class="n">ring</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">direction</span> <span class="o">*</span> <span class="n">side_offset</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<h3 id="solving-for-distance">Solving for distance</h3>
+
+<p>So now we can easily get the grid coordinates of the start and end node. We
+still have to solve for the distance between them. A quick observation shows
+that the distance necessary to travel any delta vector is the same regardless of
+starting and ending nodes. That is to say, moving (+3, +2) units is the same
+distance whether you start at hex 1 or 1000. Luckily, with the axes I’ve chosen,
+calculating this distance isn’t too hard. At any given hexagon, you can move one
+unit along either the X or Y axes. You can also move one unit up or down the
+third axis, which is equivalent to moving by either (+1, +1) or (-1, -1). Our
+choice of axes has made that bit simple.</p>
+
+<p>The process for finding the distance of a delta is:</p>
+
+<ul>
+  <li>If the coordinates of the delta share a sign (both positive or negative), the
+distance is just the maximum of the absolute values of both coordinates. In
+moving (+3, +5), for instance, you move first to (+3, +3) in three moves, and
+then to (+3, +5) in another two for a total distance of five. The same is true
+of (-3, -5), with reversed directions.</li>
+  <li>If they do not share a sign, merely add both of their absolute values
+together. For instance, moving (+2, -6) takes eight moves, because you have to
+move +2 in the X direction and -6 in the Y. Moving along the Z axis cannot aid
+you here.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">length_of_delta</span> <span class="n">delta</span>
+  <span class="n">delta</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">delta</span> <span class="k">if</span> <span class="n">delta</span><span class="p">.</span><span class="nf">all?</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">}</span>
+  <span class="n">delta</span><span class="p">.</span><span class="nf">all?</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">}</span> <span class="p">?</span> <span class="n">delta</span><span class="p">.</span><span class="nf">max</span> <span class="p">:</span> <span class="n">delta</span><span class="p">.</span><span class="nf">max</span> <span class="o">-</span> <span class="n">delta</span><span class="p">.</span><span class="nf">min</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">distance_between</span> <span class="n">num1</span><span class="p">,</span> <span class="n">num2</span>
+  <span class="n">delta</span> <span class="o">=</span> <span class="n">num_to_coords</span><span class="p">(</span><span class="n">num1</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_to_coords</span><span class="p">(</span><span class="n">num2</span><span class="p">)</span>
+  <span class="n">length_of_delta</span> <span class="n">delta</span>
+<span class="k">end</span>
+
+<span class="n">num1</span> <span class="o">=</span> <span class="no">ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">to_i</span>
+<span class="n">num2</span> <span class="o">=</span> <span class="no">ARGV</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">to_i</span>
+<span class="nb">puts</span> <span class="s2">"distance between </span><span class="si">#{</span><span class="n">num1</span><span class="si">}</span><span class="s2"> and </span><span class="si">#{</span><span class="n">num2</span><span class="si">}</span><span class="s2"> is </span><span class="si">#{</span><span class="n">distance_between</span> <span class="n">num1</span><span class="p">,</span> <span class="n">num2</span><span class="si">}</span><span class="s2">"</span></code></pre></figure>
+
+<p>And viola, a constant-time algorithm that works fine at 10 billion nodes:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">~/misc/affirm <span class="nv">$ </span><span class="nb">time </span>ruby honeycomb.rb 1 100
+distance between 1 and 100 is 6
+
+real  0m0.030s
+user  0m0.023s
+sys 0m0.005s
+~/misc/affirm <span class="nv">$ </span><span class="nb">time </span>ruby honeycomb.rb 1 10000000000
+distance between 1 and 10000000000 is 57735
+
+real  0m0.030s
+user  0m0.024s
+sys 0m0.005s</code></pre></figure>
+
+<h3 id="extra-credit">Extra Credit</h3>
+
+<p>Solving for distance was nice, but honestly a bit anticlimactic. Wouldn’t it be
+more impressive if we could actually output the number of each hexagon on the
+way to our destination?</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">path_between</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span>
+  <span class="n">delta</span> <span class="o">=</span> <span class="n">pos1</span> <span class="o">-</span> <span class="n">pos2</span>
+
+  <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">while</span> <span class="n">delta</span> <span class="o">!=</span> <span class="no">Vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">path</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">pos2</span> <span class="o">+</span> <span class="n">delta</span><span class="p">)</span>
+
+    <span class="n">move</span> <span class="o">=</span> <span class="k">if</span> <span class="n">delta</span><span class="p">.</span><span class="nf">all?</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">}</span>
+      <span class="no">Vector</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">elsif</span> <span class="n">delta</span><span class="p">.</span><span class="nf">all?</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">}</span>
+      <span class="no">Vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elsif</span> <span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span>
+      <span class="no">Vector</span><span class="p">[</span><span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span>
+      <span class="no">Vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">delta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">end</span>
+
+    <span class="n">delta</span> <span class="o">+=</span> <span class="n">move</span>
+  <span class="k">end</span>
+
+  <span class="n">path</span><span class="p">.</span><span class="nf">push</span> <span class="n">pos2</span>
+
+  <span class="n">path</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This function constructs a path of coordinates from pos1 to pos2, by attempting
+to move one hex at a time, favoring the Z axis where possible and otherwise just
+moving down the X or Y axes if there exists a remaining delta on either axis.</p>
+
+<p>However, we still only have a path in coordinates. To get back to hexagon
+numbers, we need a translation function. This article is getting a bit long, so
+I’ll just leave it here as an exercise for the reader to puzzle out:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">coords_to_num</span> <span class="n">pos</span>
+  <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="no">Vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+  <span class="n">ring</span> <span class="o">=</span> <span class="p">[</span><span class="n">pos</span><span class="p">.</span><span class="nf">max</span> <span class="o">-</span> <span class="n">pos</span><span class="p">.</span><span class="nf">min</span> <span class="p">:</span> <span class="n">pos</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:abs</span><span class="p">).</span><span class="nf">max</span><span class="p">].</span><span class="nf">max</span>
+
+  <span class="n">side</span> <span class="o">=</span> <span class="k">if</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ring</span> <span class="k">then</span> <span class="mi">2</span>
+    <span class="k">elsif</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="n">ring</span> <span class="k">then</span> <span class="mi">5</span>
+    <span class="k">elsif</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">ring</span> <span class="k">then</span> <span class="mi">1</span>
+    <span class="k">elsif</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="n">ring</span> <span class="k">then</span> <span class="mi">4</span>
+    <span class="k">elsif</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">then</span> <span class="mi">3</span>
+    <span class="k">else</span> <span class="mi">0</span>
+  <span class="k">end</span>
+
+  <span class="n">max_num</span> <span class="o">=</span> <span class="n">ring_to_max_num</span> <span class="n">ring</span>
+  <span class="n">corner</span> <span class="o">=</span> <span class="no">UNIT_HEXAGON</span><span class="p">[</span><span class="n">side</span><span class="p">]</span> <span class="o">*</span> <span class="n">ring</span>
+  <span class="n">offset</span> <span class="o">=</span> <span class="n">side</span> <span class="o">*</span> <span class="n">ring</span> <span class="o">+</span> <span class="n">length_of_delta</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">corner</span><span class="p">)</span>
+  <span class="n">offset</span> <span class="o">==</span> <span class="n">ring</span> <span class="o">*</span> <span class="mi">6</span> <span class="p">?</span> <span class="n">max_num</span> <span class="p">:</span> <span class="n">max_num</span> <span class="o">-</span> <span class="n">offset</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Bring all the pieces together and you get…</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">~/misc/affirm <span class="nv">$ </span>ruby ../misc/affirm/honeycomb.rb 1 100
+distance between 1 and 100 is 6
+path is <span class="o">[</span>1, 2, 9, 22, 42, 68, 100]</code></pre></figure>
+
+<p>Magic! The runtime here is $O(\sqrt{n})$, because the path-finding algorithm is
+linear on the length of the path, and the path can only be as long as the square
+root of the largest hexagon number on the path. Recall that the ring of a
+hexagon number is a function of the square root of that number.</p>
+
+<p>Thanks for the fun times, Levchin and co.</p>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    messageStyle: 'none',
+    tex2jax: {
+     inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+</div>
+
+    </div>
+
+  </body>
+</html>

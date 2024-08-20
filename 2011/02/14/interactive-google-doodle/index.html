@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Interactive Google Doodle
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Interactive Google Doodle</h1>
+  <span class="post-date">14 Feb 2011</span>
+  <p><a href="/google.html"><img src="/public/images/google_doodle.jpeg" /></a></p>
+
+<p>Google’s <a href="http://www.pcmag.com/article2/0,2817,2368790,00.asp">take</a> on
+an interactive ball logo was interesting enough to me that I felt that I
+needed to write <a href="/google.html">something at least as fun</a>. My take is
+backed by HTML5, so you will need a suitably compliant browser to view
+it.</p>
+
+<h3 id="features">Features</h3>
+
+<ul>
+  <li>Mass based ball collisions</li>
+  <li>Mouse input to scatter balls</li>
+  <li>Balls “anchored” to positions with dampened springs</li>
+  <li>Typing creates additional interactable balls</li>
+  <li>Searching cues exit animation</li>
+</ul>
+
+<h3 id="technical-information">Technical information</h3>
+
+<p>The code for this demo (as well this entire blog) is on github. Here is
+<a href="https://github.com/vincentwoo/blog/blob/master/public/js/balls.js">the primary javascript engine</a>.</p>
+
+<p>In google’s original doodle, the balls would react with changes in size
+and velocity to the presence of the mouse. They would not, however,
+collide with anything. I thought this was a shame, and set out to make a
+HTML5 canvas app that could handle collisions between a large number of
+objects.</p>
+
+<p>A naive initial implementation worked well enough. It looked like this
+(pseudocode is rubyish):</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="n">to</span> <span class="n">circles</span><span class="p">.</span><span class="nf">length</span> <span class="o">-</span> <span class="mi">2</span>
+<span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">circles</span><span class="p">.</span><span class="nf">length</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">handleCollision</span><span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">circles</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>which served me well enough on Canary on my admittedly beefy desktop. It
+wasn’t until I tried to run the same on Firefox 3.x on my work laptop that
+I realized I probably wasn’t performant on a wide range of configurations.</p>
+
+<p>The thing to do, then, was to set up a 2D grid covering the entire canvas.
+Each cell is about the diameter of a circle, and knows about any circles
+within itself, as well as up to four of its neighbors. Then, collision code
+becomes something like</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">for</span> <span class="n">circle</span> <span class="k">in</span> <span class="n">circles</span>
+<span class="k">for</span> <span class="n">potentialCollider</span> <span class="k">in</span> <span class="n">grid</span><span class="p">.</span><span class="nf">getPotentialColliders</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="nf">pos</span><span class="p">)</span>
+<span class="n">handleCollision</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">potentialCollider</span><span class="p">);</span>
+<span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nc">grid</span><span class="o">.</span><span class="nf">getPotentialColliders</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">getCell</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">neighbor</span> <span class="k">in</span> <span class="n">cell</span><span class="p">.</span><span class="nf">neighbors</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">neighbor</span><span class="p">.</span><span class="nf">objects</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="n">ret</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>which takes the runtime complexity down from n^2 to about n. Neat!</p>
+
+<p>Probably the hardest part was making circles appear for the query text.
+Understanding whether the user added characters, deleted, replaced, pasted,
+etc. is kind of difficult. I honestly hacked together a solution that works
+in 95% of use cases, but the best solution would to be to implement a full
+fledged dynamic programming algorithm to find the <a href="http://www.csse.monash.edu.au/~lloyd/tildeAlgDS/Dynamic/Edit/">minimum edit distance</a>.</p>
+
+<p>And finally, a big thanks to <a href="http://rawkes.com/blog/2010/09/07/recreating-googles-bouncing-balls-logo-in-html5-canvas">Rob Hawke’s recreation of the google ball logo</a>
+for both reference and initial source data points.</p>
+
+
+</div>
+
+    </div>
+
+  </body>
+</html>

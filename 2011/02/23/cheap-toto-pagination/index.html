@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Cheap Toto Pagination
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Cheap Toto Pagination</h1>
+  <span class="post-date">23 Feb 2011</span>
+  <p><a href="http://cloudhead.io/toto">Toto</a> is a great tiny blogging platform for
+Ruby/Rack. However, it doesn’t expose much in the way of a MVC structure
+and it can be just annoying enough when you want to add some feature
+that isn’t there. In this case, I wanted to add some simple older/newer
+pagination to the front page. To my chagrin, I couldn’t find a way to
+pass variables to a Toto page without using the GET variable syntax
+(i.e. ?page=1) and I still wanted to hold onto the rails RESTful
+paradigm of /page/1, so I monkey patched the Toto::Site dispatcher, like
+so:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># in config.ru</span>
+<span class="k">class</span> <span class="nc">Toto::Site</span>
+    <span class="kp">alias_method</span> <span class="ss">:old_go</span><span class="p">,</span> <span class="ss">:go</span>
+
+    <span class="k">def</span> <span class="nf">go</span> <span class="n">route</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">type</span> <span class="o">=</span> <span class="ss">:html</span>
+        <span class="k">if</span> <span class="n">not</span> <span class="n">route</span><span class="p">.</span><span class="nf">first</span> <span class="o">=~</span> <span class="sr">/\d{4}/</span> <span class="n">and</span> <span class="n">route</span><span class="p">.</span><span class="nf">size</span> <span class="o">==</span> <span class="mi">2</span> <span class="n">and</span> <span class="n">route</span><span class="p">.</span><span class="nf">last</span> <span class="o">=~</span> <span class="sr">/(\d+)/</span>
+            <span class="vi">@config</span><span class="p">[</span><span class="ss">:id</span><span class="p">]</span> <span class="o">=</span> <span class="n">route</span><span class="p">.</span><span class="nf">last</span><span class="p">.</span><span class="nf">to_i</span>
+            <span class="n">route</span><span class="p">.</span><span class="nf">pop</span>
+        <span class="k">end</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">old_go</span> <span class="n">route</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">type</span>
+        <span class="vi">@config</span><span class="p">.</span><span class="nf">delete</span> <span class="ss">:id</span>
+        <span class="n">ret</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="o">...</span>
+<span class="c1"># and in the config initializer block:</span>
+<span class="n">set</span> <span class="ss">:root</span><span class="p">,</span> <span class="s2">"page"</span>                                           <span class="c1"># page to load on /</span></code></pre></figure>
+
+<p>You can see that we intercept routes that look like name/1234 and pass
+the numeric portion of the route in @config[:id], and then clear
+@config[:id] (because @config is persistent). This is pretty hacky and
+only really acceptable in the context of Heroku caching everything.</p>
+
+<p>and in templates/pages/page.rhtml…</p>
+
+<figure class="highlight"><pre><code class="language-rhtml" data-lang="rhtml"><span class="cp">&lt;%</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="vi">@config</span><span class="p">[</span><span class="ss">:id</span><span class="p">]</span>
+    <span class="n">per_page</span> <span class="o">=</span> <span class="vi">@config</span><span class="p">[</span><span class="ss">:articles_per_page</span><span class="p">]</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">page</span><span class="p">.</span><span class="nf">nil?</span> <span class="n">or</span> <span class="p">(</span><span class="n">page</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">per_page</span> <span class="o">&gt;</span> <span class="vi">@articles</span><span class="p">.</span><span class="nf">length</span><span class="p">)</span> <span class="n">or</span> <span class="n">page</span> <span class="o">&lt;</span> <span class="mi">1</span>
+    <span class="n">page_results</span> <span class="o">=</span> <span class="vi">@articles</span><span class="p">[(</span><span class="n">page</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">per_page</span> <span class="o">..</span> <span class="n">page</span> <span class="o">*</span> <span class="n">per_page</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">prev_page</span> <span class="o">=</span> <span class="n">page</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">?</span> <span class="n">page</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="kp">nil</span>
+    <span class="n">next_page</span> <span class="o">=</span> <span class="vi">@articles</span><span class="p">.</span><span class="nf">length</span> <span class="o">&gt;</span> <span class="n">page</span> <span class="o">*</span> <span class="n">per_page</span> <span class="p">?</span> <span class="n">page</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="kp">nil</span>
+<span class="cp">%&gt;</span>
+...
+<span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"footer"</span><span class="nt">&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">prev_page</span> <span class="cp">%&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/page/</span><span class="cp">&lt;%=</span><span class="n">prev_page</span><span class="cp">%&gt;</span><span class="s">"</span><span class="nt">&gt;</span><span class="ni">&amp;laquo;</span> newer<span class="nt">&lt;/a&gt;</span>
+    <span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">next_page</span>  <span class="cp">%&gt;</span>|<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">next_page</span> <span class="cp">%&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/page/</span><span class="cp">&lt;%=</span><span class="n">next_page</span><span class="cp">%&gt;</span><span class="s">"</span><span class="nt">&gt;</span>older <span class="ni">&amp;raquo;</span><span class="nt">&lt;/a&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/p&gt;</span></code></pre></figure>
+
+<p>Also, syntax highlighting brought to you by <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>.</p>
+
+</div>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+    Vincent Woo's blog 
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="posts">
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2015/01/13/creating-google-hangouts-with-apps-via-url/">
+        Creating Google Hangouts With Apps via URL
+      </a>
+    </h1>
+
+    <time datetime="2015-01-13T00:00:00+00:00" class="post-date">13 Jan 2015</time>
+
+    <p>If you’ve tried to make a Google Hangouts app, you probably already know that it
+sucks pretty badly. <a href="https://developers.google.com/+/hangouts/getting-started">Famously terrible documentation</a>, crazy bloated
+JavaScript, and <a href="https://developers.google.com/+/hangouts/button#button_sizes">mandated UX requirements</a>. You <em>also</em> might know that you
+can craft a URL to open a new hangout without any of the bloat like so:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://plus.google.com/hangouts/_</code></p>
+
+<p>But what if you want to make a hangout with your app and set its <code class="language-plaintext highlighter-rouge">app_type</code> to
+<code class="language-plaintext highlighter-rouge">ROOM_APP</code> so that your app is loaded for everyone by default?</p>
+
+<p>Well, some digging on the internet suggests that you can write a URL of the form</p>
+
+<p><code class="language-plaintext highlighter-rouge">.../_/?gid=YOUR_GID&amp;gd=INITIAL_DATA</code></p>
+
+<p>to open a new hangout session with your app loaded and data passed to it.
+Unfortunately, this does not set the <code class="language-plaintext highlighter-rouge">app_type</code> flag specified in Google’s
+<a href="https://developers.google.com/+/hangouts/button#initial_app_parameters">initial app parameters</a> API. The only way to do so at this time appears to
+be Google’s official <code class="language-plaintext highlighter-rouge">platform.js</code> API to render an
+“Official G+ Hangouts Button”.</p>
+
+<p><strong>Fuck that.</strong></p>
+
+<p>There’s a bunch of reasons you might not want to play nice, but before going
+further you should take note of the <a href="https://developers.google.com/+/web/buttons-policy">Google buttons policy</a>. Yes, they have
+an official policy on buttons. It’s a bit murky about whether you are allowed to
+programatically generate links to create Hangouts sessions, but the thrust of
+the policy is mostly about not misleading users and not snooping their data, so
+I assume this is mostly fine.</p>
+
+<h3 id="reverse-engineering-the-hangouts-button">Reverse Engineering the Hangouts Button</h3>
+
+<p>Google’s example for generating a hangouts button via the JS API is:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js">  <span class="nx">gapi</span><span class="p">.</span><span class="nx">hangout</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="dl">'</span><span class="s1">placeholder-rr</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">render</span><span class="p">:</span> <span class="dl">'</span><span class="s1">createhangout</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">initial_apps</span><span class="p">:</span> <span class="p">[{</span>
+      <span class="na">app_id</span><span class="p">:</span>     <span class="dl">'</span><span class="s1">184219133185</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">start_data</span><span class="p">:</span> <span class="dl">'</span><span class="s1">dQw4w9WgXcQ</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">app_type</span><span class="p">:</span>   <span class="dl">'</span><span class="s1">ROOM_APP</span><span class="dl">'</span>
+    <span class="p">}]</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>which renders a button that, when clicked on, briefly opens a window with this
+URL:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://talkgadget.google.com/hangouts/_/?hl=en&amp;hcb=0&amp;lm1=1421214770979
+&amp;hs=92&amp;hscid=1421214770977081840&amp;ssc=WyIiLDAsbnVsbCxudWxsLG51bGwsW10sbn
+VsbCxudWxsLG51bGwsbnVsbCxudWxsLDkyLG51bGwsbnVsbCxudWxsLFsxNDIxMjE0NzcwO
+Tc5XSxudWxsLG51bGwsW10sbnVsbCwiMTQyMTIxNDc3MDk3NzA4MTg0MCIsbnVsbCxudWxs
+LG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxudWxsLG51bGwsbnVsbCxbXSxudWx
+sLG51bGwsbnVsbCxbXSxudWxsLG51bGwsW1siMTg0MjE5MTMzMTg1IiwiZFF3NHc5V2dYY1
+EiLDJdXV0.
+</code></pre></div></div>
+
+<p>which then redirects to a normal hangouts URL where your app is embedded as a
+full room app. Let’s break apart what’s going on here. The params in that URL
+are:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>param | value
+------|------
+hl    | en
+hcb   | 0
+lm1   | 1421214770979
+hs    | 92
+hscid | 1421214770977081840
+ssc   | WyIiLDAsbnVsbCxudWxsLG51bGwsW10sbnVsbCxudWxsLG51bGwsbnVsbCxudWx
+      | sLDkyLG51bGwsbnVsbCxudWxsLFsxNDIxMjE0NzcwOTc5XSxudWxsLG51bGwsW1
+      | 0sbnVsbCwiMTQyMTIxNDc3MDk3NzA4MTg0MCIsbnVsbCxudWxsLG51bGwsbnVsb
+      | CxudWxsLG51bGwsbnVsbCxbXSxbXSxudWxsLG51bGwsbnVsbCxbXSxudWxsLG51
+      | bGwsbnVsbCxbXSxudWxsLG51bGwsW1siMTg0MjE5MTMzMTg1IiwiZFF3NHc5V2d
+      | YY1EiLDJdXV0.
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">hl</code> seems obviously to be locale, and <code class="language-plaintext highlighter-rouge">lb1</code> and <code class="language-plaintext highlighter-rouge">hscid</code> both seem to be
+timestamp-related. A bit of experimentation proves that everything works as long
+as <code class="language-plaintext highlighter-rouge">ssc</code> is included, so we can drop the rest of the params. But what is <code class="language-plaintext highlighter-rouge">ssc</code>?</p>
+
+<p>It looks suspiciously like a Base 64 encoded blob, so we decode it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>["",0,null,null,null,[],null,null,null,null,null,92,null,null,null,
+[1421214770979],null,null,[],null,"1421214770977081840",null,null,
+null,null,null,null,null,[],[],null,null,null,[],null,null,null,[],
+null,null,[["184219133185","dQw4w9WgXcQ",2]]]
+</code></pre></div></div>
+
+<p>This looks like a big serialized protobuf or something like it to me. Most of
+the fields are unused, and even the obvious timestamp fields are unnecessary.
+The following blob works just as well:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>["",0,null,null,null,[],null,null,null,null,null,0,null,null,null,
+[0],null,null,[],null,"0",null,null,null,null,null,null,null,[],
+[],null,null,null,[],null,null,null,[],null,null,
+[["184219133185","dQw4w9WgXcQ",2]]]
+</code></pre></div></div>
+
+<p>We’ve removed the timestamps and the magic number “92” (I have no idea what
+it’s for). All that we have left is the app ID, the initial data, and “2” to
+signify <code class="language-plaintext highlighter-rouge">ROOM_APP</code>. Erego, to create a URL to open a hangouts session to an
+app with <code class="language-plaintext highlighter-rouge">APP_ID</code>, <code class="language-plaintext highlighter-rouge">INITIAL_DATA</code> as a <code class="language-plaintext highlighter-rouge">ROOM_APP</code> in Ruby:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">BASE_URL</span> <span class="o">=</span> <span class="s1">'https://plus.google.com/hangouts/_'</span>
+<span class="n">ssc_blob</span> <span class="o">=</span> <span class="s1">'["",0,null,null,null,[],null,null,null,null,null,0,null,'</span><span class="p">\</span>
+  <span class="s1">'null,null,[0],null,null,[],null,"0",null,null,null,null,null,null,'</span><span class="p">\</span>
+  <span class="s1">'null,[],[],null,null,null,[],null,null,null,[],null,null,'</span><span class="p">\</span>
+  <span class="s2">"[[</span><span class="se">\"</span><span class="si">#{</span><span class="no">APP_ID</span><span class="si">}</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="si">#{</span><span class="no">INITIAL_DATA</span><span class="si">}</span><span class="se">\"</span><span class="s2">,2]]]"</span>
+<span class="no">BASE_URL</span> <span class="o">+</span> <span class="s1">'?ssc='</span> <span class="o">+</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="n">ssc_blob</span><span class="p">)</span></code></pre></figure>
+
+<p>It works, but no promises on for how long. Good luck out there.</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2013/03/08/above-and-beyond-the-affirm-job-puzzle/">
+        Above and Beyond the Affirm Job Puzzle
+      </a>
+    </h1>
+
+    <time datetime="2013-03-08T00:00:00+00:00" class="post-date">08 Mar 2013</time>
+
+    <p>The latest startup from internet luminary <a href="http://en.wikipedia.org/wiki/Max_Levchin">Max Levchin</a> recently launched,
+and they have a very entertaining programming puzzle up on their <a href="https://affirm.com/jobs">jobs page</a>.</p>
+
+<p>You should read the page for some background, but in summary the problem is to
+find the distances between any two cells in a hexagonal grid numbered in the
+following manner:</p>
+
+<p><img src="/public/images/affirm/hexgrid.png" alt="The hexagonal grid" /></p>
+
+<h3 id="approach">Approach</h3>
+
+<p>The problem is interesting because the problem seems like a traditional graph
+theory exercise, but Affirm hints that your solution should work at the scale of
+ten billion nodes. These two ideas don’t really jive, so one wonders if there’s
+an analytic solution that doesn’t involve any graph traversal.</p>
+
+<p>It seems plausible that there is one, since the problem seems very similar to
+calculating the <a href="http://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan Distance</a> between any two nodes in a rectangular
+grid, except in this case we have a hexagonal grid where there are six ways to
+move between neighboring nodes instead of four. These six neighboring cells lie
+along three axes of movement.</p>
+
+<p><img src="/public/images/affirm/axes.png" alt="The grid with axes" /></p>
+
+<p>If you play around with the axes in your head, you can see that you can
+represent any hexagon in terms of any two of the three axes of movement. The
+corollary to that conclusion is that any translation down one axis of movement
+can be thought of as some combination of the other two. Essentially, we have one
+almost-unnecessary axis.</p>
+
+<p>This suggests an approach:</p>
+
+<ul>
+  <li>Turn a hex’s number into its grid coordinates</li>
+  <li>Figure out the distance between two arbitrary grid coordinates</li>
+</ul>
+
+<h3 id="translating-a-hexagon-number-into-coordinates">Translating a hexagon number into coordinates</h3>
+
+<p>Going from an arbitrary hexagon number to coordinates seems a bit tricky at
+first. You can’t modulo or divide by anything obvious to get some aspect of the
+geometry. The hex at position 1000 could be almost anywhere. What does seem
+obvious, though, is that higher numbers must be on larger “rings” of hexagons.
+Closer examination shows that each larger ring of hexagons has 6 more nodes than
+the last. Therefore:</p>
+
+<p>$$
+  MaxNumOnRing(n) = ‎1 + ‎\sum\limits_{ring=0}^n 6ring        \\
+  ... = 1 + 6\sum\limits_{ring=0}^n ring                    \\
+  ... = 1 + 6 \frac{n(n + 1)}{2}                         \\
+  ... = 3n^2 + 3n + 1
+$$</p>
+
+<p>The formula seems to check out, since the 0^th ring ends in 1, the 1^st ring in
+7, the 2^nd ring in 19, and so on. Programmatically, you could tell which ring a
+hex falls on by finding which two “max-ring” numbers the hex is between. In the
+case of say, 12, it would be the 2^nd ring, since it is greater than 7 and less
+than 19. However, we can do better mathematically by simply inverting the
+previous formula, to get one that takes a number and outputs a ring:</p>
+
+<p>$$
+  num = 3n^2 + 3n + 1                                       \\
+  num = 3(n^2 + n) + 1                                      \\
+  num = 3(n^2 + n + \tfrac{1}{4} - \tfrac{1}{4}) + 1        \\
+  num = 3((n + \tfrac{1}{2})^2 - \tfrac{1}{4}) + 1          \\
+  \frac{num - 1}{3} + \tfrac{1}{4} = (n + \tfrac{1}{2})^2   \\
+  \frac{4num - 1}{12} = (n + \tfrac{1}{2})^2\               \\
+  \sqrt\frac{4num - 1}{12} - \tfrac{1}{2} = n
+$$</p>
+
+<p>Plugging in num = 10 gets us a ring number of ~1.3, which we round up to 2.
+Looks good! Now that we have the ring, we have to do the hard part: figure out
+where exactly on the ring we are. It also means we need to finalize our axes.
+I’ve illustrated the coordinate system I went with below. Why I choose this
+particular configuration should become clear later:</p>
+
+<p><img src="/public/images/affirm/coordinates.png" alt="The grid with coordinates" /></p>
+
+<p>Following the pattern of coordinates here, you can see the largest number on
+each ring occurs on the negative X axis. Essentially we can say that if a number
+is the largest number on ring n, its position will be (0, -n). After a bit more
+thought, I figured that you could represent the various corners of the unit
+hexagon as six vectors that all pointed to hexagons exactly one away from the
+origin, like so:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'matrix'</span>
+
+<span class="no">UNIT_HEXAGON</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="mi">0</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+  <span class="mi">1</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">],</span>
+  <span class="mi">2</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">],</span>
+  <span class="mi">3</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+  <span class="mi">4</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+  <span class="mi">5</span> <span class="o">=&gt;</span> <span class="no">Vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>You can get any number’s position along its hexagon ring by figuring out which
+of the six sides of the hexagon it is on, and its distance from the last corner
+of the hexagon.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ring_to_max_num</span> <span class="n">ring</span>
+  <span class="mi">3</span> <span class="o">*</span> <span class="n">ring</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">ring</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">num_to_ring</span> <span class="n">num</span>
+  <span class="p">(</span><span class="no">Math</span><span class="p">.</span><span class="nf">sqrt</span><span class="p">((</span><span class="mi">4</span> <span class="o">*</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">).</span><span class="nf">ceil</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">num_to_coords</span> <span class="n">num</span>
+  <span class="k">return</span> <span class="no">Vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">1</span>
+
+  <span class="c1"># The length of a side is also the ring number</span>
+  <span class="n">side_length</span> <span class="o">=</span> <span class="n">ring</span> <span class="o">=</span> <span class="n">num_to_ring</span> <span class="n">num</span>
+
+  <span class="c1"># How far away am I from the end of my ring?</span>
+  <span class="n">offset</span> <span class="o">=</span> <span class="n">ring_to_max_num</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="o">-</span> <span class="n">num</span>
+
+  <span class="n">side_number</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">/</span> <span class="n">side_length</span>
+  <span class="n">side_offset</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">%</span> <span class="n">side_length</span>
+
+  <span class="n">corner</span> <span class="o">=</span> <span class="no">UNIT_HEXAGON</span><span class="p">[</span><span class="n">side_number</span><span class="p">]</span>
+
+  <span class="c1"># The direction to the next corner is just the position of the</span>
+  <span class="c1"># next corner minus the position of the current one.</span>
+  <span class="n">direction</span> <span class="o">=</span> <span class="no">UNIT_HEXAGON</span><span class="p">[(</span><span class="n">side_number</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">6</span><span class="p">]</span> <span class="o">-</span> <span class="n">corner</span>
+
+  <span class="p">(</span><span class="n">corner</span> <span class="o">*</span> <span class="n">ring</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">direction</span> <span class="o">*</span> <span class="n">side_offset</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
+
+<h3 id="solving-for-distance">Solving for distance</h3>
+
+<p>So now we can easily get the grid coordinates of the start and end node. We
+still have to solve for the distance between them. A quick observation shows
+that the distance necessary to travel any delta vector is the same regardless of
+starting and ending nodes. That is to say, moving (+3, +2) units is the same
+distance whether you start at hex 1 or 1000. Luckily, with the axes I’ve chosen,
+calculating this distance isn’t too hard. At any given hexagon, you can move one
+unit along either the X or Y axes. You can also move one unit up or down the
+third axis, which is equivalent to moving by either (+1, +1) or (-1, -1). Our
+choice of axes has made that bit simple.</p>
+
+<p>The process for finding the distance of a delta is:</p>
+
+<ul>
+  <li>If the coordinates of the delta share a sign (both positive or negative), the
+distance is just the maximum of the absolute values of both coordinates. In
+moving (+3, +5), for instance, you move first to (+3, +3) in three moves, and
+then to (+3, +5) in another two for a total distance of five. The same is true
+of (-3, -5), with reversed directions.</li>
+  <li>If they do not share a sign, merely add both of their absolute values
+together. For instance, moving (+2, -6) takes eight moves, because you have to
+move +2 in the X direction and -6 in the Y. Moving along the Z axis cannot aid
+you here.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">length_of_delta</span> <span class="n">delta</span>
+  <span class="n">delta</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">delta</span> <span class="k">if</span> <span class="n">delta</span><span class="p">.</span><span class="nf">all?</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">}</span>
+  <span class="n">delta</span><span class="p">.</span><span class="nf">all?</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">}</span> <span class="p">?</span> <span class="n">delta</span><span class="p">.</span><span class="nf">max</span> <span class="p">:</span> <span class="n">delta</span><span class="p">.</span><span class="nf">max</span> <span class="o">-</span> <span class="n">delta</span><span class="p">.</span><span class="nf">min</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">distance_between</span> <span class="n">num1</span><span class="p">,</span> <span class="n">num2</span>
+  <span class="n">delta</span> <span class="o">=</span> <span class="n">num_to_coords</span><span class="p">(</span><span class="n">num1</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_to_coords</span><span class="p">(</span><span class="n">num2</span><span class="p">)</span>
+  <span class="n">length_of_delta</span> <span class="n">delta</span>
+<span class="k">end</span>
+
+<span class="n">num1</span> <span class="o">=</span> <span class="no">ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">to_i</span>
+<span class="n">num2</span> <span class="o">=</span> <span class="no">ARGV</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">to_i</span>
+<span class="nb">puts</span> <span class="s2">"distance between </span><span class="si">#{</span><span class="n">num1</span><span class="si">}</span><span class="s2"> and </span><span class="si">#{</span><span class="n">num2</span><span class="si">}</span><span class="s2"> is </span><span class="si">#{</span><span class="n">distance_between</span> <span class="n">num1</span><span class="p">,</span> <span class="n">num2</span><span class="si">}</span><span class="s2">"</span></code></pre></figure>
+
+<p>And viola, a constant-time algorithm that works fine at 10 billion nodes:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">~/misc/affirm <span class="nv">$ </span><span class="nb">time </span>ruby honeycomb.rb 1 100
+distance between 1 and 100 is 6
+
+real  0m0.030s
+user  0m0.023s
+sys 0m0.005s
+~/misc/affirm <span class="nv">$ </span><span class="nb">time </span>ruby honeycomb.rb 1 10000000000
+distance between 1 and 10000000000 is 57735
+
+real  0m0.030s
+user  0m0.024s
+sys 0m0.005s</code></pre></figure>
+
+<h3 id="extra-credit">Extra Credit</h3>
+
+<p>Solving for distance was nice, but honestly a bit anticlimactic. Wouldn’t it be
+more impressive if we could actually output the number of each hexagon on the
+way to our destination?</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">path_between</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span>
+  <span class="n">delta</span> <span class="o">=</span> <span class="n">pos1</span> <span class="o">-</span> <span class="n">pos2</span>
+
+  <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">while</span> <span class="n">delta</span> <span class="o">!=</span> <span class="no">Vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">path</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">pos2</span> <span class="o">+</span> <span class="n">delta</span><span class="p">)</span>
+
+    <span class="n">move</span> <span class="o">=</span> <span class="k">if</span> <span class="n">delta</span><span class="p">.</span><span class="nf">all?</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">}</span>
+      <span class="no">Vector</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">elsif</span> <span class="n">delta</span><span class="p">.</span><span class="nf">all?</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">}</span>
+      <span class="no">Vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elsif</span> <span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span>
+      <span class="no">Vector</span><span class="p">[</span><span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span>
+      <span class="no">Vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">delta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">end</span>
+
+    <span class="n">delta</span> <span class="o">+=</span> <span class="n">move</span>
+  <span class="k">end</span>
+
+  <span class="n">path</span><span class="p">.</span><span class="nf">push</span> <span class="n">pos2</span>
+
+  <span class="n">path</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This function constructs a path of coordinates from pos1 to pos2, by attempting
+to move one hex at a time, favoring the Z axis where possible and otherwise just
+moving down the X or Y axes if there exists a remaining delta on either axis.</p>
+
+<p>However, we still only have a path in coordinates. To get back to hexagon
+numbers, we need a translation function. This article is getting a bit long, so
+I’ll just leave it here as an exercise for the reader to puzzle out:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">coords_to_num</span> <span class="n">pos</span>
+  <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="no">Vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+  <span class="n">ring</span> <span class="o">=</span> <span class="p">[</span><span class="n">pos</span><span class="p">.</span><span class="nf">max</span> <span class="o">-</span> <span class="n">pos</span><span class="p">.</span><span class="nf">min</span> <span class="p">:</span> <span class="n">pos</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:abs</span><span class="p">).</span><span class="nf">max</span><span class="p">].</span><span class="nf">max</span>
+
+  <span class="n">side</span> <span class="o">=</span> <span class="k">if</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ring</span> <span class="k">then</span> <span class="mi">2</span>
+    <span class="k">elsif</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="n">ring</span> <span class="k">then</span> <span class="mi">5</span>
+    <span class="k">elsif</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">ring</span> <span class="k">then</span> <span class="mi">1</span>
+    <span class="k">elsif</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="n">ring</span> <span class="k">then</span> <span class="mi">4</span>
+    <span class="k">elsif</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">then</span> <span class="mi">3</span>
+    <span class="k">else</span> <span class="mi">0</span>
+  <span class="k">end</span>
+
+  <span class="n">max_num</span> <span class="o">=</span> <span class="n">ring_to_max_num</span> <span class="n">ring</span>
+  <span class="n">corner</span> <span class="o">=</span> <span class="no">UNIT_HEXAGON</span><span class="p">[</span><span class="n">side</span><span class="p">]</span> <span class="o">*</span> <span class="n">ring</span>
+  <span class="n">offset</span> <span class="o">=</span> <span class="n">side</span> <span class="o">*</span> <span class="n">ring</span> <span class="o">+</span> <span class="n">length_of_delta</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">corner</span><span class="p">)</span>
+  <span class="n">offset</span> <span class="o">==</span> <span class="n">ring</span> <span class="o">*</span> <span class="mi">6</span> <span class="p">?</span> <span class="n">max_num</span> <span class="p">:</span> <span class="n">max_num</span> <span class="o">-</span> <span class="n">offset</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Bring all the pieces together and you get…</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">~/misc/affirm <span class="nv">$ </span>ruby ../misc/affirm/honeycomb.rb 1 100
+distance between 1 and 100 is 6
+path is <span class="o">[</span>1, 2, 9, 22, 42, 68, 100]</code></pre></figure>
+
+<p>Magic! The runtime here is $O(\sqrt{n})$, because the path-finding algorithm is
+linear on the length of the path, and the path can only be as long as the square
+root of the largest hexagon number on the path. Recall that the ring of a
+hexagon number is a function of the square root of that number.</p>
+
+<p>Thanks for the fun times, Levchin and co.</p>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    messageStyle: 'none',
+    tex2jax: {
+     inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2013/02/17/the-riders-and-hunters-of-men/">
+        The Riders and Hunters of Men
+      </a>
+    </h1>
+
+    <time datetime="2013-02-17T00:00:00+00:00" class="post-date">17 Feb 2013</time>
+
+    <p>Posit that humans are just the reproductive organs of ideas, and our minds
+little more than churning pools of interchanging notions. In short, standard
+<a href="http://en.wikipedia.org/wiki/Meme">meme theory</a>. We might be hosts whose carefully formulated egos are nothing
+more than the emergent terrain of an ancient memetic battleground - one imagines
+long wars between the myriad incarnations of fear and laziness for control of
+our weary brains. The memes with the most dominant survival characteristics must
+have long since evolved - likely candidates being caution, hope, and solidarity.
+In this paradigm, the most prolific ideas are the hardiest survivors of
+thousands of years of crossbreeding, their properties now the building blocks of
+more complicated and fragile abstractions like justice, ambition, and
+melancholy. The simplest ideas might occupy the lowest and most important rungs
+of an intellectual ecosystem, akin to our humble meat-space phytoplankton.</p>
+
+<p>However, how do ideas like self-destruction and asocialism breed, if their
+character makes their owners shun reproducing? The answer may lie in the non-
+intuitive fact that the reproduction of ideas need not be necessarily coupled
+with the reproduction of humans. Have you found yourself slighted when cut off
+on the highway, and thus spurred to cut another off in the same way? Some ideas
+may predispose their hosts towards not mating, and yet be potent enough to
+spread from individual to individual. Biologists have even identified similar
+processes in the field, where individual bacteria swap genetic material without
+reproducing. They call this act <a href="http://en.wikipedia.org/wiki/Horizontal_gene_transfer">Horizontal Gene Transfer</a>, and it may be a
+more widely applicable concept than they know.</p>
+
+<p>More broadly, the reproduction criteria for a meme have little to do with the
+host at all, beyond causing the host to express behaviors that cause others to
+adopt that same meme. In Biology, in order for a lethal virus to survive, it
+must assure that its genetic code is passed on before it destroys its host. This
+seemingly ironclad Darwinian rule of the natural world need not apply to the
+spread of ideas. Consider again that for ideas to be exchanged, humans do not
+even have to meet face to face, or even be alive simultaneously. How many
+suicides were born decades before they occurred, spread posthumously by another
+carrier, like an oak desperately dropping acorns in the death throes of a fire.
+The striking tragedy of a suicide is more than just sadness, but the idea’s
+resilience in the minds of its witnesses. The kernel of the idea sits idly for
+years in the intellectual field of a man’s mind until the fire of anger or
+loneliness causes the undergrowth to clear enough for the seed of suicide to
+sprout. Perhaps I erred, then, in suggesting that the most popular memes are
+hardier than their less successful cousins.</p>
+
+<p>What is the nature of our relationship with ideas? In some cases it seems
+parasitic, especially with self-destructive ideas. The will to self-destruct
+manifests itself at great personal cost to its host. Other ideas seem symbiotic,
+like tribalism and love. Through expressing themselves in us, these ideas not
+only heighten their own odds at survival, but bring us happiness and safety as
+well. Still others seem hard to classify, like asceticism and other highly
+abstract pursuits. It seems evident that humans and ideas need each other to
+survive, but beyond that, their relationship is murky.</p>
+
+<p>Perhaps the binary of parasitism and symbiosis is unhelpful. What if ideas owe
+each other more allegiance than they owe us, and vice versa? We readily accept
+the notion that the wolves who prey on the slowest of deer place a selection
+pressure on the herd for speed. Might not some ideas prey on the most
+susceptible of humans to ensure the fitness of the rest for peaceful occupation
+by their memetic brethren? In that same vein, it could be said that humans
+choose which ideas to pollinate, optimizing for ideas that appeal to ourselves
+the most.</p>
+
+<p>Ideas cooperating to produce a fitter human herd seems pat, but could the truth
+be darker? What if our mostly Darwinian universe decreed that there must be
+wolves to cull the weak human symbiotes and untenable ideas equally from the
+herds of both humans and ideas. These wolves scent out their human prey, the
+infirm harborers of unfit ideas, and stalk them until they fall. The complete
+destruction of their prey has a threefold result: the thinning of the least fit
+humans, the purging of divergent ideas remaining in those hosts, and the birth
+of an ever so slightly deadlier predator from the wreckage of its victim.</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2012/08/15/the-api-for-googles-most-valuable-resource-sucks/">
+        The API for Google's most valuable resource sucks
+      </a>
+    </h1>
+
+    <time datetime="2012-08-15T00:00:00+00:00" class="post-date">15 Aug 2012</time>
+
+    <blockquote>
+  <p>Disclosure: I recently worked for Google for about a year. It was alright.</p>
+</blockquote>
+
+<p>Recently, Vic Gundotra of Google+ fame made a bold statement. He
+<a href="https://plus.google.com/107117483540235115863/posts/EstNjiL2uon">proclaimed</a>
+that the lack of write API access to Google+ is born not out of lack of
+foresight, planning, or even bandwidth, but out of trepidation, caution, and the
+desire to do right by developers.</p>
+
+<p>This is raw, barely-refined bullshit and I regret not being able to respond to
+the thread with a pithier snarky comment. The truth is simpler: Google is
+full-stop terrible at APIs.</p>
+
+<p><img src="http://farm9.staticflickr.com/8440/7784924826_01c136c801.jpg" alt="Vic Gundotra" title="Vic Gundotra, ladies and gentlemen" /></p>
+<h4 id="dont-look-at-me-it-says-so-right-there">Don’t look at me, it says so right there</h4>
+
+<p>As a case study, let’s examine what I had to do in order to use the most
+powerful collection of user-generated content that Google makes available to
+developers: a user’s <a href="https://developers.google.com/google-apps/contacts/v3/">email contact list</a>. People who work for consumer-
+facing web companies probably know how deeply important having a user’s email
+address is for marketing. Despite being invented before I was born, email has
+yet to be outmoded as the most effective way to push content to users on demand.</p>
+
+<h3 id="the-feature">The feature</h3>
+
+<p>Recently here at <a href="https://www.everlane.com/about">Everlane</a>, we thought it might be a good idea to have a
+button a user could hit to view a list of their Gmail contacts with portraits,
+select some of them, and then have us send those users an invitation email.
+Simple, obvious stuff to want to do, right?</p>
+
+<p><img src="http://farm9.staticflickr.com/8293/7784680274_968248f0fb_z.jpg" alt="import screen 1" /></p>
+
+<p><img src="http://farm9.staticflickr.com/8437/7785016330_cf1cf02710_z.jpg" alt="import screen 2" /></p>
+<h4 id="what-we-want-to-implement">What we want to implement</h4>
+
+<p>Well, let’s hit the <a href="https://developers.google.com/google-apps/contacts/v3/index#getting_started">getting started page</a> of the contacts API documentation.
+Reading closely seems to reveal that there might already be a library for doing
+what we want, which is really nothing more than getting a bunch of names, faces,
+and emails. Those geniuses at Google <em>have</em> to have something already made for
+this, right? We head over to the <a href="https://developers.google.com/google-apps/tasks/downloads">libraries and samples page</a>. Cool, a
+<a href="http://code.google.com/p/google-api-javascript-client/">Javascript library</a>! This could be easy! <em>Nope</em>, they seem to support every
+Google API but Contacts. The Google+ read API doesn’t seem to have a good way to
+grab emails, either.</p>
+
+<p>That’s fine – we’re pretty decent engineers and can call the Contacts API on
+our own. We register our application with the <a href="https://code.google.com/apis/console#access">API Console</a> and start reading
+about OAuth. Google provides a <a href="https://developers.google.com/accounts/docs/OAuth2#scenarios">few authorization schemes</a>. We probably want
+the one titled “<a href="https://developers.google.com/accounts/docs/OAuth2UserAgent">Client-side Applications</a>”, which saves us the complexity of
+an application server having to be aware of any sensitive information.</p>
+
+<h3 id="api-woes">API woes</h3>
+
+<p>Now we can finally ask the Contacts API for a list of contacts! Easy enough,
+right? We’ll just do a JSONP request to get around the cross-domain
+restrictions.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">authParams</span> <span class="o">=</span> <span class="p">{</span> <span class="na">access_token</span><span class="p">:</span> <span class="p">...,</span> <span class="na">token_type</span><span class="p">:</span> <span class="p">...</span> <span class="p">};</span> <span class="c1">// from Google oAuth</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">url</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://www.google.com/m8/feeds/contacts/default/full</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">dataType</span><span class="p">:</span> <span class="dl">'</span><span class="s1">jsonp</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="nx">authParams</span><span class="p">,</span>
+  <span class="na">success</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>What does this give us? To our slow and creeping horror, we get back something
+like this for every contact:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;entry</span> <span class="na">gd:etag=</span><span class="s">'&amp;quot;QHc_fDVSLit7I2A9WhJXFUkDQQ0.&amp;quot;'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;id&gt;</span>http://www.google.com/m8/feeds/contacts/your%40gmail.com/base/13659b580fe5686d<span class="nt">&lt;/id&gt;</span>
+  <span class="nt">&lt;updated&gt;</span>2012-08-09T22:01:31.944Z<span class="nt">&lt;/updated&gt;</span>
+  <span class="nt">&lt;app:edited</span> <span class="na">xmlns:app=</span><span class="s">'http://www.w3.org/2007/app'</span><span class="nt">&gt;</span>2012-08-09T22:01:31.944Z<span class="nt">&lt;/app:edited&gt;</span>
+  <span class="nt">&lt;category</span> <span class="na">scheme=</span><span class="s">'http://schemas.google.com/g/2005#kind'</span> <span class="na">term=</span><span class="s">'http://schemas.google.com/contact/2008#contact'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;title&gt;</span>Diane Duane<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;link</span>
+    <span class="na">rel=</span><span class="s">'http://schemas.google.com/contacts/2008/rel#photo'</span>
+    <span class="na">type=</span><span class="s">'image/*'</span>
+    <span class="na">href=</span><span class="s">'https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0'</span>
+    <span class="na">gd:etag=</span><span class="s">'&amp;quot;UWlBIlclWit7I2A9AFQKRg9YFXoHL0oQSQA.&amp;quot;'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;link</span>
+    <span class="na">rel=</span><span class="s">'self'</span>
+    <span class="na">type=</span><span class="s">'application/atom+xml'</span>
+    <span class="na">href=</span><span class="s">'https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;link</span>
+    <span class="na">rel=</span><span class="s">'edit'</span>
+    <span class="na">type=</span><span class="s">'application/atom+xml'</span>
+    <span class="na">href=</span><span class="s">'https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;gd:name&gt;</span>
+    <span class="nt">&lt;gd:fullName&gt;</span>Diane Duane<span class="nt">&lt;/gd:fullName&gt;</span>
+    <span class="nt">&lt;gd:givenName&gt;</span>Diane<span class="nt">&lt;/gd:givenName&gt;</span>
+    <span class="nt">&lt;gd:familyName&gt;</span>Duane<span class="nt">&lt;/gd:familyName&gt;</span>
+  <span class="nt">&lt;/gd:name&gt;</span>
+  <span class="nt">&lt;gd:email</span>
+    <span class="na">rel=</span><span class="s">'http://schemas.google.com/g/2005#other'</span>
+    <span class="na">address=</span><span class="s">'diane.duane@gmail.com'</span>
+    <span class="na">primary=</span><span class="s">'true'</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/entry&gt;</span></code></pre></figure>
+
+<p>You take several deep breaths. You ignore the fact that you are fetching roughly
+1kb of data per contact (out of potentially thousands) to get a name, an email,
+and the URL of an image. “Okay”, you think to yourself, “this is still
+salvageable. I can parse XML on the client. In fact, jQuery can probably do it
+for me.” You take a quick stab at grabbing names and emails.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">success</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">xml</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">parseXML</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nx">xml</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">entry</span><span class="dl">'</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">entry</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">name</span>  <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">title</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">email</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">address</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>A quick browser test shows that this only appears to work in Chrome. A bit more
+digging turns up, to your chagrin, that jQuery has trouble finding namespaced
+elements like “<gd:email>" in XML documents on different browsers. You Google
+around and find a fix:</gd:email></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">email, gd</span><span class="se">\\</span><span class="s1">:email</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">address</span><span class="dl">'</span><span class="p">);</span></code></pre></figure>
+
+<p>For now, you ignore <a href="http://www.steveworkman.com/html5-2/javascript/2011/improving-javascript-xml-node-finding-performance-by-2000/">how inefficient this is</a>, hoping merely to reach
+functionality. It works! Now you want to add images. It looks like one of the
+link elements under &lt;entry&gt; appears to point to an image for that contact. You
+fiddle around on the console:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">)</span>
+<span class="c1">// =&gt; https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0</span></code></pre></figure>
+
+<p>Attempting to load this in your browser gives you a 401. Taking a look a the
+<a href="https://developers.google.com/google-apps/contacts/v3/index#retrieving_a_contacts_photo">photo management section of the docs</a> seems to suggest you need to
+additionally apply auth credentials to this url. You amend your code:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">href</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">imageUrl</span> <span class="o">=</span> <span class="nx">href</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="nx">authParams</span><span class="p">);</span></code></pre></figure>
+
+<p>This seems to produce a real photo in your browser. Success! Let’s extrapolate:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="nx">xml</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">entry</span><span class="dl">'</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">entry</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">href</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">imageUrl</span> <span class="o">=</span> <span class="nx">href</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="nx">authParams</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">body</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;img src="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">imageUrl</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" /&gt;</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">});</span></code></pre></figure>
+
+<h3 id="image-contortions">Image contortions</h3>
+
+<p>Unfortunately, only a few images load. What’s going on? You squint at the docs
+more closely.</p>
+
+<blockquote>
+  <p>Note: If a contact does not have a photo, then the photo link element has no
+gd:etag attribute.</p>
+</blockquote>
+
+<p>Great, so some image links have a magic attribute on them that says they’re real
+images. You wonder why Google even bothers returning image links for photos that
+don’t exist. You try something like the following:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"][gd</span><span class="se">\\</span><span class="s1">:etag]</span><span class="dl">'</span><span class="p">)</span> <span class="c1">// or even</span>
+<span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"][gd:etag]</span><span class="dl">'</span><span class="p">)</span> <span class="c1">// nope? how about</span>
+<span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"][etag]</span><span class="dl">'</span><span class="p">)</span></code></pre></figure>
+
+<p>But no, jQuery can’t deal with namespaced attribute selection, at all, so you
+arrive at:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"]</span><span class="dl">'</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">entry</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">gd:etag</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">imageUrl</span> <span class="o">=</span> <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">)</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="nx">authParams</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">body</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&amp;lt;img src="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">imageUrl</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" /&amp;gt;</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This time, a few more photos load, but then they stop coming. The console shows
+a few successful image loads, but most of the requests for images returned with
+<strong>503 (Service Unavailable)</strong> errors. You realize, after an hour or so, that
+each image load is being counted as an API call against you, and that there must
+be some rate limiting in place.</p>
+
+<p>Naturally, this fact is completely undocumented. Playing around with the
+code, you find that Google doesn’t like it if you have more than one in-flight
+API request at a time. You come up with essentially the opposite of an image
+preloader to stagger image loading:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">imageUrls</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">https://...</span><span class="dl">'</span><span class="p">,</span> <span class="p">...];</span>
+<span class="kd">function</span> <span class="nx">staggerImages</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">index</span> <span class="o">==</span> <span class="nx">imageUrls</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+  <span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Load the next image 100ms after this one finishes loading</span>
+      <span class="nx">staggerImages</span><span class="p">(</span><span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">imageUrls</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">body</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">staggerImages</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span></code></pre></figure>
+
+<p>Whew, that was fun, right? At this point it seems like a good idea to try to
+sort contacts by some sort of relevance metric. Unfortunately, the Contacts API
+doesn’t support this at all. Oh well. You give up, having reached something
+approximating your original goals.</p>
+
+<h3 id="what-have-we-learned">What have we learned?</h3>
+
+<ul>
+  <li>Google doesn’t get JSON.</li>
+  <li>Google can’t design clean APIs or document them well.</li>
+  <li>Despite their browser-first mantra, Google doesn’t put out first-party
+Javascript libraries for the browser.</li>
+  <li>Vic Gundotra is <em>soooooo</em> lying.</li>
+</ul>
+
+<p>Developers waiting for Google+ to deliver on its full, API-wonderland potential:
+you should probably just give up. What are the odds that this whole time,
+they’ve been cooking up the perfect write API, replete with features, libraries,
+and documentation? I’m betting that they’re doing exactly what I did when I
+worked for Google: <em>absolutely nothing of importance</em>.</p>
+
+<blockquote>
+  <p>Lastly, we’re always on the lookout for talented developers who are interested
+in the fashion space here at <a href="https://www.everlane.com/about">Everlane</a>. You don’t need to own more than one
+pair of shoes. My love of fashion is born of William Gibson novels and is almost
+entirely academic. If you’re interested, check out our <a href="https://www.everlane.com/jobs">jobs page</a> or send
+me an email at <a href="mailto:me@vincentwoo.com">me@vincentwoo.com</a>.</p>
+</blockquote>
+
+<blockquote>
+  <p>P.S. Yes, I am aware there is an older <a href="http://code.google.com/p/gdata-javascript-client/">gdata library</a> that can
+potentially handle contacts. I might have used it if it wasn’t deprecated or
+Google had made any mention of it whatsoever on their Contacts API page.</p>
+</blockquote>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2012/07/25/3d-music-visualization/">
+        3D Music Visualization
+      </a>
+    </h1>
+
+    <time datetime="2012-07-25T00:00:00+00:00" class="post-date">25 Jul 2012</time>
+
+    <iframe title="YouTube video player" class="youtube-player" width="640" height="390" src="https://www.youtube.com/embed/JzczKjcOyIs?rel=0">
+</iframe>
+
+<p>I made this visualization of a
+<a href="https://www.youtube.com/watch?v=fjZOL4C0oVo">violin and piano performance</a>
+a year or so ago in Adobe After Effects and then promptly forgot about it.</p>
+
+<p>It was inspired by this <a href="http://vimeo.com/6284199">very similar and honestly much better video</a>.
+I think I’ll play with attempting to get actually separate instrument tracks
+instead of trying to muddle with frequency filters to try to split them.</p>
+
+
+  </article>
+  
+</div>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/page/4">Older</a>
+  
+  
+    <a class="pagination-item newer" href="/page/2">Newer</a>
+  
+</div>
+
+    </div>
+
+  </body>
+</html>

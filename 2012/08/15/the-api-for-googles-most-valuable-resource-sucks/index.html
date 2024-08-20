@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     The API for Google's most valuable resource sucks
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">The API for Google's most valuable resource sucks</h1>
+  <span class="post-date">15 Aug 2012</span>
+  <blockquote>
+  <p>Disclosure: I recently worked for Google for about a year. It was alright.</p>
+</blockquote>
+
+<p>Recently, Vic Gundotra of Google+ fame made a bold statement. He
+<a href="https://plus.google.com/107117483540235115863/posts/EstNjiL2uon">proclaimed</a>
+that the lack of write API access to Google+ is born not out of lack of
+foresight, planning, or even bandwidth, but out of trepidation, caution, and the
+desire to do right by developers.</p>
+
+<p>This is raw, barely-refined bullshit and I regret not being able to respond to
+the thread with a pithier snarky comment. The truth is simpler: Google is
+full-stop terrible at APIs.</p>
+
+<p><img src="http://farm9.staticflickr.com/8440/7784924826_01c136c801.jpg" alt="Vic Gundotra" title="Vic Gundotra, ladies and gentlemen" /></p>
+<h4 id="dont-look-at-me-it-says-so-right-there">Don’t look at me, it says so right there</h4>
+
+<p>As a case study, let’s examine what I had to do in order to use the most
+powerful collection of user-generated content that Google makes available to
+developers: a user’s <a href="https://developers.google.com/google-apps/contacts/v3/">email contact list</a>. People who work for consumer-
+facing web companies probably know how deeply important having a user’s email
+address is for marketing. Despite being invented before I was born, email has
+yet to be outmoded as the most effective way to push content to users on demand.</p>
+
+<h3 id="the-feature">The feature</h3>
+
+<p>Recently here at <a href="https://www.everlane.com/about">Everlane</a>, we thought it might be a good idea to have a
+button a user could hit to view a list of their Gmail contacts with portraits,
+select some of them, and then have us send those users an invitation email.
+Simple, obvious stuff to want to do, right?</p>
+
+<p><img src="http://farm9.staticflickr.com/8293/7784680274_968248f0fb_z.jpg" alt="import screen 1" /></p>
+
+<p><img src="http://farm9.staticflickr.com/8437/7785016330_cf1cf02710_z.jpg" alt="import screen 2" /></p>
+<h4 id="what-we-want-to-implement">What we want to implement</h4>
+
+<p>Well, let’s hit the <a href="https://developers.google.com/google-apps/contacts/v3/index#getting_started">getting started page</a> of the contacts API documentation.
+Reading closely seems to reveal that there might already be a library for doing
+what we want, which is really nothing more than getting a bunch of names, faces,
+and emails. Those geniuses at Google <em>have</em> to have something already made for
+this, right? We head over to the <a href="https://developers.google.com/google-apps/tasks/downloads">libraries and samples page</a>. Cool, a
+<a href="http://code.google.com/p/google-api-javascript-client/">Javascript library</a>! This could be easy! <em>Nope</em>, they seem to support every
+Google API but Contacts. The Google+ read API doesn’t seem to have a good way to
+grab emails, either.</p>
+
+<p>That’s fine – we’re pretty decent engineers and can call the Contacts API on
+our own. We register our application with the <a href="https://code.google.com/apis/console#access">API Console</a> and start reading
+about OAuth. Google provides a <a href="https://developers.google.com/accounts/docs/OAuth2#scenarios">few authorization schemes</a>. We probably want
+the one titled “<a href="https://developers.google.com/accounts/docs/OAuth2UserAgent">Client-side Applications</a>”, which saves us the complexity of
+an application server having to be aware of any sensitive information.</p>
+
+<h3 id="api-woes">API woes</h3>
+
+<p>Now we can finally ask the Contacts API for a list of contacts! Easy enough,
+right? We’ll just do a JSONP request to get around the cross-domain
+restrictions.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">authParams</span> <span class="o">=</span> <span class="p">{</span> <span class="na">access_token</span><span class="p">:</span> <span class="p">...,</span> <span class="na">token_type</span><span class="p">:</span> <span class="p">...</span> <span class="p">};</span> <span class="c1">// from Google oAuth</span>
+
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+  <span class="na">url</span><span class="p">:</span> <span class="dl">'</span><span class="s1">https://www.google.com/m8/feeds/contacts/default/full</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">dataType</span><span class="p">:</span> <span class="dl">'</span><span class="s1">jsonp</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">data</span><span class="p">:</span> <span class="nx">authParams</span><span class="p">,</span>
+  <span class="na">success</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>What does this give us? To our slow and creeping horror, we get back something
+like this for every contact:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;entry</span> <span class="na">gd:etag=</span><span class="s">'&amp;quot;QHc_fDVSLit7I2A9WhJXFUkDQQ0.&amp;quot;'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;id&gt;</span>http://www.google.com/m8/feeds/contacts/your%40gmail.com/base/13659b580fe5686d<span class="nt">&lt;/id&gt;</span>
+  <span class="nt">&lt;updated&gt;</span>2012-08-09T22:01:31.944Z<span class="nt">&lt;/updated&gt;</span>
+  <span class="nt">&lt;app:edited</span> <span class="na">xmlns:app=</span><span class="s">'http://www.w3.org/2007/app'</span><span class="nt">&gt;</span>2012-08-09T22:01:31.944Z<span class="nt">&lt;/app:edited&gt;</span>
+  <span class="nt">&lt;category</span> <span class="na">scheme=</span><span class="s">'http://schemas.google.com/g/2005#kind'</span> <span class="na">term=</span><span class="s">'http://schemas.google.com/contact/2008#contact'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;title&gt;</span>Diane Duane<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;link</span>
+    <span class="na">rel=</span><span class="s">'http://schemas.google.com/contacts/2008/rel#photo'</span>
+    <span class="na">type=</span><span class="s">'image/*'</span>
+    <span class="na">href=</span><span class="s">'https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0'</span>
+    <span class="na">gd:etag=</span><span class="s">'&amp;quot;UWlBIlclWit7I2A9AFQKRg9YFXoHL0oQSQA.&amp;quot;'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;link</span>
+    <span class="na">rel=</span><span class="s">'self'</span>
+    <span class="na">type=</span><span class="s">'application/atom+xml'</span>
+    <span class="na">href=</span><span class="s">'https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;link</span>
+    <span class="na">rel=</span><span class="s">'edit'</span>
+    <span class="na">type=</span><span class="s">'application/atom+xml'</span>
+    <span class="na">href=</span><span class="s">'https://www.google.com/m8/feeds/contacts/your%40gmail.com/full/13659b580fe5686d?v=3.0'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;gd:name&gt;</span>
+    <span class="nt">&lt;gd:fullName&gt;</span>Diane Duane<span class="nt">&lt;/gd:fullName&gt;</span>
+    <span class="nt">&lt;gd:givenName&gt;</span>Diane<span class="nt">&lt;/gd:givenName&gt;</span>
+    <span class="nt">&lt;gd:familyName&gt;</span>Duane<span class="nt">&lt;/gd:familyName&gt;</span>
+  <span class="nt">&lt;/gd:name&gt;</span>
+  <span class="nt">&lt;gd:email</span>
+    <span class="na">rel=</span><span class="s">'http://schemas.google.com/g/2005#other'</span>
+    <span class="na">address=</span><span class="s">'diane.duane@gmail.com'</span>
+    <span class="na">primary=</span><span class="s">'true'</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/entry&gt;</span></code></pre></figure>
+
+<p>You take several deep breaths. You ignore the fact that you are fetching roughly
+1kb of data per contact (out of potentially thousands) to get a name, an email,
+and the URL of an image. “Okay”, you think to yourself, “this is still
+salvageable. I can parse XML on the client. In fact, jQuery can probably do it
+for me.” You take a quick stab at grabbing names and emails.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">success</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">xml</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">parseXML</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nx">xml</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">entry</span><span class="dl">'</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">entry</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">name</span>  <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">title</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">email</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">address</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>A quick browser test shows that this only appears to work in Chrome. A bit more
+digging turns up, to your chagrin, that jQuery has trouble finding namespaced
+elements like “<gd:email>" in XML documents on different browsers. You Google
+around and find a fix:</gd:email></p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">email, gd</span><span class="se">\\</span><span class="s1">:email</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">address</span><span class="dl">'</span><span class="p">);</span></code></pre></figure>
+
+<p>For now, you ignore <a href="http://www.steveworkman.com/html5-2/javascript/2011/improving-javascript-xml-node-finding-performance-by-2000/">how inefficient this is</a>, hoping merely to reach
+functionality. It works! Now you want to add images. It looks like one of the
+link elements under &lt;entry&gt; appears to point to an image for that contact. You
+fiddle around on the console:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">)</span>
+<span class="c1">// =&gt; https://www.google.com/m8/feeds/photos/media/your%40gmail.com/13659b580fe5686d?v=3.0</span></code></pre></figure>
+
+<p>Attempting to load this in your browser gives you a 401. Taking a look a the
+<a href="https://developers.google.com/google-apps/contacts/v3/index#retrieving_a_contacts_photo">photo management section of the docs</a> seems to suggest you need to
+additionally apply auth credentials to this url. You amend your code:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">href</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">imageUrl</span> <span class="o">=</span> <span class="nx">href</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="nx">authParams</span><span class="p">);</span></code></pre></figure>
+
+<p>This seems to produce a real photo in your browser. Success! Let’s extrapolate:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="nx">xml</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">entry</span><span class="dl">'</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">entry</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">href</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">imageUrl</span> <span class="o">=</span> <span class="nx">href</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="nx">authParams</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">body</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;img src="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">imageUrl</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" /&gt;</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">});</span></code></pre></figure>
+
+<h3 id="image-contortions">Image contortions</h3>
+
+<p>Unfortunately, only a few images load. What’s going on? You squint at the docs
+more closely.</p>
+
+<blockquote>
+  <p>Note: If a contact does not have a photo, then the photo link element has no
+gd:etag attribute.</p>
+</blockquote>
+
+<p>Great, so some image links have a magic attribute on them that says they’re real
+images. You wonder why Google even bothers returning image links for photos that
+don’t exist. You try something like the following:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"][gd</span><span class="se">\\</span><span class="s1">:etag]</span><span class="dl">'</span><span class="p">)</span> <span class="c1">// or even</span>
+<span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"][gd:etag]</span><span class="dl">'</span><span class="p">)</span> <span class="c1">// nope? how about</span>
+<span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"][etag]</span><span class="dl">'</span><span class="p">)</span></code></pre></figure>
+
+<p>But no, jQuery can’t deal with namespaced attribute selection, at all, so you
+arrive at:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">link[type="image/*"]</span><span class="dl">'</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">entry</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">gd:etag</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">imageUrl</span> <span class="o">=</span> <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">)</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="nx">authParams</span><span class="p">);</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">body</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&amp;lt;img src="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">imageUrl</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" /&amp;gt;</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This time, a few more photos load, but then they stop coming. The console shows
+a few successful image loads, but most of the requests for images returned with
+<strong>503 (Service Unavailable)</strong> errors. You realize, after an hour or so, that
+each image load is being counted as an API call against you, and that there must
+be some rate limiting in place.</p>
+
+<p>Naturally, this fact is completely undocumented. Playing around with the
+code, you find that Google doesn’t like it if you have more than one in-flight
+API request at a time. You come up with essentially the opposite of an image
+preloader to stagger image loading:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">imageUrls</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">https://...</span><span class="dl">'</span><span class="p">,</span> <span class="p">...];</span>
+<span class="kd">function</span> <span class="nx">staggerImages</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">index</span> <span class="o">==</span> <span class="nx">imageUrls</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+  <span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Load the next image 100ms after this one finishes loading</span>
+      <span class="nx">staggerImages</span><span class="p">(</span><span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">imageUrls</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+  <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">body</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">staggerImages</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span></code></pre></figure>
+
+<p>Whew, that was fun, right? At this point it seems like a good idea to try to
+sort contacts by some sort of relevance metric. Unfortunately, the Contacts API
+doesn’t support this at all. Oh well. You give up, having reached something
+approximating your original goals.</p>
+
+<h3 id="what-have-we-learned">What have we learned?</h3>
+
+<ul>
+  <li>Google doesn’t get JSON.</li>
+  <li>Google can’t design clean APIs or document them well.</li>
+  <li>Despite their browser-first mantra, Google doesn’t put out first-party
+Javascript libraries for the browser.</li>
+  <li>Vic Gundotra is <em>soooooo</em> lying.</li>
+</ul>
+
+<p>Developers waiting for Google+ to deliver on its full, API-wonderland potential:
+you should probably just give up. What are the odds that this whole time,
+they’ve been cooking up the perfect write API, replete with features, libraries,
+and documentation? I’m betting that they’re doing exactly what I did when I
+worked for Google: <em>absolutely nothing of importance</em>.</p>
+
+<blockquote>
+  <p>Lastly, we’re always on the lookout for talented developers who are interested
+in the fashion space here at <a href="https://www.everlane.com/about">Everlane</a>. You don’t need to own more than one
+pair of shoes. My love of fashion is born of William Gibson novels and is almost
+entirely academic. If you’re interested, check out our <a href="https://www.everlane.com/jobs">jobs page</a> or send
+me an email at <a href="mailto:me@vincentwoo.com">me@vincentwoo.com</a>.</p>
+</blockquote>
+
+<blockquote>
+  <p>P.S. Yes, I am aware there is an older <a href="http://code.google.com/p/gdata-javascript-client/">gdata library</a> that can
+potentially handle contacts. I might have used it if it wasn’t deprecated or
+Google had made any mention of it whatsoever on their Contacts API page.</p>
+</blockquote>
+
+
+</div>
+
+    </div>
+
+  </body>
+</html>
