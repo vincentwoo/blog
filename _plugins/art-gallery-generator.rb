@@ -48,7 +48,7 @@ module Jekyll
 
       self.process(@name)
       gallery_index = File.join(base, "_layouts", "art_gallery_index.html")
-      unless File.exists?(gallery_index)
+      unless File.exist?(gallery_index)
         gallery_index = File.join(File.dirname(__FILE__), "art_gallery_index.html")
       end
       self.read_yaml(File.dirname(gallery_index), File.basename(gallery_index))
@@ -116,7 +116,7 @@ module Jekyll
 
       self.process(@name)
       gallery_page = File.join(base, "_layouts", "art_gallery_page.html")
-      unless File.exists?(gallery_page)
+      unless File.exist?(gallery_page)
         gallery_page = File.join(File.dirname(__FILE__), "art_gallery_page.html")
       end
       self.read_yaml(File.dirname(gallery_page), File.basename(gallery_page))
@@ -199,7 +199,7 @@ module Jekyll
               sf.relative_path == "/" + image_path
             }
             @site.static_files << GalleryFile.new(site, base, dir, image)
-            if File.exists?(link_dest) or File.symlink?(link_dest)
+            if File.exist?(link_dest) or File.symlink?(link_dest)
               if not File.symlink?(link_dest)
                 puts "#{link_dest} exists but is not a symlink. Deleting."
                 File.delete(link_dest)
@@ -208,7 +208,7 @@ module Jekyll
                 File.delete(link_dest)
               end
             end
-            if not File.exists?(link_dest) and not File.symlink?(link_dest)
+            if not File.exist?(link_dest) and not File.symlink?(link_dest)
               File.symlink(link_src, link_dest)
             end
             print "\n"
