@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+     Creating Google Hangouts With Apps via URL
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Creating Google Hangouts With Apps via URL</h1>
+  <span class="post-date">13 Jan 2015</span>
+  <p>If you’ve tried to make a Google Hangouts app, you probably already know that it
+sucks pretty badly. <a href="https://developers.google.com/+/hangouts/getting-started">Famously terrible documentation</a>, crazy bloated
+JavaScript, and <a href="https://developers.google.com/+/hangouts/button#button_sizes">mandated UX requirements</a>. You <em>also</em> might know that you
+can craft a URL to open a new hangout without any of the bloat like so:</p>
+
+<p><code class="language-plaintext highlighter-rouge">https://plus.google.com/hangouts/_</code></p>
+
+<p>But what if you want to make a hangout with your app and set its <code class="language-plaintext highlighter-rouge">app_type</code> to
+<code class="language-plaintext highlighter-rouge">ROOM_APP</code> so that your app is loaded for everyone by default?</p>
+
+<p>Well, some digging on the internet suggests that you can write a URL of the form</p>
+
+<p><code class="language-plaintext highlighter-rouge">.../_/?gid=YOUR_GID&amp;gd=INITIAL_DATA</code></p>
+
+<p>to open a new hangout session with your app loaded and data passed to it.
+Unfortunately, this does not set the <code class="language-plaintext highlighter-rouge">app_type</code> flag specified in Google’s
+<a href="https://developers.google.com/+/hangouts/button#initial_app_parameters">initial app parameters</a> API. The only way to do so at this time appears to
+be Google’s official <code class="language-plaintext highlighter-rouge">platform.js</code> API to render an
+“Official G+ Hangouts Button”.</p>
+
+<p><strong>Fuck that.</strong></p>
+
+<p>There’s a bunch of reasons you might not want to play nice, but before going
+further you should take note of the <a href="https://developers.google.com/+/web/buttons-policy">Google buttons policy</a>. Yes, they have
+an official policy on buttons. It’s a bit murky about whether you are allowed to
+programatically generate links to create Hangouts sessions, but the thrust of
+the policy is mostly about not misleading users and not snooping their data, so
+I assume this is mostly fine.</p>
+
+<h3 id="reverse-engineering-the-hangouts-button">Reverse Engineering the Hangouts Button</h3>
+
+<p>Google’s example for generating a hangouts button via the JS API is:</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js">  <span class="nx">gapi</span><span class="p">.</span><span class="nx">hangout</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="dl">'</span><span class="s1">placeholder-rr</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">render</span><span class="p">:</span> <span class="dl">'</span><span class="s1">createhangout</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">initial_apps</span><span class="p">:</span> <span class="p">[{</span>
+      <span class="na">app_id</span><span class="p">:</span>     <span class="dl">'</span><span class="s1">184219133185</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">start_data</span><span class="p">:</span> <span class="dl">'</span><span class="s1">dQw4w9WgXcQ</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">app_type</span><span class="p">:</span>   <span class="dl">'</span><span class="s1">ROOM_APP</span><span class="dl">'</span>
+    <span class="p">}]</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>which renders a button that, when clicked on, briefly opens a window with this
+URL:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://talkgadget.google.com/hangouts/_/?hl=en&amp;hcb=0&amp;lm1=1421214770979
+&amp;hs=92&amp;hscid=1421214770977081840&amp;ssc=WyIiLDAsbnVsbCxudWxsLG51bGwsW10sbn
+VsbCxudWxsLG51bGwsbnVsbCxudWxsLDkyLG51bGwsbnVsbCxudWxsLFsxNDIxMjE0NzcwO
+Tc5XSxudWxsLG51bGwsW10sbnVsbCwiMTQyMTIxNDc3MDk3NzA4MTg0MCIsbnVsbCxudWxs
+LG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxudWxsLG51bGwsbnVsbCxbXSxudWx
+sLG51bGwsbnVsbCxbXSxudWxsLG51bGwsW1siMTg0MjE5MTMzMTg1IiwiZFF3NHc5V2dYY1
+EiLDJdXV0.
+</code></pre></div></div>
+
+<p>which then redirects to a normal hangouts URL where your app is embedded as a
+full room app. Let’s break apart what’s going on here. The params in that URL
+are:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>param | value
+------|------
+hl    | en
+hcb   | 0
+lm1   | 1421214770979
+hs    | 92
+hscid | 1421214770977081840
+ssc   | WyIiLDAsbnVsbCxudWxsLG51bGwsW10sbnVsbCxudWxsLG51bGwsbnVsbCxudWx
+      | sLDkyLG51bGwsbnVsbCxudWxsLFsxNDIxMjE0NzcwOTc5XSxudWxsLG51bGwsW1
+      | 0sbnVsbCwiMTQyMTIxNDc3MDk3NzA4MTg0MCIsbnVsbCxudWxsLG51bGwsbnVsb
+      | CxudWxsLG51bGwsbnVsbCxbXSxbXSxudWxsLG51bGwsbnVsbCxbXSxudWxsLG51
+      | bGwsbnVsbCxbXSxudWxsLG51bGwsW1siMTg0MjE5MTMzMTg1IiwiZFF3NHc5V2d
+      | YY1EiLDJdXV0.
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">hl</code> seems obviously to be locale, and <code class="language-plaintext highlighter-rouge">lb1</code> and <code class="language-plaintext highlighter-rouge">hscid</code> both seem to be
+timestamp-related. A bit of experimentation proves that everything works as long
+as <code class="language-plaintext highlighter-rouge">ssc</code> is included, so we can drop the rest of the params. But what is <code class="language-plaintext highlighter-rouge">ssc</code>?</p>
+
+<p>It looks suspiciously like a Base 64 encoded blob, so we decode it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>["",0,null,null,null,[],null,null,null,null,null,92,null,null,null,
+[1421214770979],null,null,[],null,"1421214770977081840",null,null,
+null,null,null,null,null,[],[],null,null,null,[],null,null,null,[],
+null,null,[["184219133185","dQw4w9WgXcQ",2]]]
+</code></pre></div></div>
+
+<p>This looks like a big serialized protobuf or something like it to me. Most of
+the fields are unused, and even the obvious timestamp fields are unnecessary.
+The following blob works just as well:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>["",0,null,null,null,[],null,null,null,null,null,0,null,null,null,
+[0],null,null,[],null,"0",null,null,null,null,null,null,null,[],
+[],null,null,null,[],null,null,null,[],null,null,
+[["184219133185","dQw4w9WgXcQ",2]]]
+</code></pre></div></div>
+
+<p>We’ve removed the timestamps and the magic number “92” (I have no idea what
+it’s for). All that we have left is the app ID, the initial data, and “2” to
+signify <code class="language-plaintext highlighter-rouge">ROOM_APP</code>. Erego, to create a URL to open a hangouts session to an
+app with <code class="language-plaintext highlighter-rouge">APP_ID</code>, <code class="language-plaintext highlighter-rouge">INITIAL_DATA</code> as a <code class="language-plaintext highlighter-rouge">ROOM_APP</code> in Ruby:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">BASE_URL</span> <span class="o">=</span> <span class="s1">'https://plus.google.com/hangouts/_'</span>
+<span class="n">ssc_blob</span> <span class="o">=</span> <span class="s1">'["",0,null,null,null,[],null,null,null,null,null,0,null,'</span><span class="p">\</span>
+  <span class="s1">'null,null,[0],null,null,[],null,"0",null,null,null,null,null,null,'</span><span class="p">\</span>
+  <span class="s1">'null,[],[],null,null,null,[],null,null,null,[],null,null,'</span><span class="p">\</span>
+  <span class="s2">"[[</span><span class="se">\"</span><span class="si">#{</span><span class="no">APP_ID</span><span class="si">}</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="si">#{</span><span class="no">INITIAL_DATA</span><span class="si">}</span><span class="se">\"</span><span class="s2">,2]]]"</span>
+<span class="no">BASE_URL</span> <span class="o">+</span> <span class="s1">'?ssc='</span> <span class="o">+</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="n">ssc_blob</span><span class="p">)</span></code></pre></figure>
+
+<p>It works, but no promises on for how long. Good luck out there.</p>
+
+
+</div>
+
+    </div>
+
+  </body>
+</html>

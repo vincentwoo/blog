@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1"
+  />
+
+  <title>
+    Vincent Woo's blog 
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css" />
+  <link rel="stylesheet" href="/public/css/syntax.css" />
+  <link rel="stylesheet" href="/public/css/hyde.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="apple-touch-icon-precomposed"
+    sizes="144x144"
+    href="/public/apple-touch-icon-144-precomposed.png"
+  />
+  <link rel="shortcut icon" href="/public/favicon.ico" />
+
+  <!-- RSS -->
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="RSS"
+    href="/atom.xml"
+  />
+
+  
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <p class="lead">I'm Vincent Woo, the founder of <a href="https://coderpad.io">CoderPad</a>, and sometimes journalist.</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        class="sidebar-nav-item"
+        href="/"
+        >Home</a
+      >
+
+         
+      <a
+        class="sidebar-nav-item"
+        href="/about/"
+        >About</a
+      >
+          
+      <a
+        class="sidebar-nav-item"
+        href="/archives/"
+        >Archives</a
+      >
+                
+      <a
+        class="sidebar-nav-item"
+        href="/portfolio/photos/"
+        >Photography</a
+      >
+                            
+      
+      <a class="sidebar-nav-item" href="https://www.youtube.com/playlist?list=PLXhk-g2kj99k6FMp2tZ2XrJTAulZTu2cs">Timelapses</a>
+    </nav>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="posts">
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2012/04/02/love-in-the-time-of-mapreduce/">
+        Love in the Time of MapReduce
+      </a>
+    </h1>
+
+    <time datetime="2012-04-02T00:00:00+00:00" class="post-date">02 Apr 2012</time>
+
+    <blockquote>
+  <p>This piece was written for an internal Google fiction contest, for the 100th
+edition of the engineering newsletter. The call to arms arrived in my inbox like
+so:</p>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p>For this special Eng Newsletter issue, we’re running a “google eng-y” short
+fiction contest. You can write about anything, but the story must begin with
+these two words: “The MapReduce”.</p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <p>Please note that some meaning may be lost on non-Googler’s, notably the bits
+concerning company hierarchy. All the opinions expressed are my own and
+obviously do not constitute the workings of an actual Google plan, etc. Jeff Dean
+is a very nice man. This is a piece of fiction in almost every sense.</p>
+</blockquote>
+
+<p>The MapReduce was a piece of technology whose existence its steward, Jeff Dean,
+sometimes begrudged. It was glamorous, in a way, to be the public face of the
+algorithm that had essentially rewritten interpersonal contact, but it was also
+draining and surreal.</p>
+
+<p>In one of Jeff’s increasingly common attacks of perspective, he realized that
+his daughters, too, had been completely swept up by a thing that he himself had
+designed, built, and evangelized. They were, of course, perfectly happy with the
+product. Jeff noted this with a tinge of grim pride, remembering the long nights
+of trial runs. Victoria and Natalie were a bit too happy, Jeff mused, so
+completely satisfied with something they could never understand (indeed, that he
+himself no longer understood well), that he found their lack of doubt troubling.
+Why didn’t they care that it probably shouldn’t work, that time and computation
+could twist statistics in such a fundamentally disturbing way? It was probably
+due to both of them being so preoccupied with Natalie’s wedding, he concluded
+wearily.</p>
+
+<p>Later, outside of his office, Irina was waiting for him.</p>
+
+<p>“Jeff, you have a visitor waiting for you in your office,” she said. Something
+in her tone gave away the urgency of the situation, and Jeff nodded, having long
+grown used to trusting Irina to manage his calendar more deftly than he could
+tie his shoes.</p>
+
+<p>His suited visitor was a trim man of about sixty, which was unusual enough for
+the Googleplex in terms of both age and dress. He wore his graying hair swept
+back and neatly cropped. With a start, Jeff realized that his visitor was none
+other than a senator of Iowa.</p>
+
+<p>“I’m Robert Graves, and sorry about showing up so unannounced, Mr. Dean,” said
+the man, with a smile. Jeff paused for a moment to admire how finely
+countenanced the man was, and to feel a small thrill at being so delightfully
+underdressed, himself.</p>
+
+<p>“You’re the senator pushing for patent reform. I don’t watch TV much, but I’ve
+seen you on when my wife watches the news.” Jeff shook his visitor’s hand and
+seated himself behind his desk.</p>
+
+<p>“The very same. Look, I’ll spare you the pleasantries and get right to why I’ve
+come. I’m told that engineers prize truth and directness.” Jeff lifted an
+eyebrow at this, having found that lately he valued being left well enough alone
+better than both of those things. “As you well know, MapReduce is proving
+problematic, socially. FOX is filming a reality TV show at this very moment
+about an engaged couple who are convinced that after trying out their MapReduce
+partners, they’ll still want to get married.”</p>
+
+<p>“Jesus. How’s it looking for the couple?”</p>
+
+<p>“Not good. Even worse, they’re filming it in my hometown.” Graves massaged his
+temples.</p>
+
+<p>Jeff was not surprised. MapReduce rarely erred. Though it had begun as a general
+purpose framework for parallelizing search index updates, it eventually lent
+itself to analyzing the massive amounts of user generated social data Google+
+collected. In time, this would become all that MapReduce was known for (at least
+externally of Google), in a queer reversal of how the words escalator and
+aspirin came to describe all such contrivances, though they were once only
+brands.</p>
+
+<p>“Basically the right is getting as much fuel as it wants for its eternal fire of
+shouting about our perpetual moral decay. On top of that, MapReduce is having a
+powerful economic impact, which doesn’t help. We’re having an employment
+problem, as you’ve doubtless inferred by now, since you must have all the
+numbers on how many people are using MapReduce to pair up.”</p>
+
+<p>The first Jeff had heard about the phenomenon the media had dubbed as the
+“honeymoon effect,” had been from the news itself, but he nodded anyway. “My
+citizens are up and leaving jobs they’ve worked at for a decade to meet their
+dreamboat on the other side of the world. I mean, great for them, but our
+coffers weren’t in great shape before, and your invention is a drain we can’t
+possibly afford right now, never mind the bad press. As much as I am for the
+future, I desperately need you to stop operating in my state.”</p>
+
+<p>Jeff suppressed the urge to tell the man to just contact press@google.com, and
+instead reluctantly launched into a narrative he had delivered many times
+before. “I’m sure you’ve seen and read all the press releases about this. What
+we do isn’t terribly new. We provide a service that users want. In a sense, we
+provide nothing more than what eHarmony and Match.com have been providing for
+years, just with much less uncertainty and a bigger candidate pool.”</p>
+
+<p>Robert snorted. “I’d hardly call ‘every Google user on Earth’ a bigger pool.
+Your operation is different, too. You know all the things that people have
+searched for, and all the things they’re too ashamed to search for. You know why
+some actresses draw men to them, and which men women will wait hours to receive
+texts from. Those bankrupt dating sites had only the constructed personas of the
+desperate to work with. There’s a case that could be made here for unlawful
+invasion of privacy and monopolistic abuse of information.”</p>
+
+<p>A Googler rode past Jeff’s window on a small yellow bicycle. Jeff focused on the
+bright colors to briefly escape his current uncomfortable tension.</p>
+
+<p>If Graves was right about anything, it was that MapReduce was uncannily
+effective. Through what some people might call sorcery, or what Jeff’s team
+leads described as “massively parallel Bayesian-adapted machine learning plus
+deep social mining,” it was able to identify, with nearly 97% confidence, a
+lifetime romantic partner for any given user. The algorithm could even supply
+just the right amount of shared interests as conversation starters, while
+leaving enough unsaid for the nascent couple to discover independently, leaving
+them feeling as if they had come to know each other intimately of their own
+volition. Some people found this deeply unnerving.</p>
+
+<p>Even those people commonly derided by society could find love in this way,
+though MapReduce might take weeks instead of seconds to produce a suitable
+pairing. People of every sexual deviancy and every personal vice were being
+matched up, to the horror of the many people alienated by the brutal efficiency
+of MapReduce’s perfect lack of bias.</p>
+
+<p>In short, romantic fulfillment was, for most people, little more work than
+clicking “I’m feeling lucky” and buying a plane ticket. This is what the people
+wanted more than anything else. Graves knew it, and Jeff knew that Graves knew
+it. Furthermore, Jeff knew that Graves was powerless to do anything about it, so
+strongly did the public crave MapReduce’s presence in the world. Yet Jeff felt
+sympathy for Grave’s willingness to shoulder the impossible task of squaring the
+budget against falling revenues and changing social tides.</p>
+
+<p>“Mr. Graves, I understand your dilemma. The last thing you need right now is the
+income rug pulled out from under you. But look at it this way: about half of
+those people who have gone and paired off will probably come back to their
+hometown, bride or husband in tow, so your population will probably end up about
+even. After these couples outgrow their honeymoon period, they’ll settle down,
+work, have kids, and spend with an intensity that only the truly content can
+bring to bear. In the coming decade, your books might even make it into the
+black.”</p>
+
+<p>Robert was not easily placated. “Can you say for certain that this is the way
+it’s going to play out? The world has never seen this kind of mass social
+movement. What if the people become complacent instead of motivated? What if
+your algorithms can’t guarantee long term stability?”</p>
+
+<p>Jeff had an inner conflict. As usual, the side favoring the least amount of
+social friction won out. “We’re the ones who managed to pair everyone up so well
+in the first place, aren’t we? The models say the population will eventually
+converge on a higher level of stable productivity. I can’t promise you it’s
+going to happen, of course, but here at Google we have pretty high hopes for the
+future.”</p>
+
+<p>The two men talked in this way for some time. The elder statesman pushed and the
+younger (but not exactly young) engineer deflected until the senator grew weary
+or satisfied enough to defer discussion to a later date. Jeff had managed to end
+the meeting with only vague promises, a surprising talent that had earned him
+his relative autonomy from Larry Page’s inner circle. Later he would have to
+file a report, naturally, detailing the intricacies of his conversation with the
+senator, but for now Page trusted him to keep third parties at arm’s length on
+his own.</p>
+
+<p>Later that evening, after a quiet supper with Heidi, Jeff lay in bed thinking.
+The models actually didn’t say much about the economic reality of the future.
+The social data that allowed his team to pair people so effectively seemed to
+shrug mutely at the problem of what the future might be like. He had assured
+Graves that everything would be fine, but by the time Jeff could be proved
+wrong, he would be long retired.</p>
+
+<p>Sleep took him. He dreamt, which was not unusual (though he didn’t know it), but
+he also remembered his dreams from that night, which was. He dreamt of a young
+man smashing a perfect chalice in a decrepit hallway, and of women who laughed
+while they danced away from their homes.</p>
+
+<p>When he woke, Jeff knew what he had to do.</p>
+
+<p>Sanjay probably could be trusted, but Jeff couldn’t take the chance. He would
+split his change into pieces, and sneak them into other, tangentially related
+changelists. The other developers on his team would probably rubber stamp these,
+anyway, since Jeff was one of the most prolific programmers there was. Who would
+look at yet another Jeff Dean code review too closely?</p>
+
+<p>What did it mean to adhere to Google’s famed “Don’t be Evil” policy, when it
+came to arranging marriages? The standard Google answer would be to make the
+user as happy as possible without violating their trust. But what trust was
+there to violate if users themselves didn’t know what they wanted in
+relationships, or what would truly make them happy? Marriages are long lived
+beasts, Jeff reasoned, subject to slowly building changes in the macroeconomic
+climate. If marriages affect the economy, and the economy affects all marriages,
+what should you optimize for, and how?</p>
+
+<p>Jeff’s changelists were approved, as a matter of course. Years later, he
+retired. The day he first started noticing what might have been the fruits of
+his subversion ripen, he remembered a thing that his old mentor Urs loved to
+say, before Urs had left him in charge.</p>
+
+<p>“It is better to ask forgiveness than permission,” Hölzle would often chuckle,
+in a particularly German way. Jeff chuckled now, too.</p>
+
+<p>Wired was doing a bio piece on a recently minted tech millionaire. The man was
+one of the few people for whom MapReduce’s pairing hadn’t worked out in the long
+term. When asked what had motivated him to start the company he had just sold,
+the man somewhat abashedly said that he wanted to prove to his ex-wife that
+dumping him was a mistake.</p>
+
+<p>Ambition and talent sometimes survive contact with love, Jeff mused, but are
+more often dulled by it. MapReduce could identify those individuals who are
+defined by intelligence, drive, and pride. In other words, the archetypal
+entrepreneur. A few modified terms in a complex linear algebra equation could
+yield surprising results, Jeff had discovered, like optimizing for romantic
+partners that would net the largest increase in a person’s ambition, rather than
+happiness. A lot of the unfortunate people of talent singled out by Jeff’s
+modification would probably yield little value, but one, he hoped, would build
+the next Google. Jeff longed to see that day.</p>
+
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2012/03/20/html5-canvas-isolines/">
+        HTML5 canvas isolines
+      </a>
+    </h1>
+
+    <time datetime="2012-03-20T00:00:00+00:00" class="post-date">20 Mar 2012</time>
+
+    <p>Here’s a little page that <a href="/js/isolines.html">draws isolines in a canvas element</a>.
+It uses the <a href="http://en.wikipedia.org/wiki/Marching_squares">marching squares algorithm</a>
+and can take dynamic data in the form of a tab separated value file (.tsv).</p>
+
+<p>Such a file should be formatted thusly:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10	90	30	10	50	40
+0	70	20	0	5	10
+20	30	10	20	70	30
+50	60	70	100	10	20
+80	20	40	35	60	15
+20	10	40	50	30	40
+</code></pre></div></div>
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2012/03/16/misc-toys/">
+        misc toys
+      </a>
+    </h1>
+
+    <time datetime="2012-03-16T00:00:00+00:00" class="post-date">16 Mar 2012</time>
+
+    <p>I’ve put a couple toys on my site that I haven’t bothered documenting.</p>
+
+<p>One is a toy canvas simulating a <a href="/google.html">bunch of colored balls in bouncing around</a>
+in the shape of the Google logo (I made it before joining Google).</p>
+
+<p>The other is a nifty page that will load a <a href="/js/tumblr.html">tumblr user’s 100 longest posts</a>.
+It’s all done client side, querying the old tumblr v1 API.</p>
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2011/04/30/arguing-for-immortality/">
+        Arguing for Immortality
+      </a>
+    </h1>
+
+    <time datetime="2011-04-30T00:00:00+00:00" class="post-date">30 Apr 2011</time>
+
+    <p>I want to live forever. I’ve always thought that not dying was a pretty
+obvious thing to want. To my surprise, I’ve found that a lot of people
+whom I usually agree with on most topics strongly disagree with me on
+this one. Rather than write yet another piece extolling the virtues of
+a far-future post-scarcity post-singularity world, I thought I’d just
+document some of the objections to immortality I get and my
+counterarguments.</p>
+
+<p>Note that for the purposes of giving my conversational partners
+opportunities to disagree, I typically posit a form of immortality where
+you, and you alone are presented with the option of eternal youth with
+no suicide option. You constantly regenerate to perfect health at the
+prime of your life. There are a lot of potential ways we might go about
+not dying, but people tend to find objections to this particular flavor
+more readily than the others. Please assume this working definition for
+the below.</p>
+
+<h3 id="watching-your-loved-ones-die">Watching your loved ones die</h3>
+
+<p>I get this one the most. The argument goes like</p>
+
+<blockquote>
+  <p>I can’t stand the thought of having to watch everyone I love die. Can
+you imagine living forever with everyone you used to know gone? How
+could you deal with the pain of building lifelong relationships and then
+seeing them disappear, forever?</p>
+</blockquote>
+
+<p>My response to this is essentially, “<em>Newsflash</em>, you already are going
+to have to deal with that.” If you are above average in caution,
+intelligence, or just plain old fitness, odds are you are going to have
+to watch a fair share of your friends die and still continue living for
+a significant period of time afterwards. Statistics don’t lie. Accidents
+and cancer, while tragic, are inevitable.</p>
+
+<p>As for having to carry the burden forever, we can again look to reality
+to answer this objection. “Time heals all wounds,” is an adage for a
+reason. If you can deal with a friend being dead for twenty years (as
+people already do), it seems pretty likely you’ll be able to deal with
+it for an indefinite future. As you live forever, you’ll make new
+friends and get over the loss of old ones. It seems unlikely that it
+will be year 2769 of missing Fred that finally pushes you over the edge,
+forever. What will probably actually happen is you just get really good
+at coping.</p>
+
+<h3 id="ill-get-bored-and-sick-of-life">I’ll get bored and sick of life</h3>
+
+<p>This one is simple enough. It goes</p>
+
+<blockquote>
+  <p>I feel awful enough when I’m bored as it is. If I live forever, won’t
+I eventually just get bored after having done literally everything? I
+can’t even imagine my life past [X] years.</p>
+</blockquote>
+
+<p>The way I deal with this is essentially Moore’s Law. Each day, literally
+a year of video is uploaded to Youtube. Every year, more books than you
+could possibly read in a regular lifetime are written. As society
+increases exponentially in complexity, generation of interesting content
+explodes. It will be impossible for you to do everything when society
+invents new experiences faster than you can experience them. Sit back
+and enjoy the ride, you’re immortal.</p>
+
+<p>As for the people who can’t even imagine their long term prospects right
+now, I say that this makes them perfectly suited for immortality. If
+you lack a long term vision and focus on the short term, you’ll never
+be dragged down by your long past. The best mindset for happiness over a
+long time period is <em>always</em> to enjoy the present.</p>
+
+<h3 id="deaths-inevitability-gives-life-meaning">Death’s inevitability gives life meaning</h3>
+
+<p>Now we start waxing philosophic with stuff like,</p>
+
+<blockquote>
+  <p>There is no good without evil. Having death exist gives my life
+meaning just like scarcity lends gold-backed currencies their value. I
+need to know that there is an end because it gives me a sense of urgency
+to my life. Without it I would just stagnate.</p>
+</blockquote>
+
+<p>To me this is like saying “shitting gives eating meaning.” Does it?
+Evolution would beg to disagree if it were anything but a blind
+selection process. When was the last time you sat down for a great meal
+and said to yourself, “Thank god I’m going to die one day or this meal
+would be devoid of meaning”? What you do with your life is what lends it
+value or meaning, not the eventuality of death.</p>
+
+<p>Besides, if you believe in death being necessary to lend your life
+value, why go with the arbitrary time limit of your natural lifespan?
+No one who has fielded this argument against me has agreed to just kill
+themselves when they feel like they’ve basically achieved what they’ve
+wanted to in life. The fact of the matter is that everyone chooses life
+over death on a day-to-day basis, and actions speak louder than words.</p>
+
+<h3 id="what-about-the-afterlife">What about the afterlife?</h3>
+
+<p>This one can be touchy, for obvious reasons. Let’s go with the
+reasonably neutral objection of,</p>
+
+<blockquote>
+  <p>Suppose there is an afterlife. By taking immortality, I would be
+missing out on a greater truth and the greatest party in or outside of
+the universe.</p>
+</blockquote>
+
+<p>Sure, you might be. But most religions (weighted by subscribers) don’t
+fault you for not dying. If your purpose in living is to live according
+to your religion, immortality doesn’t get in the way of that.
+Furthermore, at the end of eternity, which is a construct that should be
+available to gods, it seems reasonable that you will receive your just
+reward in any case. Religions also commonly posit Judgment Day scenarios
+in which all living humans will be placed into various afterlives. It
+seems reasonable here to assume that if a god so wishes it, your
+immortality will be revoked.</p>
+
+<h3 id="ill-be-too-different-from-everyone-else">I’ll be too different from everyone else</h3>
+
+<p>There are a couple variations on this theme. In its simplest form,</p>
+
+<blockquote>
+  <p>If I live forever and no one else does, I’ll be endlessly meeting new
+people with the foreknowledge that I will outlive them. I’ll be so
+fundamentally different from the average mortal person that I won’t be
+able to form meaningful relationships. Nobody will understand me!</p>
+</blockquote>
+
+<p>This one is more of a deal breaker on a case-by-case basis. If a person
+really feels that they will be well and truly alienated by being
+immortal, well, it’s hard to tell them that they won’t be. It’s kind of
+self-fulfilling. That said, there a few things you can say.</p>
+
+<ul>
+  <li>
+    <p><em>People actually will understand you</em></p>
+
+    <p>If there’s anything humans are good at, it’s getting used to stuff.
+In short order you and your future peers will be cracking wise about
+your absurd inability to die over whatever the future equivalent of beer
+is. Maybe mechano-beer. I’m pretty sure that after an eternity of
+explaining yourself to mortals, you’ll be extremely proficient at
+helping other people understand who you are.</p>
+  </li>
+  <li>
+    <p><em>Science will eventually catch up</em></p>
+
+    <p>Lifespan lengthening technologies only need to make it to the point
+where they can increase a person’s lifespan one year for every year of
+research before the masses become practically immortal. Wait long enough
+and you and your magical wish-granted immortality will be in good
+company.</p>
+  </li>
+  <li>
+    <p><em>Being different is an asset</em></p>
+
+    <p>You can honestly just play your immortality for international
+celebrity. Make a bid for president. Be rich. Honestly, being too much
+like other people basically sucks. Being exceptional will make you
+popular, not the opposite.</p>
+  </li>
+</ul>
+
+<h3 id="disaster-scenarios">Disaster scenarios</h3>
+
+<p>This one is kind of morbid. I thought about simply forbidding it by
+adding a clause to the immortality definition, but it’s interesting
+enough to keep in. In a few words,</p>
+
+<blockquote>
+  <p>What if everyone but me gets wiped out? I don’t think I could live as
+the only human being alive. Also, what if the government kidnaps me and
+uses me as a lab rat? What if I piss off some people enough to get me
+tortured forever? There might be times where I might actually need to
+kill myself, even if I would normally find living forever appealing.</p>
+</blockquote>
+
+<p>Coming up with a bulletproof answer to this one is hard. It’s very
+tempting to say that no actual implementation of immortality will
+actually prevent you from dying in literally every case or rob you of
+the option of killing yourself. But really, that would be cheating.</p>
+
+<p>A real counterargument has to take the form of, “You already run similar
+risks today, as a mortal.” You can be used as a medical experiment or
+tortured this very day, and they can keep you alive for a very long
+time. As an immortal, it’s likely that you will eventually outlive your
+captors.</p>
+
+<p>Also consider that it’s far more likely that any government or entity
+with power will want your cooperation instead of your incarceration. You
+could be the world’s greatest astronaut or the guy who goes into
+nuclear reactor cores melting down.</p>
+
+<p>However, the extinction of the human race scenario actually does throw a
+wrench into this argument. To this, all I can really say is that the
+miniscule risk you run of a mass extinction is just a risk you’ll have
+to swallow in order to reap the vast rewards of immortality. Maybe
+there’s other life out there that you can find. Maybe in your spare time
+you’ll engineer a way to rebuild the world.</p>
+
+<h3 id="wrap-up">Wrap-up</h3>
+
+<p>This is a fun topic for me, and I hope I’ve been interesting without
+being <em>too</em> offensive to people on either side of the coin. This topic
+is important in the sense that once you accept that immortality is a
+pretty good idea, you open the door for a lot of other interesting
+arguments to be made about rationality, ethics, and just general
+decision making. If you feel I’ve made some sort of egregious error or
+just want to weigh in for any reason, please feel free to comment below.</p>
+
+<p>EDIT: The <a href="http://news.ycombinator.com/item?id=2511929">Hacker News</a>
+discussion of this page is fairly interesting. Give it a try, too!</p>
+
+  </article>
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/2011/03/05/facebook-puzzle-sophie/">
+        Facebook Puzzle: sophie
+      </a>
+    </h1>
+
+    <time datetime="2011-03-05T00:00:00+00:00" class="post-date">05 Mar 2011</time>
+
+    <p>This week: Facebook’s <a href="http://www.facebook.com/careers/puzzles.php?puzzle_id=11">sophie
+puzzle</a>. This
+one is “buffet” difficulty, which translates roughly to “the underlying
+problem is NP-complete,” which explains why I have such a hard time
+choosing food at sushi buffets. In any case, the problem is to find your
+cat in your apartment, where you know where the cat is likely to be, as
+well as the transit times between the various locations in your home.</p>
+
+<p>I’ll document here the various bad solutions I came up with on my way to
+a decent one, and as a bonus: an optimized-ish version in C++!</p>
+
+<h3 id="about-the-math">About the math</h3>
+<p>The problem asks you to minimize the expected time to find sophie. What
+does this mean? Take a look at the example input (comments mine).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>4
+#node name    #probability sophie is there
+front_door    .2
+in_cabinet    .3
+under_bed     .4
+behind_blinds .1
+5
+#node x    #node y       #time between x and y
+front_door under_bed     5
+under_bed  behind_blinds 9
+front_door behind_blinds 5
+front_door in_cabinet    2
+in_cabinet behind_blinds 6
+</code></pre></div></div>
+
+<p>This says there are four nodes and five edges between those nodes, and
+that 40% of the time, sophie is going to be under the bed. If sophie was
+under the bed 100% of the time, the optimal path to minimize the
+expected time to find her would be just the path that takes you to the
+bed in the shortest amount of time. But since some nodes are unlikely to
+hide sophie, you can afford to take your sweet time getting to them.</p>
+
+<p>For this sample input, the optimal path is front_door, in_cabinet,
+under_bed, behind_blind. Note that to go from in_cabinet to under_bed,
+you should pass through the front_door node. The expectation for this
+path is 6.00 seconds, as explained from this snippet from <a href="http://www.davideisenstat.com/fbpfaq/#sophie">David
+Eisenstat’s site</a>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Pr(front_door) * 0
++ Pr(in_cabinet) * Distance(front_door, in_cabinet)
++ Pr(under_bed) * (Distance(front_door, in_cabinet)
+                   + Distance(in_cabinet, under_bed))
++ Pr(behind_blinds) * (Distance(front_door, in_cabinet)
+                       + Distance(in_cabinet, under_bed)
+                       + Distance(under_bed, behind_blinds))
+    = .2 * 0 + .3 * 2 + .4 * (2 + 7) + .1 * (2 + 7 + 9) = 6.00
+</code></pre></div></div>
+
+<h3 id="building-the-graph">Building the graph</h3>
+
+<p>The input only includes edges between particular nodes. In order to know
+that, say, the distance between the cabinet and the bed is 7 (through
+the front door), you have to build up the shortest distances between
+every node in the graph. This is known as the “all pairs shortest path”
+problem. There exists a quite famous dynamic programming algorithm to
+solve this, the <a href="http://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm">Floyd Warshall
+algorithm</a>. Trivially implemented in Ruby:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># note that $weights[x][y] is initialized to either</span>
+<span class="c1"># Float::MAX if there is no edge between x and y, or</span>
+<span class="c1"># to whatever the length of the edge is if there is.</span>
+<span class="k">def</span> <span class="nf">floyd_warshall</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="mi">0</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="vg">$next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># links menoizes the list of nodes you need to traverse</span>
+<span class="c1"># between nodes i and j</span>
+<span class="k">def</span> <span class="nf">links</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="vg">$next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">k</span> <span class="k">if</span> <span class="n">k</span><span class="p">.</span><span class="nf">class</span> <span class="o">==</span> <span class="no">Set</span>
+    <span class="vg">$next</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="vg">$next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="p">.</span><span class="nf">nil?</span> <span class="n">or</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span> <span class="p">?</span>
+        <span class="no">Set</span><span class="p">.</span><span class="nf">new</span><span class="p">([])</span> <span class="p">:</span>
+        <span class="p">(</span><span class="n">links</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="no">Set</span><span class="p">.</span><span class="nf">new</span><span class="p">([</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="n">links</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This gives a good starting point for actually trying to start solving
+the problem.</p>
+
+<h3 id="bfs-solution">BFS solution</h3>
+<p>In my hubris, I figured a breadth first search where you expand on the
+path with the lowest current expected time would work. Here’s what it
+looks like:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">solve</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="no">MinHeap</span><span class="p">.</span><span class="nf">new</span>
+    <span class="n">queue</span><span class="p">.</span><span class="nf">push</span> <span class="mf">0.0</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">],</span> <span class="no">Set</span><span class="p">.</span><span class="nf">new</span><span class="p">((</span><span class="mi">1</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">select</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">}),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+    <span class="k">while</span> <span class="n">not</span> <span class="n">queue</span><span class="p">.</span><span class="nf">empty?</span>
+        <span class="n">node</span><span class="p">,</span> <span class="n">remain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">expected</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="nf">pop</span>
+        <span class="k">if</span> <span class="n">remain</span><span class="p">.</span><span class="nf">empty?</span>
+            <span class="nb">p</span> <span class="n">node</span>
+            <span class="k">return</span> <span class="n">expected</span>
+        <span class="k">end</span>
+        <span class="c1"># only iterate remaining nodes that you don't need to</span>
+        <span class="c1"># go through other remaining ndoes to reach</span>
+        <span class="n">remain</span><span class="p">.</span><span class="nf">select</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span>
+            <span class="p">(</span><span class="n">links</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="nf">last</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">remain</span><span class="p">).</span><span class="nf">empty?</span>
+        <span class="p">}.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+            <span class="n">new_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="nf">last</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+            <span class="n">new_expected</span> <span class="o">=</span> <span class="n">expected</span> <span class="o">+</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">new_time</span>
+            <span class="n">queue</span><span class="p">.</span><span class="nf">push</span> <span class="n">new_expected</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span> <span class="o">+</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">remain</span> <span class="o">-</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">new_time</span><span class="p">,</span> <span class="n">new_expected</span><span class="p">]</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>In my defense I hadn’t yet realized that the sophie problem is a variant
+of the traveling salesman problem and that a BFS search would take
+forever on large graphs. This doesn’t work because you incrementally
+build all the bad paths on your way to finding the first path to
+complete. Complexity: proportional to the number of paths, or O(n!).</p>
+
+<h3 id="dp-solution">DP Solution</h3>
+
+<p>Hitting upon the realization that the problem is a variant of the
+<a href="http://en.wikipedia.org/wiki/Traveling_salesman_problem">traveling salesman
+problem</a> I
+decided to try the canonical dynamic programming solution to TSP.</p>
+
+<p>The DP solution requires that you build a structure like</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">C</span><span class="p">[</span><span class="n">subset</span><span class="p">][</span><span class="n">j</span><span class="p">]</span></code></pre></figure>
+
+<p>where subset is some subset of all nodes, and j is a node in that
+subset. The value of this entry should be the minimum expected time to
+proceed from node 0 to node j and through all the nodes in the subset.
+The problem then reduces to finding the minimum of:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">C</span><span class="p">[</span><span class="n">subset</span> <span class="o">-</span> <span class="p">[</span><span class="n">j</span><span class="p">]][</span><span class="n">i</span><span class="p">]</span> <span class="c1"># for all i in subset</span></code></pre></figure>
+
+<p>There are some problems here, but first, some code:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">solve</span>
+    <span class="n">relevant</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="vg">$num</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">select</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="nb">hash</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">hash</span><span class="p">[[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]}</span>
+    <span class="k">for</span> <span class="n">size</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="n">relevant</span><span class="p">.</span><span class="nf">size</span>
+        <span class="n">relevant</span><span class="p">.</span><span class="nf">combination</span><span class="p">(</span><span class="n">size</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">subset</span><span class="o">|</span>
+            <span class="n">subset</span><span class="p">.</span><span class="nf">insert</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="nb">hash</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="no">Float</span><span class="o">::</span><span class="no">MAX</span><span class="p">,</span> <span class="no">Float</span><span class="o">::</span><span class="no">MAX</span><span class="p">]}</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="n">subset</span>
+                <span class="k">next</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="n">reduced</span> <span class="o">=</span> <span class="n">subset</span> <span class="o">-</span> <span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="nb">hash</span><span class="p">[</span><span class="n">subset</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">reduced</span><span class="p">.</span><span class="nf">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span>
+                    <span class="n">e</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">[</span><span class="n">reduced</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">t</span> <span class="o">+=</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                    <span class="p">[</span><span class="n">e</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">t</span><span class="p">]</span>
+                <span class="p">}.</span><span class="nf">min</span> <span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="n">a</span><span class="p">.</span><span class="nf">first</span> <span class="o">&lt;=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="nf">first</span><span class="p">}</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="nb">hash</span><span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">relevant</span><span class="p">].</span><span class="nf">values</span><span class="p">.</span><span class="nf">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="p">.</span><span class="nf">first</span><span class="p">}.</span><span class="nf">min</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This works, but isn’t fast. A 17 node graph took me about 10 minutes to
+finish. The problem is that since subsets aren’t ordered, there is no
+convenient way to represent them as array indices and you must therefore
+hash entire subsets. Since there are 2<sup>n</sup> subsets, and you must
+compute the path that ends in each node in each subset, which itself
+requires examining all other previous paths of the subset minus one of
+its elements (breathe), the complexity here is
+O(2<sup>n</sup>n<sup>2</sup>).</p>
+
+<h3 id="recursive-backtracking-pruning-solution">Recursive Backtracking (Pruning) Solution</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Backtracking">Backtracking</a> can be thought
+of as essentially a DFS search with fast failure. For example, say you
+have found a complete path that you know will give you an expected time
+of 30 seconds. Now you are attempting to build another path, and halfway
+through you know your partial expected time is already 31 seconds. You
+can abandon building this path, saving yourself the hassle of expanding
+all of that partial path’s children.</p>
+
+<p>Skipping entire subtrees is known as pruning, and you can achieve some
+pretty massive savings depending on how well you implement it. My
+solution was to very conservatively estimate the remaining expectation
+of a partial path. For instance, if you are halfway through a path with
+a current expected time of 10 seconds, a path length of 20 seconds and
+you have covered 60% of the places where sophie can be, then even in the
+perfect case where the next node was 0 seconds away and had a 40%
+probability of hiding sophie, you would still incur an additional 20 *
+.4 = .8 seconds of expected time. If you have already found a minimum
+path length of say, 10.5, you can prune this subtree where you could not
+have before.</p>
+
+<p>And without further ado, here’s the code.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vg">$min</span> <span class="o">=</span> <span class="no">Float</span><span class="o">::</span><span class="no">MAX</span>
+<span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">remain</span><span class="p">,</span> <span class="n">unseen</span><span class="p">,</span> <span class="n">expect</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="n">expect</span> <span class="o">+</span> <span class="n">unseen</span> <span class="o">*</span> <span class="n">time</span> <span class="o">&gt;=</span> <span class="vg">$min</span>
+    <span class="k">return</span> <span class="p">(</span><span class="vg">$min</span> <span class="o">=</span> <span class="n">expect</span><span class="p">)</span> <span class="k">if</span> <span class="n">remain</span><span class="p">.</span><span class="nf">empty?</span>
+    <span class="n">remain</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+        <span class="n">next_time</span>  <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="vg">$weights</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+        <span class="n">solve</span> <span class="n">n</span><span class="p">,</span>
+              <span class="n">remain</span> <span class="o">-</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span>
+              <span class="n">unseen</span> <span class="o">-</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+              <span class="n">expect</span> <span class="o">+</span> <span class="n">next_time</span> <span class="o">*</span> <span class="vg">$probs</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+              <span class="n">next_time</span>
+    <span class="k">end</span>
+    <span class="vg">$min</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>This works fairly well. We can do that 17 node graph in 30 seconds now.
+I don’t have a good estimate of the complexity improvement here, since
+you can generate corner cases that can prevent any pruning from
+happening.</p>
+
+<h3 id="optimizations">Optimizations!</h3>
+
+<p>Ruby is slow. At least, Cygwin’s default Ruby 1.8.7 interpreter is slow.
+I decided to reimplement the whole deal in C++ and see what kind of
+speedups I could achieve. Here is my initial implementation in C++:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">double</span> <span class="nf">solve</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">,</span> <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">remain</span><span class="p">,</span> <span class="kt">double</span> <span class="n">unseen</span><span class="p">,</span>
+        <span class="kt">double</span> <span class="n">expect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">double</span> <span class="n">min</span> <span class="o">=</span> <span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">expect</span> <span class="o">+</span> <span class="n">unseen</span> <span class="o">*</span> <span class="n">time</span> <span class="o">&gt;=</span> <span class="n">min</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">remain</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">min</span> <span class="o">=</span> <span class="n">expect</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">n</span> <span class="o">=</span> <span class="n">remain</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">n</span> <span class="o">!=</span> <span class="n">remain</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="o">*</span><span class="n">n</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">next_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">weights</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">next</span><span class="p">];</span>
+        <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next_remain</span> <span class="o">=</span> <span class="n">remain</span><span class="p">;</span>
+        <span class="n">next_remain</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+        <span class="n">solve</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">next_remain</span><span class="p">,</span> <span class="n">unseen</span> <span class="o">-</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span>
+            <span class="n">expect</span> <span class="o">+</span> <span class="n">next_time</span> <span class="o">*</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span> <span class="n">next_time</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">min</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>However, the speedup here was only a factor of two or so. Where are the
+bottlenecks? Turns out, a big one in both Ruby and C++ is the constant
+recreation of the remainder set at</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next_remain</span> <span class="o">=</span> <span class="n">remain</span><span class="p">;</span></code></pre></figure>
+
+<p>It’s much faster to just do:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">next_remain</span> <span class="o">=</span> <span class="n">remain</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">n</span> <span class="o">=</span> <span class="n">remain</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">n</span> <span class="o">!=</span> <span class="n">remain</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="o">*</span><span class="n">n</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">next_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">weights</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">next</span><span class="p">];</span>
+    <span class="n">next_remain</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+    <span class="n">solve</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">next_remain</span><span class="p">,</span> <span class="n">unseen</span> <span class="o">-</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span>
+        <span class="n">expect</span> <span class="o">+</span> <span class="n">next_time</span> <span class="o">*</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span> <span class="n">next_time</span><span class="p">);</span>
+    <span class="n">next_remain</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This way, you only do one set copy per recursion, and then just pass
+around to all of your children. “But Vincent,” you say, “why even
+bother recreating the set at each recursion? Can’t you just pass alone
+one set of remaining nodes and add and remove from it?” Sure, but its
+very annoying to not invalidate iterators to a set that is constantly
+shrinking and growing through iteration and recursion. Here’s what I
+came up with:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">double</span> <span class="nf">solve</span><span class="p">(</span><span class="kt">int</span> <span class="n">node</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">node_entry</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">remain</span><span class="p">,</span> <span class="kt">double</span> <span class="n">unseen</span><span class="p">,</span>
+        <span class="kt">double</span> <span class="n">expect</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">double</span> <span class="n">min</span> <span class="o">=</span> <span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">expect</span> <span class="o">+</span> <span class="n">unseen</span> <span class="o">*</span> <span class="n">time</span> <span class="o">&gt;=</span> <span class="n">min</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="n">empty</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">node_entry</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">n</span> <span class="o">=</span> <span class="n">remain</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">n</span> <span class="o">!=</span> <span class="n">remain</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">active</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">index</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">next_time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">weights</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">next</span><span class="p">];</span>
+        <span class="n">n</span><span class="o">-&gt;</span><span class="n">active</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">solve</span><span class="p">(</span><span class="n">next</span><span class="p">,</span> <span class="n">remain</span><span class="p">,</span> <span class="n">unseen</span> <span class="o">-</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span>
+            <span class="n">expect</span> <span class="o">+</span> <span class="n">next_time</span> <span class="o">*</span> <span class="n">probs</span><span class="p">[</span><span class="n">next</span><span class="p">],</span> <span class="n">next_time</span><span class="p">);</span>
+        <span class="n">n</span><span class="o">-&gt;</span><span class="n">active</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">empty</span><span class="p">)</span> <span class="n">min</span> <span class="o">=</span> <span class="n">expect</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">min</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This way we just store whether an element is active or not in the data
+model itself, instead of representing that information with presence in
+a set. This is nice because adding/removing from a set, while O(log(n))
+fast, ain’t no O(1). This gets us (for our 17 node graph):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ make &amp;&amp; time ./sophie in_sophie5.txt
+make: `sophie' is up to date.
+38.20
+
+real    0m0.220s
+user    0m0.156s
+sys     0m0.030s
+</code></pre></div></div>
+
+<p>Hooray!</p>
+
+<h3 id="final-thoughts">Final Thoughts</h3>
+
+<p>I didn’t talk about any of the edge cases, but you need to check for if
+it’s actually possible to be sure to find sophie. In particular, if
+there are nodes that aren’t reachable from the first node that sophie
+has a chance of being in then you need to fail.</p>
+
+<blockquote>
+  <p>Dear submitter,</p>
+
+  <p>Thank you for your submission of a puzzle solution
+to Facebook! After running your solution to sophie (received on March 5,
+2011, 8:14 pm), I have determined it to be correct. Your solution ran
+for 25.118 ms on its longest test case.</p>
+</blockquote>
+
+<p>Also, full source and some plagiarized test cases are all on
+<a href="https://github.com/vincentwoo/rubycode/tree/master/sophie">github</a>.</p>
+
+  </article>
+  
+</div>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/page/5">Older</a>
+  
+  
+    <a class="pagination-item newer" href="/page/3">Newer</a>
+  
+</div>
+
+    </div>
+
+  </body>
+</html>
