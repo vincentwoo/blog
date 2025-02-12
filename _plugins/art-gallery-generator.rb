@@ -2,8 +2,8 @@
 # Distribiuted under MIT license with attribution
 # sourced from https://github.com/ggreer/jekyll-gallery-generator
 #
-require 'pry'
-require 'pry-rescue'
+# require 'pry'
+# require 'pry-rescue'
 require 'rmagick'
 include Magick
 
