@@ -1,0 +1,14 @@
+[[headers]]
+  for = "*.ply"
+  [headers.values]
+	   cache-control= "max-age=600"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    cache-control= "max-age=600"
+
+[[headers]]
+  for = "*.webp"
+  [headers.values]
+    cache-control= "max-age=600"
