@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Sutro Tower in 3D</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+        <link rel="icon" type="image/x-icon" href="favico.png"/>
+
+        <link rel="stylesheet" href="./index.css">
+        <script type="importmap">
+            {
+                "imports": {
+                    "playcanvas": "https://cdn.jsdelivr.net/npm/playcanvas@2.4.3/build/playcanvas.min.mjs",
+                    "viewerSettings": "./settings.json",
+                    "sogs": "./sogs.js",
+                    "annotation": "./annotation.mjs"
+                }
+            }
+        </script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@playcanvas/web-components@0.1.11/dist/pwc.min.mjs"></script>
+    </head>
+    <body>
+        <pc-app antialias="false" depth="false" high-resolution="true" stencil="false">
+            <pc-asset id="camera-controls" src="camera-controls.mjs" preload></pc-asset>
+            <pc-asset id="xr-controllers" src="https://cdn.jsdelivr.net/npm/playcanvas@2.4.3/scripts/esm/xr-controllers.min.mjs" preload></pc-asset>
+            <pc-asset id="xr-navigation" src="https://cdn.jsdelivr.net/npm/playcanvas@2.4.3/scripts/esm/xr-navigation.min.mjs" preload></pc-asset>
+            <pc-asset src="./annotation.mjs" preload></pc-asset>
+
+            <pc-scene>
+                <!-- Camera (with XR support) -->
+                <pc-entity name="camera root">
+                    <pc-entity name="camera">
+                        <pc-camera nearClip="0.01" farClip="1000" horizontalFov="true" tonemap="neutral"></pc-camera>
+                        <pc-scripts>
+                            <pc-script name="cameraControls"></pc-script>
+                        </pc-scripts>
+                    </pc-entity>
+                    <pc-scripts>
+                        <pc-script name="xrControllers"></pc-script>
+                        <pc-script name="xrNavigation"></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <!-- Light (for XR controllers) -->
+                <pc-entity name="light" rotation="35 45 0">
+                    <pc-light color="white" intensity="1.5"></pc-light>
+                </pc-entity>
+
+                <pc-entity name="annotation1" position="0.06991473938783188 1.4396460774827757 -0.05564770297736166">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Repainting Scaffold",
+                            "text": "<p>This scaffolding is part of ongoing (as of December 2024) work to <a href=\"https://static1.squarespace.com/static/5e6fff374bb4d0147cd19d8a/t/679aab99901a1056521ccae8/1738189722180/Notice+of+Community+Meeting+for+the+Exterior+Horizontal+Cladding+Replacement+Project+%284915-8987-4957.4%29.pdf\">remove and repaint</a> the old lead paint on the towers exterior.</p><p>Sutro tower is equipped with a built-in water line, enabling workers to use high pressure water to blast off the old paint. The scaffolding serves to prevent the lead from escaping into the air.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation2" position="0.09955292352963863 1.9289983864924578 -0.04880327580561661">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "North Mast",
+                            "text": "<p>This antenna handles the combined transmission of digital television for: <ul><li>KQED 30</li><li>KMTP 33</li><li>KCNS 39</li><li>KCSM 43</li></ul></p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation3" position="-0.10844953090904541 1.9289983864924578 -0.05386242263741914">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "West Mast",
+                            "text": "<p>This antenna handles the combined transmission of digital television for: <ul><li>KPIX 29</li><li>KRON 38</li><li>KTVU 44</li></ul></p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation3" position="-0.006323034998376054 1.9289983864924578 0.12693716266028465">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "South Mast",
+                            "text": "<p>The top and bottom portions of this antenna handles the transmission of KGO 7 and KRON 4, respectively.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation4" position="0.10969503838511777 1.8049000653450507 -0.05866909976566759">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "KFSF Antenna",
+                            "text": "<p>This side-mounted antenna broadcasts KFSF 34.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation5" position="0.008214382391203423 1.7403053127037187 0.1308093284900101">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "KBCW Antenna",
+                            "text": "<p>This side-mounted antenna broadcasts KBCW 44.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation6" position="-0.051389349491841804 1.6154302905918132 0.20501470009367814">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "LPTV Antenna",
+                            "text": "<p>This antenna, formerly an FM radio antenna, now broadcasts <a href=\"https://en.wikipedia.org/wiki/Low-power_broadcasting\">Low Power Television</a>.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation7" position="0.04722527624750689 1.6034989911085338 0.20434041773399347">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "KNBR Antenna",
+                            "text": "<p>This antenna broadcasts the FM radio station KNBR.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation8" position="-0.004011964267738033 1.5942549699146809 0.1355715216757889">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "KQED FM Antenna",
+                            "text": "<p>This antenna broadcasts the FM radio station KQED.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation9" position="-0.13720422472154278 0.037414141826553726 -0.06942100456701093">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Elevator Entrance",
+                            "text": "<p>Sutro tower has an internal elevator in its west leg, which somewhat uncomfortably fits two people. Passengers may experience slight disorientation as the elevator shifts from leaning forwards to backwards as the car passes the waist of the tower. The whole trip takes eight minutes.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation10" position="-0.21336461214405256 0.1040948128222326 0.26082182268842613">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Bucket Lift",
+                            "text": "<p>The preferred way for tower workers to ascend is in one of two open-air bucket lifts. These lifts travel along anchored guy wires on the outside of the tower structure.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation11" position="0.05404656834534549 0.9455951163592545 0.039755684141491">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Auxillary Antenna",
+                            "text": "<p>This large antenna serves as a backup for broadcasting the following stations if the primary antennas need to be serviced: <ul><li>KRCB 22</li><li>KPIX 5</li><li>KTVU 2</li><li>KBCW 44</li><li>KQED 9</li><li>KCNS 38</li><li>KFSF 34</li><li>LPTV</li></ul></p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation12" position="0.03627140248006375 0.042042181446739546 0.02324157521037662">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Satellite Dishes",
+                            "text": "<p>Sutro Tower makes use of several large satellite dishes that track the positions of TV satellites throughout the day to receive broadcasts from national stations in order to rebroadcast them locally.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation13" position="-0.052396060010365786 0.767440865386073 0.036536439968935575">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Tower Structure",
+                            "text": "<p>Sutro Tower was designed by <a href=\"http://www.acmartin.com\">Albert C. Martin & Associates of Los Angeles</a>. It was fabricated and erected by <a href=\"https://en.wikipedia.org/wiki/Kline_Iron_and_Steel\">Kline Iron and Steels</a> of South Carolina. It stands at 977 feet high, and its base sits at an elevation of 834 feet. Its three legs are embedded in 15 million pounds of cement, and its towers are made of 3.5 million pounds of steel. For earthquake safety, the actual center of balance of the structure is below ground, and the tower is designed to twist slightly in high winds.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation14" position="0.18771904656136573 0.08446511598702977 0.2184819956229751">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Transmitter Building",
+                            "text": "<p>At the base of Sutro Tower, the Transmitter Building handles sending the signals for broadcast up to the antennae on the tower. It is built on the former site of the <a href=\"https://www.kqed.org/arts/13919589/haunted-mansion-sutro-tower-kgo-television\">La Avanzada</a> mansion built by Adolph Gilbert Sutro in 1930.</p><p>Sutro Tower itself is owned and operated by Sutro Tower Inc. (STI), a nonprofit conglomerate made up of the broadcasters KGO, KTVU, KRON, and KPIX, who funded the initial construction and maintenance of the tower.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation15" position="-0.05743358457333432 1.5321356629816771 0.03136097341387724">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Level 6",
+                            "text": "<p>Sutro Tower is a much desired destination among the incredibly small population of qualified TV and radio tower workers who regularly scale towers thousands of feet tall. One very unique draw of Sutro Tower is that one does not require a harness to <a href=\"https://www.youtube.com/watch?v=A7-3CKulsCc\">tour</a> its sixth and top level.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation16" position="40.343486989749955 -0.45561601757127423 -5.716439856281013">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Salesforce Tower",
+                            "text": "<p>Standing at 1070 feet tall, Salesforce Tower is slightly taller than Sutro Tower, but given that Sutro Tower sits at 834 feet above sea level, it comfortably commands the best view of the city.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation17" position="0.060276331537573724 0.401977807665871 0.07105335792536627">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Microwave Antennas",
+                            "text": "<p>On levels 2 and 3 of the tower, arrays of microwave dishes provide high bandwidth point-to-point links with other parts of San Francisco.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                <pc-entity name="annotation18" position="0.00374811283323942 0.11911328087877249 0.17974759028588985">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Hard Line Coaxial Cables",
+                            "text": "<p>While these might look like large plumbing pipes that you might find in your home, they are actually solid copper cables insulated with pressurized nitrogen for transmitting high power signals up to the tower for broadcast.</p>"
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
+                
+            </pc-scene>
+        </pc-app>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('ply')) {
+                function htmlToNode(html) {
+                    const template = document.createElement('template');
+                    template.innerHTML = html;
+                    const nNodes = template.content.childNodes.length;
+                    return template.content.firstChild;
+                }
+                document.getElementsByTagName('pc-app')[0].appendChild(htmlToNode(
+                    '<pc-asset id="ply" type="gsplat" src="./scene.compressed.ply"></pc-asset>'));
+                document.getElementsByTagName('pc-scene')[0].appendChild(htmlToNode(
+                    '<pc-entity name="splat" rotation="0 0 180"><pc-splat asset="ply"></pc-splat></pc-entity>'));
+            }
+        </script>
+
+        <!-- Info Panel -->
+        <div id="infoPanel" onclick="document.getElementById('infoPanel').classList.add('hidden')">
+            <div id="infoPanelContent" onclick="event.stopPropagation()">
+                <div id="about">
+                    <h3>About</h3>
+                    <p>Welcome to my 3D model of San Francisco's Sutro Tower. Feel free to explore it at your own pace. If you're on a phone, you can also engage XR mode by clicking the little cube, it'll let you explore the scene by walking around and waving your phone.</p>
+                    <p>Sutro Tower is a wonderful building, and I hope you enjoy learning a bit about it here. If you want to learn more, check out the much more thorough <a href="https://explore.sutrotower.com/">official digital tour</a>.</p>
+                    <p>This scan is made possible by recent advances in <a href="https://en.wikipedia.org/wiki/Gaussian_splatting">Gaussian Splatting</a>. In particular, this scene was shot on drones, aligned in <a href="https://www.capturingreality.com">RealityCapture</a>, trained in <a href="https://github.com/nerfstudio-project/gsplat" >gsplat</a>, compressed by <a href="https://fraunhoferhhi.github.io/Self-Organizing-Gaussians">SOGS</a>, and rendered here for you by <a href="https://playcanvas.com/">PlayCanvas</a>.</p>
+                    <h3>Special Thanks</h3>
+                    <p><a href="https://wieland.morgenst.de/">Wieland Morgenstern</a> for developing Self Organizing Gaussian compression and assisting me in understanding it.</p>
+                    <p><a href="https://x.com/slimbuck7">Donovan Hutchence</a> of PlayCanvas for helping me implement the decoding of the new compressed format that allows us to serve this entire scene in 30MB</p>
+                    <p><a href="https://x.com/daylenyang">Daylen Yang</a> for flying the second drone!</p>
+                </div>
+                <div id="controls">
+                    <h3>Controls</h3>
+                    <div class="control-item">
+                        <span class="control-action">Annotations</span>
+                        <span class="control-key"><input type="checkbox" checked id="annotationToggle"/></span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Orbit</span>
+                        <span class="control-key">Left Mouse</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Pan</span>
+                        <span class="control-key">Middle Mouse</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Look around</span>
+                        <span class="control-key">Right Mouse</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Zoom</span>
+                        <span class="control-key">Mouse Wheel</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Fly</span>
+                        <span class="control-key">WASD / Arrow Keys</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Fly faster</span>
+                        <span class="control-key">Shift</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Fly slower</span>
+                        <span class="control-key">Ctrl</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-action">Reset Camera</span>
+                        <span class="control-key">R</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons Panel -->
+        <div id="buttonContainer">
+            <button id="arMode" class="button hidden">
+                <svg class="buttonSvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-181 240-296q-19-11-29.5-29T200-365v-230q0-22 10.5-40t29.5-29l200-115q19-11 40-11t40 11l200 115q19 11 29.5 29t10.5 40v230q0 22-10.5 40T720-296L520-181q-19 11-40 11t-40-11Zm0-92v-184l-160-93v185l160 92Zm80 0 160-92v-185l-160 93v184ZM80-680v-120q0-33 23.5-56.5T160-880h120v80H160v120H80ZM280-80H160q-33 0-56.5-23.5T80-160v-120h80v120h120v80Zm400 0v-80h120v-120h80v120q0 33-23.5 56.5T800-80H680Zm120-600v-120H680v-80h120q33 0 56.5 23.5T880-800v120h-80ZM480-526l158-93-158-91-158 91 158 93Zm0 45Zm0-45Zm40 69Zm-80 0Z"/></svg>
+            </button>
+            <button id="vrMode" class="button hidden">
+                <svg class="buttonSvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M300-240q-66 0-113-47t-47-113v-163q0-51 32-89.5t82-47.5q57-11 113-15.5t113-4.5q57 0 113.5 4.5T706-700q50 10 82 48t32 89v163q0 66-47 113t-113 47h-40q-13 0-26-1.5t-25-6.5l-64-22q-12-5-25-5t-25 5l-64 22q-12 5-25 6.5t-26 1.5h-40Zm0-80h40q7 0 13.5-1t12.5-3q29-9 56.5-19t57.5-10q30 0 58 9.5t56 19.5q6 2 12.5 3t13.5 1h40q33 0 56.5-23.5T740-400v-163q0-22-14-38t-35-21q-52-11-104.5-14.5T480-640q-54 0-106 4t-105 14q-21 4-35 20.5T220-563v163q0 33 23.5 56.5T300-320ZM40-400v-160h60v160H40Zm820 0v-160h60v160h-60Zm-380-80Z"/></svg>
+            </button>
+            <button id="enterFullscreen" class="button hidden">
+                <svg class="buttonSvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/></svg>
+            </button>
+            <button id="exitFullscreen" class="button hidden">
+                <svg class="buttonSvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-120v-120H120v-80h200v200h-80Zm400 0v-200h200v80H720v120h-80ZM120-640v-80h120v-120h80v200H120Zm520 0v-200h80v120h120v80H640Z"/></svg>
+            </button>
+            <button id="info" class="button">
+                <svg class="buttonSvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+            </button>
+        </div>
+
+        <script type="module" src="./index.js"></script>
+    </body>
+</html>
