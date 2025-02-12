@@ -63,7 +63,6 @@ p {
     flex-grow: 1;
 }
 #controls {
-    width: 100px;
     flex-grow: 0;
 }
 #infoPanelContent h3 {
