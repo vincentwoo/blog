@@ -1255,11 +1255,10 @@ class CameraControls extends Script {
         }
 
         if (this._spinning) {
-            this._dir.y -= 2.5 * dt
-            console.log(this._origin.y)
+            this._dir.y -= 1.5 * dt
             if (this._origin.y < 0.4) this._spinYDir = 1;
             if (this._origin.y > 1.5) this._spinYDir = -1;
-            this._origin.y += this._spinYDir * 0.005 * dt
+            this._origin.y += this._spinYDir * 0.001 * dt
         }
         this._move(dt);
 
