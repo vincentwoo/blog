@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             cameraControls.zoomDamping = window.isMobile ? 0.995 : 0.98;
             cameraControls.focusDamping = 0.99
             cameraControls.zoomMax = 1
+            cameraControls.zoomPinchSens = 15
 
             cameraControls.on('clamp:position', (position) => {
                 const xz_dist = Math.sqrt(position.x ** 2 + position.z ** 2);
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
 
-            setInterval(() => console.log(cameraControls.entity.getPosition()), 1000)
+            // setInterval(() => console.log(cameraControls.entity.getPosition()), 1000)
 
             setTimeout(updateAnnotationSetting, 1000);
         }
