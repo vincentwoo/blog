@@ -189,7 +189,7 @@ export class Annotation extends Script {
      * @param {number} [borderWidth] - The border width in pixels
      * @returns {Texture} The hotspot texture
      */
-    static createHotspotTexture(app, alpha = 0.8, size = 64, fillColor = '#000000', strokeColor = '#66aa66', borderWidth = 6) {
+    static createHotspotTexture(app, alpha = 0.8, size = 64, fillColor = '#000000', strokeColor = '#66aa66', borderWidth = 10) {
         // Create canvas for hotspot texture
         const canvas = document.createElement('canvas');
         canvas.width = size;
@@ -206,7 +206,7 @@ export class Annotation extends Script {
         // Draw dark circle with light border
         const centerX = size / 2;
         const centerY = size / 2;
-        const radius = (size / 2) - 4; // Leave space for border
+        const radius = (size / 2) - borderWidth; // Leave space for border
 
         // Draw main circle
         ctx.beginPath();

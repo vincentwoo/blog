@@ -56,14 +56,16 @@ p {
 }
 #infoPanelContent > div {
     padding: 0 15px;
-    min-width: 200px;
-    width: 200px;
 }
 #about {
-    flex-grow: 1;
+    flex-grow: 0.9;
+    min-width: 250px;
+    width: 250px;
 }
 #controls {
-    flex-grow: 0;
+    flex-grow: 0.1;
+    min-width: 190px;
+    width: 190px;
 }
 #infoPanelContent h3 {
     margin: 12px 0;
@@ -74,6 +76,7 @@ p {
     justify-content: space-between;
     gap: 24px;
     line-height: 1.5;
+    border-bottom: 1px dashed #aaa;
 }
 .control-action {
     text-align: left;
