@@ -45,19 +45,19 @@ p {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    opacity: 0.92;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    max-height: 70vh;
     width: 75%;
     max-width: 800px;
-    display: flex;
-    flex-direction: row;
-    opacity: 0.92;
-    max-height: 70vh;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;
 }
 #infoPanelContent > div {
-    flex-direction: column;
     padding: 0 15px;
     min-width: 200px;
+    width: 200px;
 }
 #about {
     flex-grow: 1;
