@@ -185,6 +185,10 @@ class CameraControls extends Script {
      */
     _focusing = false;
 
+    _spinning = false;
+    _spinTimer = null;
+    _spinYDir = -1;
+
     /**
      * @type {Record<string, boolean>}
      * @private
@@ -593,6 +597,7 @@ class CameraControls extends Script {
      * @param {PointerEvent} event - The pointer event.
      */
     _onPointerDown(event) {
+        this._stopSpin()
         if (!this._camera) {
             return;
         }
@@ -811,9 +816,16 @@ class CameraControls extends Script {
      */
     _onWheel(event) {
         event.preventDefault();
+        this._stopSpin()
         let delta = event.deltaY
         delta = Math.abs(delta) > 25 ? delta : delta * 10
         this._zoom(delta);
+    }
+
+    _stopSpin() {
+        this._spinning = false
+        clearTimeout(this._spinTimer)
+        this._spinTimer = setTimeout(() => this._spinning = true, 30000)
     }
 
     /**
@@ -822,6 +834,7 @@ class CameraControls extends Script {
      */
     _onKeyDown(event) {
         event.stopPropagation();
+        this._stopSpin()
         switch (event.key.toLowerCase()) {
             case 'w':
             case 'arrowup':
@@ -1241,6 +1254,13 @@ class CameraControls extends Script {
             return;
         }
 
+        if (this._spinning) {
+            this._dir.y -= 2.5 * dt
+            console.log(this._origin.y)
+            if (this._origin.y < 0.4) this._spinYDir = 1;
+            if (this._origin.y > 1.5) this._spinYDir = -1;
+            this._origin.y += this._spinYDir * 0.005 * dt
+        }
         this._move(dt);
 
         if (!this._flying) {

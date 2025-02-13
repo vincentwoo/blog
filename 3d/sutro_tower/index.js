@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const bbox = this.calcBound();
             this.resetCamera(bbox);
+            cameraControls._spinning = true
 
             window.addEventListener('keydown', (e) => {
                 switch (e.key) {
