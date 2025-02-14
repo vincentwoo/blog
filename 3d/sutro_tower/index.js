@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             cameraControls.rotateSpeed = 0.35;
             cameraControls.rotateDamping = 0.99;
             cameraControls.zoomDamping = window.isMobile ? 0.995 : 0.98;
-            cameraControls.focusDamping = 0.99
+            cameraControls.focusDamping = 0.995
             cameraControls.zoomMax = 1
             cameraControls.zoomPinchSens = 15
 

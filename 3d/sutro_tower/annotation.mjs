@@ -138,7 +138,7 @@ export class Annotation extends Script {
             .pc-annotation {
                 display: none;
                 position: absolute;
-                background-color: rgba(0, 0, 0, 0.8);
+                background-color: rgba(0, 0, 0, 0.6);
                 color: white;
                 padding: 16px;
                 border-radius: 8px;
@@ -189,7 +189,7 @@ export class Annotation extends Script {
      * @param {number} [borderWidth] - The border width in pixels
      * @returns {Texture} The hotspot texture
      */
-    static createHotspotTexture(app, alpha = 0.8, size = 64, fillColor = '#000000', strokeColor = '#ebed00', borderWidth = 10) {
+    static createHotspotTexture(app, alpha = 0.8, size = 64, fillColor = '#000000', strokeColor = '#5bb6bb', borderWidth = 10) {
         // Create canvas for hotspot texture
         const canvas = document.createElement('canvas');
         canvas.width = size;
@@ -338,8 +338,13 @@ export class Annotation extends Script {
                 this._hideTooltip(this._tooltip);
                 Annotation._activeTooltip = null;
             } else {
-                this._showTooltip(this._tooltip);
                 Annotation._activeTooltip = this._tooltip;
+                if (this.cameraPos) {
+                    this.app.fire('annotation-focus', this.cameraPos, this.entity.getPosition())
+                    setTimeout(() => this._showTooltip(this._tooltip), 400)
+                } else {
+                    this._showTooltip(this._tooltip);
+                }
             }
         });
 
@@ -429,11 +434,7 @@ export class Annotation extends Script {
      */
     _showTooltip(tooltip) {
     	tooltip.style.display = 'block'
-        // tooltip.style.visibility = 'visible';
         tooltip.style.opacity = '1';
-        if (this.cameraPos) {
-            this.app.fire('annotation-focus', this.cameraPos, this.entity.getPosition())
-        }
     }
 
     /**
@@ -555,6 +556,6 @@ export class Annotation extends Script {
 
         // console.log(worldSize)
         // return worldSize
-        return Math.max(worldSize, 0.012);
+        return Math.max(worldSize * window.devicePixelRatio, 0.012);
     }
 }
