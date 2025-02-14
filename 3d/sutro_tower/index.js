@@ -77,6 +77,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             // }, 1000)
 
             setTimeout(updateAnnotationSetting, 1000);
+
+            const interval = setInterval(() => {
+                document.getElementById('ambient').play()
+                    .then(() => clearInterval(interval))
+                    .catch(() => void 0)
+            }, 100)
         }
 
         postInitialize() {
@@ -106,6 +112,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('annotationToggle').checked ? Annotation.showAll() : Annotation.hideAll()
     }
     document.getElementById('annotationToggle').addEventListener('change', updateAnnotationSetting)
+
+    function updateSoundSetting() {
+        const audio = document.getElementById('ambient')
+        document.getElementById('soundToggle').checked ? audio.play() : audio.pause()
+    }
+    document.getElementById('soundToggle').addEventListener('change', updateSoundSetting)
     Array.from(document.getElementsByTagName('a')).forEach((a) => a.setAttribute("target", "_blank"))
 
 

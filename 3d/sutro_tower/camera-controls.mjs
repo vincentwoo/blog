@@ -727,7 +727,6 @@ class CameraControls extends Script {
                     // Now we commit to orbit
                     this._maybeOrbit = false;
                     this._orbiting   = true;
-                    console.log('orbit')
 
                     // We can do your one-time orbit init here if needed.
                     // E.g. forcibly set your orbit center or angles, if you
