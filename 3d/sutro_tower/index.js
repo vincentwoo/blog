@@ -70,11 +70,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             app.on('annotation-focus', (cameraPos, target) => {
                 cameraControls.refocus(target, cameraPos, true)
             })
-            setInterval(() => {
-                const pos = cameraControls.entity.getPosition()
-                const arr = [pos.x, pos.y, pos.z]
-                console.log(arr)
-            }, 1000)
+            // setInterval(() => {
+            //     const pos = cameraControls.entity.getPosition()
+            //     const arr = [pos.x, pos.y, pos.z]
+            //     console.log(arr)
+            // }, 1000)
 
             setTimeout(updateAnnotationSetting, 1000);
         }
