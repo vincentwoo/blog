@@ -67,7 +67,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
 
-            // setInterval(() => console.log(cameraControls.entity.getPosition()), 1000)
+            app.on('annotation-focus', (cameraPos, target) => {
+                cameraControls.refocus(target, cameraPos, true)
+            })
+            setInterval(() => {
+                const pos = cameraControls.entity.getPosition()
+                const arr = [pos.x, pos.y, pos.z]
+                console.log(arr)
+            }, 1000)
 
             setTimeout(updateAnnotationSetting, 1000);
         }
@@ -90,16 +97,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         new MiniStats(app);
     }
 
-    if (!urlParams.has('ply')) {
-        createSogs(app, 'data')
-        .then((sogsEntity) => {
-            sogsEntity.setEulerAngles(0, 0, 180);
-            app.root.addChild(sogsEntity);
-            entity.script.create(FrameScene);
-        });
-    } else {
-        entity.script.create(FrameScene);
-    }
+    const sogsEntity = await createSogs(app, 'data');
+    sogsEntity.setEulerAngles(0, 0, 180);
+    app.root.addChild(sogsEntity);
+    entity.script.create(FrameScene);
 
     function updateAnnotationSetting() {
         document.getElementById('annotationToggle').checked ? Annotation.showAll() : Annotation.hideAll()

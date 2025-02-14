@@ -431,6 +431,9 @@ export class Annotation extends Script {
     	tooltip.style.display = 'block'
         // tooltip.style.visibility = 'visible';
         tooltip.style.opacity = '1';
+        if (this.cameraPos) {
+            this.app.fire('annotation-focus', this.cameraPos, this.entity.getPosition())
+        }
     }
 
     /**
