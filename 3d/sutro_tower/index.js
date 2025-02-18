@@ -102,6 +102,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (urlParams.has('stats')) {
         new MiniStats(app);
     }
+    if (urlParams.has('skip')) {
+        document.getElementById('infoPanel').classList.add('hidden')
+        document.getElementById('about').classList.add('hidden')
+        document.getElementById('infoPanelContent').style.width = 'auto'
+    }
 
     const sogsEntity = await createSogs(app, 'data');
     sogsEntity.setEulerAngles(0, 0, 180);
