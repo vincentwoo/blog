@@ -1,14 +1,3 @@
-import { decode } from 'fast-png'
-
-const dataPaths = [
-	['means', ['means_u.png', 'means_l.png']],
-	['opacities', ['opacities.png']],
-	['quats', ['quats.png']],
-	['scales', ['scales.png']],
-	['sh0', ['sh0.png']],
-	['shN', ['centroids.png', 'labels_u.png', 'labels_l.png']],
-]
-
 function rescaleData(data, meta, bits = 8) {
 	const len = meta.shape[0]
 	const dim = (meta.shape[1] || 1) * (meta.shape[2] || 1)
@@ -24,14 +13,14 @@ function rescaleData(data, meta, bits = 8) {
 	for (let i = 0; i < len; i ++) {
 		for (let j = 0; j < dim; j++) {
 			ret[j][i] =
-				(data[i * dim + j] / norm) * scales[j] + meta.mins[j]
+				(data[i * 4 + j] / norm) * scales[j] + meta.mins[j]
 		}
 	}
 
 	return ret
 }
 
-function mergeMeans(upper, lower, meta) {
+function mergeMeans(lower, upper, meta) {
 	const len = meta.shape[0]
 	const dim = (meta.shape[1] || 1) * (meta.shape[2] || 1)
 	let scales = new Float32Array(dim)
@@ -45,7 +34,7 @@ function mergeMeans(upper, lower, meta) {
 
 	for (let i = 0; i < len; i++) {
 		for (let j = 0; j < dim; j++) {
-			let u = (upper[i * dim + j] << 8) + lower[i * dim + j]
+			let u = (upper[i * 4 + j] << 8) + lower[i * 4 + j]
 			u = (u / norm) * scales[j] + meta.mins[j]
 			u = Math.sign(u) * (Math.exp(Math.abs(u)) - 1)
 			ret[j][i] = u
@@ -55,20 +44,24 @@ function mergeMeans(upper, lower, meta) {
 	return ret
 }
 
-function decompressKmeans(centroids, labels_u, labels_l, meta) {
+function decompressKmeans(centroids, labels_l, labels_u, meta) {
 	const scale = meta.maxs - meta.mins
 	const norm = (2 ** meta.quantization) - 1
-	const dim = meta.shape[1] * meta.shape[2]
+	const len = meta.shape[0]
+	const dim = (meta.shape[1] || 1) * (meta.shape[2] || 1)
 	const ret = []
-	const labels = new Uint16Array(labels_u.length)
-	for (let i = 0; i < labels_u.length; i++) {
-		labels[i] = (labels_u[i] << 8) + labels_l[i]
+
+	const labels = new Uint16Array(len)
+	for (let i = 0; i < len; i++) {
+		labels[i] = (labels_u[i * 4] << 8) + labels_l[i * 4]
 	}
 	for (let j = 0; j < dim; j++) ret.push(new Float32Array(labels.length))
 
 	for (let i = 0; i < labels.length; i++) {
 		for (let j = 0; j < dim; j++) {
-			const centroid = centroids[labels[i] * dim + (3 * (j % 15) + Math.floor(j / 15))]
+			let k = labels[i] * dim + (3 * (j % 15) + Math.floor(j / 15))
+			k = Math.floor(k / 3) * 4 + k % 3
+			const centroid = centroids[k]
 			ret[j][i] = (centroid / norm) * scale + meta.mins
 		}
  	}
@@ -81,20 +74,37 @@ export async function loadFromURL(path) {
 
 async function load(path, meta, getter) {
 	const data = {}
-	return Promise.all(
-		dataPaths.map(([param, files], _, __) => {
+	return Promise.all(Object.entries(meta).map(([param, _meta]) => {
 			return Promise.all(
-				files.map(file => getter(path + '/' + file))
+				_meta.files.map(file => {
+					return new Promise((resolve, reject) => {
+				        // Create an image element
+				        const img = new Image();
+				        img.onload = () => {
+				            // Create an offscreen canvas
+				            const canvas = new OffscreenCanvas(img.width, img.height);
+				            const ctx = canvas.getContext('2d');
+
+				            // Draw image onto the canvas
+				            ctx.drawImage(img, 0, 0);
+
+				            // Extract pixel data
+				            const imageData = ctx.getImageData(0, 0, img.width, img.height).data;
+				            resolve(imageData)
+				        };
+
+				        img.onerror = reject;
+				        img.src = path + '/' + file;
+				    });
+				})
 			).then(files => {
-				console.time(param)
 				if (param == 'means') {
-					data[param] = mergeMeans(decode(files[0]).data, decode(files[1]).data, meta.means)
+					data[param] = mergeMeans(files[0], files[1], _meta)
 				} else if (param == 'shN') {
-					data[param] = decompressKmeans(decode(files[0]).data, decode(files[1]).data, decode(files[2]).data, meta.shN)
+					data[param] = decompressKmeans(files[0], files[1], files[2], _meta)
 				} else {
-					data[param] = rescaleData(decode(files[0]).data, meta[param])
+					data[param] = rescaleData(files[0], _meta)
 				}
-				console.timeEnd(param)
 			})
 		})
 	).then(() => data)
