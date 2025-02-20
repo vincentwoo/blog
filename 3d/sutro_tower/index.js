@@ -1,11 +1,12 @@
 import { GSplatData, GSplatResource, BoundingBox, Color, Script, Vec3, MiniStats } from 'playcanvas';
 import { Annotation } from 'annotation'
 
-import viewerSettings from "viewerSettings" with { type: "json" };
+const viewerSettingsResp = fetch('settings.json')
 
 window.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 document.addEventListener('DOMContentLoaded', async () => {
+    const viewerSettings = await (await viewerSettingsResp).json()
     const position = viewerSettings.camera.position && new Vec3(viewerSettings.camera.position);
     const target = viewerSettings.camera.target && new Vec3(viewerSettings.camera.target);
 
