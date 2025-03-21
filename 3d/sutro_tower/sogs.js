@@ -1,4 +1,4 @@
-import { Asset, BoundingBox, Entity, GSplatInstance, ShaderMaterial, Texture, Vec2, ADDRESS_CLAMP_TO_EDGE, BLEND_NORMAL, CULLFACE_NONE, FILTER_NEAREST, SEMANTIC_ATTR13, SEMANTIC_POSITION } from 'playcanvas';
+import { Asset, BoundingBox, Entity, GSplatInstance, ShaderMaterial, Texture, Vec2, ADDRESS_CLAMP_TO_EDGE, BLEND_PREMULTIPLIED, CULLFACE_NONE, FILTER_NEAREST, SEMANTIC_ATTR13, SEMANTIC_POSITION } from 'playcanvas';
 
 const loadSogsMeta = async (path) => {
     const response = await fetch(path + '/meta.json');
@@ -240,7 +240,7 @@ class SogsData {
         });
 
         result.cull = CULLFACE_NONE;
-        result.blendType = BLEND_NORMAL;
+        result.blendType = BLEND_PREMULTIPLIED;
         result.depthWrite = false;
         result.chunks = {
             gsplatDataVS,
