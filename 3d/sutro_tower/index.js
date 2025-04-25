@@ -1,4 +1,4 @@
-import { GSplatData, GSplatResource, BoundingBox, Color, Script, Vec3, MiniStats } from 'playcanvas';
+import { Asset, GSplatData, GSplatResource, BoundingBox, Color, Script, Vec3, MiniStats } from 'playcanvas';
 import { Annotation } from 'annotation'
 
 const viewerSettingsResp = fetch('settings.json')
@@ -112,17 +112,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         const { loadGsplatDataFromURL } = await import('./sogs-decoder.js')
         console.time('load')
         const splatData = await loadGsplatDataFromURL('data')
-        const resource = new GSplatResource(app.graphicsDevice, new GSplatData(splatData));
+        const resource = new GSplatResource(app, new GSplatData(splatData));
         app.root.addChild(resource.instantiate())
         entity.script.create(FrameScene)
         console.timeEnd('load')
     } else {
-        const { createSogs } = await import('./sogs.js')
         console.time('load')
-        const sogsEntity = await createSogs(app, 'data');
-        sogsEntity.setEulerAngles(0, 0, 180);
-        app.root.addChild(sogsEntity);
-        entity.script.create(FrameScene);
+        const url = {
+            url: 'data/meta.json',
+            filename: 'meta.json'
+        }
+        const asset = new Asset(url.filename, 'gsplat', url, null, {
+            mapUrl: mapUrl => 'data/' + mapUrl
+        });
+        app.assets.add(asset);
+        app.assets.load(asset);
+        asset.on('load', () => {
+            app.root.addChild(asset.resource.instantiate())
+            entity.script.create(FrameScene);
+        });
         console.timeEnd('load')
     }
 
