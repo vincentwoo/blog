@@ -113,7 +113,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.time('load')
         const splatData = await loadGsplatDataFromURL('data')
         const resource = new GSplatResource(app, new GSplatData(splatData));
-        app.root.addChild(resource.instantiate())
+        const gsplatEntity = resource.instantiate()
+        gsplatEntity.gsplat.material.setDefine('GSPLAT_AA', urlParams.has('aa'))
+        app.root.addChild(gsplatEntity)
         entity.script.create(FrameScene)
         console.timeEnd('load')
     } else {
@@ -128,7 +130,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         app.assets.add(asset);
         app.assets.load(asset);
         asset.on('load', () => {
-            app.root.addChild(asset.resource.instantiate())
+            const gsplatEntity = asset.resource.instantiate()
+            gsplatEntity.gsplat.material.setDefine('GSPLAT_AA', urlParams.has('aa'))
+            app.root.addChild(gsplatEntity)
             entity.script.create(FrameScene);
         });
         console.timeEnd('load')
