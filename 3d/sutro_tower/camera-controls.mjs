@@ -745,7 +745,7 @@ class CameraControls extends Script {
 
                     const pitchRad = this._angles.x * math.DEG_TO_RAD;
                     const horizontalDist = Math.sqrt(currentCamPos.x ** 2 + currentCamPos.z ** 2);
-                    this._origin.y = Math.max(Math.min(currentCamPos.y + Math.tan(pitchRad) * horizontalDist, 2), 0.2);
+                    this._origin.y = Math.max(Math.min(currentCamPos.y + Math.tan(pitchRad) * horizontalDist, 2), 0.1);
                     tmpV1.sub2(currentCamPos, this._origin);
                     const elev = Math.atan2(tmpV1.y, Math.sqrt(tmpV1.x * tmpV1.x + tmpV1.z * tmpV1.z)) * math.RAD_TO_DEG;
                     this._clampAngles(this._dir.set(-elev, this._dir.y));
