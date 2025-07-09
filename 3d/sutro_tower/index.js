@@ -1,4 +1,4 @@
-import { Asset, GSplatData, GSplatResource, BoundingBox, Color, Script, Vec3, MiniStats } from 'playcanvas';
+import { Asset, Entity, BoundingBox, Color, Script, Vec3, MiniStats } from 'playcanvas';
 import { Annotation } from 'annotation'
 
 const viewerSettingsResp = fetch('settings.json')
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     position.x  = position.x / xz_dist * 5;
                     position.z  = position.z / xz_dist * 5;
                 }
-                position.y = Math.min(Math.max(0.2, position.y), 4);
+                position.y = Math.min(Math.max(0.1, position.y), 4);
             });
 
             cameraControls.on('clamp:angles', (angles) => {
@@ -108,35 +108,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('infoPanelContent').style.width = 'auto'
     }
 
-    if (urlParams.has('cpu')) {
-        const { loadGsplatDataFromURL } = await import('./sogs-decoder.js')
-        console.time('load')
-        const splatData = await loadGsplatDataFromURL('data')
-        const resource = new GSplatResource(app, new GSplatData(splatData));
-        const gsplatEntity = resource.instantiate()
-        gsplatEntity.gsplat.material.setDefine('GSPLAT_AA', urlParams.has('aa'))
-        app.root.addChild(gsplatEntity)
-        entity.script.create(FrameScene)
-        console.timeEnd('load')
-    } else {
-        console.time('load')
-        const url = {
-            url: 'data/meta.json',
-            filename: 'meta.json'
-        }
-        const asset = new Asset(url.filename, 'gsplat', url, null, {
-            mapUrl: mapUrl => 'data/' + mapUrl
-        });
-        app.assets.add(asset);
-        app.assets.load(asset);
-        asset.on('load', () => {
-            const gsplatEntity = asset.resource.instantiate()
-            gsplatEntity.gsplat.material.setDefine('GSPLAT_AA', urlParams.has('aa'))
-            app.root.addChild(gsplatEntity)
-            entity.script.create(FrameScene);
-        });
-        console.timeEnd('load')
+    console.time('load')
+    const url = {
+        url: 'data/meta.json',
+        filename: 'meta.json'
     }
+    const asset = new Asset(url.filename, 'gsplat', url, null, {
+        mapUrl: mapUrl => 'data/' + mapUrl
+    });
+    app.assets.add(asset);
+    app.assets.load(asset);
+    asset.on('load', () => {
+        const gsplatEntity = new Entity()
+        gsplatEntity.addComponent('gsplat', { asset })
+        gsplatEntity.gsplat.material.setDefine('GSPLAT_AA', true)
+        gsplatEntity.gsplat.highQualitySH = true
+        gsplatEntity.setEulerAngles(0, 0, 180)
+        app.root.addChild(gsplatEntity)
+        entity.script.create(FrameScene);
+    });
+    console.timeEnd('load')
 
     function updateAnnotationSetting() {
         document.getElementById('annotationToggle').checked ? Annotation.showAll() : Annotation.hideAll()

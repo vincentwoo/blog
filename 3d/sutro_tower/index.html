@@ -27,7 +27,7 @@
         <script type="importmap">
             {
                 "imports": {
-                    "playcanvas": "https://cdn.jsdelivr.net/npm/playcanvas@2.7.2/build/playcanvas.min.mjs",
+                    "playcanvas": "https://cdn.jsdelivr.net/npm/playcanvas@2.9.0/build/playcanvas.mjs",
                     "annotation": "./annotation.mjs"
                 }
             }
@@ -37,8 +37,8 @@
     <body>
         <pc-app antialias="false" depth="false" high-resolution="true" stencil="false">
             <pc-asset id="camera-controls" src="camera-controls.mjs" preload></pc-asset>
-            <pc-asset id="xr-controllers" src="https://cdn.jsdelivr.net/npm/playcanvas@2.7.2/scripts/esm/xr-controllers.min.mjs" preload></pc-asset>
-            <pc-asset id="xr-navigation" src="https://cdn.jsdelivr.net/npm/playcanvas@2.7.2/scripts/esm/xr-navigation.min.mjs" preload></pc-asset>
+            <pc-asset id="xr-controllers" src="https://cdn.jsdelivr.net/npm/playcanvas@2.9.0/scripts/esm/xr-controllers.min.mjs" preload></pc-asset>
+            <pc-asset id="xr-navigation" src="https://cdn.jsdelivr.net/npm/playcanvas@2.9.0/scripts/esm/xr-navigation.min.mjs" preload></pc-asset>
             <pc-asset src="./annotation.mjs" preload></pc-asset>
 
             <pc-scene>
@@ -231,7 +231,15 @@
                         }'></pc-script>
                     </pc-scripts>
                 </pc-entity>
-                
+                <pc-entity name="annotation19" position="-0.12042636370274594 0.05765623535916441 0.15826748284742514">
+                    <pc-scripts>
+                        <pc-script name="annotation" attributes='{
+                            "title": "Sutro Tower Beehives",
+                            "text": "<p>Local environmental education nonprofit <a href=\"https://www.instagram.com/p/DDFy8i1Pbx7/\">Planet Bee</a> cares for several hives installed at the base of Sutro Tower. These hives pollinate fruits and vegetables for miles around the tower.</p>",
+                            "cameraPos": [-0.03481496870517731, 0.19992171227931976, 0.2984175682067871]
+                        }'></pc-script>
+                    </pc-scripts>
+                </pc-entity>
             </pc-scene>
         </pc-app>
 
