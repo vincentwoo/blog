@@ -80,8 +80,8 @@
       45
     ],
     "dtype": "float32",
-    "mins": -4.533328056335449,
-    "maxs": 4.636760234832764,
+    "mins": -4.422688007354736,
+    "maxs": 5.305794715881348,
     "quantization": 8,
     "files": [
       "shN_centroids.webp",
