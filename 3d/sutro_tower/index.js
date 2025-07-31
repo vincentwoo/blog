@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         postInitialize() {
             this.initCamera();
+            console.timeEnd('paint')
         }
     }
 
@@ -119,6 +120,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     app.assets.add(asset);
     app.assets.load(asset);
     asset.on('load', () => {
+        console.timeEnd('load')
+        console.time('paint')
         const gsplatEntity = new Entity()
         gsplatEntity.addComponent('gsplat', { asset })
         gsplatEntity.gsplat.material.setDefine('GSPLAT_AA', true)
@@ -127,7 +130,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         app.root.addChild(gsplatEntity)
         entity.script.create(FrameScene);
     });
-    console.timeEnd('load')
 
     function updateAnnotationSetting() {
         document.getElementById('annotationToggle').checked ? Annotation.showAll() : Annotation.hideAll()
