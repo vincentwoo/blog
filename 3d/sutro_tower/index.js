@@ -131,6 +131,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         entity.script.create(FrameScene);
     });
 
+    // let watermark = 0
+    // asset.on('progress', (received, length) => {
+    //     const progress = Math.min(1, received / length) * 100;
+    //     console.log(progress)
+    //     if (progress > watermark) {
+    //         watermark = progress;
+    //         document.getElementById('progress').style.width = watermark.toFixed(0) + '%';
+    //     }
+    // });
+
     function updateAnnotationSetting() {
         document.getElementById('annotationToggle').checked ? Annotation.showAll() : Annotation.hideAll()
     }
