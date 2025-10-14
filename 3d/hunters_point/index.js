@@ -95,9 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             0.45,
             0.40
 */
-    camera.camera.clearColor = /*new Color(viewerSettings.background.color);*/ new Color([            0.8862745098039215,
-            0.9529411764705882,
-            0.9725490196078431]);
+    camera.camera.clearColor = /*new Color(viewerSettings.background.color);*/ new Color([0.4, 0.4, 0.4]);
     camera.camera.fov = viewerSettings.camera.fov;
     camera.camera.nearClip = 0.00001;
 
@@ -126,7 +124,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.time('paint')
         const gsplatEntity = new Entity()
         gsplatEntity.addComponent('gsplat', { asset })
-        gsplatEntity.gsplat.material.setDefine('GSPLAT_AA', true)
         gsplatEntity.gsplat.highQualitySH = true
         gsplatEntity.setEulerAngles(0, 0, 180)
         app.root.addChild(gsplatEntity)
@@ -148,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     document.getElementById('annotationToggle').addEventListener('change', updateAnnotationSetting)
 
-    Array.from(document.getElementsByTagName('a')).forEach((a) => a.setAttribute("target", "_blank"))
+    // Array.from(document.getElementsByTagName('a')).forEach((a) => a.setAttribute("target", "_blank"))
 
     // Get button and info panel elements
     const dom = ['arMode', 'vrMode', 'enterFullscreen', 'exitFullscreen', 'info', 'infoPanel'].reduce((acc, id) => {

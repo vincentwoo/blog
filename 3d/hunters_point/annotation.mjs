@@ -127,6 +127,8 @@ export class Annotation extends Script {
     /** @type {HTMLStyleElement | null} */
     static _styleSheet = null;
 
+    static numAnnotations = 0;
+
     /**
      * Injects required CSS styles into the document
      * @private
@@ -170,6 +172,18 @@ export class Annotation extends Script {
 
             body.hide-annotations .pc-annotation-hotspot {
                 display: none !important;
+            }
+
+            .annotation-button {
+                background: #666;
+                border: 1px solid #5bb6bb;
+                padding: 5px 10px;
+                border-radius: 10px;
+                display: block;
+                color: white;
+                text-decoration: none;
+                margin: 15px auto 0 auto;
+                text-align: center;
             }
         `;
 
@@ -305,12 +319,15 @@ export class Annotation extends Script {
 
         // Add text
         const textElement = document.createElement('div');
-        textElement.innerHTML = this.text;
+        textElement.innerHTML = this.text + `<a href="#" class="annotation-button" data-idx="${Annotation.numAnnotations + 1}">See next annotation</a>`;
         this._tooltip.appendChild(textElement);
+        this._button = this._tooltip.querySelector('.annotation-button');
 
         // Create hotspot element
         this._hotspot = document.createElement('div');
         this._hotspot.className = 'pc-annotation-hotspot';
+        this._hotspot.dataset.idx = Annotation.numAnnotations;
+        Annotation.numAnnotations++;
 
         
         if (window.isMobile) {
@@ -346,6 +363,14 @@ export class Annotation extends Script {
                     this._showTooltip(this._tooltip);
                 }
             }
+        });
+
+        this._button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(this._button.dataset.idx) % Annotation.numAnnotations;
+            const target = document.querySelector(`.pc-annotation-hotspot[data-idx="${idx}"]`);
+            this._hideTooltip(Annotation._activeTooltip);
+            target.click();
         });
 
         document.addEventListener('click', (evt) => {
@@ -541,7 +566,7 @@ export class Annotation extends Script {
      * @private
      */
     _calculateScreenSpaceScale() {
-        const DESIRED_PIXEL_SIZE = 12;
+        const DESIRED_PIXEL_SIZE = 30;
 
         const cameraPos = this.camera.entity.getPosition();
         const toAnnotation = this.entity.getPosition().sub(cameraPos);
