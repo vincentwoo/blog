@@ -319,7 +319,7 @@ export class Annotation extends Script {
 
         // Add text
         const textElement = document.createElement('div');
-        textElement.innerHTML = this.text + `<a href="#" class="annotation-button" data-idx="${Annotation.numAnnotations + 1}">See next annotation</a>`;
+        textElement.innerHTML = this.text + `<a href="#" class="annotation-button" data-idx="${Annotation.numAnnotations + 1}">See next parcel</a>`;
         this._tooltip.appendChild(textElement);
         this._button = this._tooltip.querySelector('.annotation-button');
 
