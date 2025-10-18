@@ -731,8 +731,8 @@ class CameraControls extends Script {
                     // We can do your one-time orbit init here if needed.
                     // E.g. forcibly set your orbit center or angles, if you
                     // originally had that in _onPointerDown. For example:
-                    this._origin.x = 0;  // your existing logic
-                    this._origin.z = 0;
+                    // this._origin.x = 0;  // your existing logic
+                    // this._origin.z = 0;
 
                     const currentCamPos = this.entity.getPosition();
                     tmpV1.sub2(currentCamPos, this._origin);
@@ -745,7 +745,7 @@ class CameraControls extends Script {
 
                     const pitchRad = this._angles.x * math.DEG_TO_RAD;
                     const horizontalDist = Math.sqrt(currentCamPos.x ** 2 + currentCamPos.z ** 2);
-                    this._origin.y = Math.max(Math.min(currentCamPos.y + Math.tan(pitchRad) * horizontalDist, 2), 0.1);
+                    this._origin.y = Math.max(Math.min(currentCamPos.y + Math.tan(pitchRad) * horizontalDist, 2), 0.0);
                     tmpV1.sub2(currentCamPos, this._origin);
                     const elev = Math.atan2(tmpV1.y, Math.sqrt(tmpV1.x * tmpV1.x + tmpV1.z * tmpV1.z)) * math.RAD_TO_DEG;
                     this._clampAngles(this._dir.set(-elev, this._dir.y));
