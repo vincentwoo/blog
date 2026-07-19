@@ -1,0 +1,7 @@
+This is a playcanvas editor project. You can see scripts and json files only.
+
+The scene hierarchy and other assets are not present here.
+
+Engine source code is available at /Users/dhutchence/Snapchat/Dev/playcanvas/engine
+
+The viewer code (in lib folder) was originally taken from /Users/dhutchence/Snapchat/Dev/playcanvas/supersplat-viewer

@@ -1,0 +1,47 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,500&family=Inconsolata:wght@200..900&display=block" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block" />
+
+<div id="overlay">
+    <header id="title-bar">
+        <h1 id="title">Grace Cathedral</h1>
+    </header>
+
+    <div id="bottom-controls">
+        <button id="mode-toggle" class="mode-button inconsolata-medium">
+            <span id="mode-icon" class="material-symbols-outlined">church</span>
+            <span id="mode-label">ENTER</span>
+        </button>
+
+        <button id="peek-toggle" class="mode-button inconsolata-medium">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>PEEK</span>
+            <span class="toggle-check material-symbols-outlined">check</span>
+        </button>
+        <button id="about-toggle" class="mode-button" aria-label="About">
+            <span id="about-glyph">i</span>
+        </button>
+        <button id="sound-toggle" class="mode-button" aria-label="Toggle sound">
+            <span id="sound-icon" class="material-symbols-outlined">volume_up</span>
+        </button>
+
+
+    </div>
+
+    <!-- ABOUT: credits overlay, opened by the info button; closed by the X, backdrop, or Escape -->
+    <div id="about-box">
+        <div id="about-panel">
+            <button id="about-close" aria-label="Close">&times;</button>
+            <div id="about-title">About</div>
+            <p>
+                Scene capture and reconstruction by <a href="https://vincentwoo.com" target="_blank" rel="noopener">Vincent Woo</a>.
+                <br>
+                Built by Donovan Hutchence of the <a href="https://playcanvas.com" target="_blank" rel="noopener">PlayCanvas</a> team.
+                <br><br>
+                Thank you to <a href="https://isaacmason.com" target="_blank" rel="noopener">Isaac Mason</a> and Andreas Sundquist of <a href="https://www.worldlabs.ai/" target="_blank" rel="noopener">World Labs</a> for early prototyping, and to Rebecca Nestle of Grace Cathedral for the opportunity.<br><br>
+                If you have a connection to a historic location that could benefit from digital preservation, please feel free to <a href="mailto:me@vincentwoo.com" target="_blank" rel="noopener">email Vincent</a>.
+            </p>
+        </div>
+    </div>
+</div>
