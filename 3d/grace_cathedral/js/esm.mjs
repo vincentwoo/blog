@@ -1082,7 +1082,7 @@ var controlScheme = /*#__PURE__*/Object.freeze({
     panActive: panActive
 });
 
-const TUNING={rotateSpeed:18,moveSpeed:4,wheelSpeed:.06,pinchSpeed:.4,mouseRotateSensitivity:.5,touchRotateSensitivity:1.5,gamepadRotateSensitivity:1,trackpadOrbitSensitivity:.75,trackpadPanSensitivity:1,trackpadZoomSensitivity:2,flyMoveAccelerationDamping:.992,flyMoveDecelerationDamping:.993};
+const TUNING={rotateSpeed:18,moveSpeed:4,wheelSpeed:.06,pinchSpeed:.4,mouseRotateSensitivity:.5,touchRotateSensitivity:1.5,gamepadRotateSensitivity:1,trackpadOrbitSensitivity:.75,trackpadPanSensitivity:1,trackpadZoomSensitivity:4,flyMoveAccelerationDamping:.992,flyMoveDecelerationDamping:.993};
 
 var tuning = /*#__PURE__*/Object.freeze({
     __proto__: null,
