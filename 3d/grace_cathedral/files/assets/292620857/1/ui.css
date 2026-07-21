@@ -457,6 +457,7 @@ body.gc-covered #about-toggle {
   letter-spacing: 0.04em;
   margin-bottom: 0.75rem;
   flex-shrink: 0;
+  margin-right: 3.1rem;
 }
 
 /* the scrolling region: shrinks first when the panel hits its max height */
@@ -467,9 +468,9 @@ body.gc-covered #about-toggle {
 
 .gc-annotation-close {
   position: absolute;
-  top: 0.5rem;
+  top: 1.2rem;
   right: 0.75rem;
-  font-size: 1.4rem;
+  font-size: 2rem;
   line-height: 1;
   cursor: pointer;
   background: none;
@@ -486,8 +487,8 @@ body.gc-covered #about-toggle {
    side card never needs it) */
 .gc-annotation-expand {
   position: absolute;
-  top: 0.55rem;
-  right: 2.6rem;
+  top: 1.2rem;
+  right: 2.8rem;
   display: none;
   align-items: center;
   justify-content: center;
@@ -500,7 +501,7 @@ body.gc-covered #about-toggle {
 }
 
 .gc-annotation-expand .material-symbols-outlined {
-  font-size: 1.3rem;
+  font-size: 2rem;
 }
 
 /* PANEL FOOTER (prev / next arrows, hidden when there's only one annotation) */
@@ -565,8 +566,10 @@ body.gc-covered #about-toggle {
     max-height: 33vh;
     transform: none;
     border-radius: 12px 12px 0 0;
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(1px);
     /* the sheet sits flush at bottom: 0, so its own padding absorbs the gesture-bar inset */
-    padding-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
     transition: opacity 0.2s ease-in-out, max-height 0.2s ease-out, border-radius 0.2s ease-out;
   }
 

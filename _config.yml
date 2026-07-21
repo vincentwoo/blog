@@ -5,6 +5,7 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - Rakefile
+  - 3d
 paginate: 5
 paginate_path: /page/:num
 permalink: pretty
