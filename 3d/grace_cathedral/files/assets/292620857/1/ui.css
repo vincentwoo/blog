@@ -242,7 +242,7 @@ html, body, canvas {
 
 
 /* ABOUT TOGGLE (beside the sound toggle) + the credits overlay it opens */
-#about-toggle, #sound-toggle {
+#about-toggle, #sound-toggle, #fullscreen-toggle {
   width: 2.8rem;
   /* aspect-ratio: 1 / 1; */
   /* height: width; */
